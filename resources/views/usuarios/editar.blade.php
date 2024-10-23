@@ -25,17 +25,19 @@
                 <div class="px-2">
                     <div class="flex flex-wrap justify-center">
                         <!-- Imagen de Perfil -->
-                        <div class="w-full flex justify-center mb-4">
-                            <div class="relative w-32 h-32">
-                                @if ($usuario->image)
-                                    <img alt="Imagen de perfil" src="{{ asset('storage/'.$usuario->image) }}"
-                                         class="object-cover w-full h-full rounded-full shadow-xl border-none">
-                                @else
-                                    <img alt="Imagen no disponible" src="https://via.placeholder.com/150"
-                                         class="object-cover w-full h-full rounded-full shadow-xl border-none">
-                                @endif
-                            </div>
-                        </div>
+                        <!-- Imagen de Perfil -->
+<div class="w-full flex justify-center mb-4">
+    <div class="relative w-32 h-32 fixed-container">
+        @if ($usuario->image)
+            <img alt="Imagen de perfil" src="{{ asset('storage/'.$usuario->image) }}"
+                 class="fixed-image rounded-full shadow-xl border-none">
+        @else
+            <img alt="Imagen no disponible" src="https://via.placeholder.com/150"
+                 class="fixed-image rounded-full shadow-xl border-none">
+        @endif
+    </div>
+</div>
+
 
                         <!-- Información del Usuario -->
                         <div class="w-full lg:w-4/12 px-4 lg:order-1">
@@ -387,6 +389,20 @@
         align-items: center;
         justify-content: space-between;
     }
+
+    .fixed-container {
+    width: 150px; /* Ancho fijo */
+    height: 150px; /* Alto fijo */
+    overflow: hidden; /* Oculta las partes de la imagen que sobresalen */
+}
+
+.fixed-image {
+    width: 100%; /* Ancho siempre será 100% del contenedor */
+    height: 100%; /* Alto siempre será 100% del contenedor */
+    object-fit: cover; /* Ajusta la imagen dentro del contenedor sin distorsión */
+    object-position: center; /* Centra la imagen */
+    border-radius: 50%; /* Para mantener la forma circular */
+}
 
     .btn-back {
         /* Otros estilos */

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 <style>
+    /* Estilos de la tabla */
     #miTabla2 {
         font-family: 'Open Sans', sans-serif;
         border-collapse: collapse;
@@ -37,7 +38,8 @@
         text-align: center;
     }
 
-    .css-button-sliding-to-left--yellow {
+    /* Estilos de los botones */
+    .css-button-sliding-to-left--yellow, .css-button-sliding-to-left--red {
         min-width: 130px;
         height: 40px;
         color: #fff;
@@ -51,30 +53,16 @@
         border-radius: 5px;
         background: #fff;
         overflow: hidden;
+    }
+
+    .css-button-sliding-to-left--yellow {
         border: 2px solid #6d6d6c;
         color: #535352;
     }
 
     .css-button-sliding-to-left--red {
-        min-width: 130px;
-        height: 40px;
-        color: #fff;
-        padding: 5px 10px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        display: inline-block;
-        outline: none;
-        border-radius: 5px;
-        background: #fff;
-        overflow: hidden;
         border: 2px solid #d90429;
         color: #d90429;
-    }
-
-    .dataTables_filter {
-        position: relative;
     }
 
     .dataTables_filter input[type="search"] {
@@ -87,43 +75,12 @@
         transition: all 0.3s ease;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-
-    @media (max-width: 992px) {
-        .mobile-card {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 16px;
-            padding: 16px;
-        }
-
-        .mobile-card .row {
-            margin-bottom: 8px;
-        }
-
-        .mobile-card label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .mobile-card .data {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-        }
-    }
 </style>
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h3 class="page__heading">Evaluados</h3>
+        <h3 class="page__heading">Evaluadoss</h3>
     </div>
     <div class="section-body">
         <div class="row">
@@ -138,29 +95,31 @@
 
                         <div class="table-responsive">
                             <table class="table table-striped mt-2" id="miTabla2">
-                                <thead style="background-color:#000000">
+                                
+                                <thead class="table-header" style="background-color: #cbdcfc">
                                     <tr>
-                                        <th style="color:#fff;" class="text-center">ID</th>
-                                        <th style="color:#fff;" class="text-center">Nombre</th>
-                                        <th style="color:#fff;" class="text-center">Apellido Paterno</th>
-                                        <th style="color:#fff;" class="text-center">Apellido Materno</th>
-                                        <th style="color:#fff;" class="text-center">CURP</th>
-                                        <th style="color:#fff;" class="text-center">RFC</th>
-                                        <th style="color:#fff;" class="text-center">CUIP</th>
-                                        <th style="color:#fff;" class="text-center">IFE</th>
-                                        <th style="color:#fff;" class="text-center">SMN</th>
-                                        <th style="color:#fff;" class="text-center">Fecha de Apertura</th>
-                                        <th style="color:#fff;" class="text-center">Sexo</th>
-                                        <th style="color:#fff;" class="text-center">Acciones</th>
+                                        <th class="text-center">ID</th>
+                                        <th class="text-center">Nombre</th>
+                                        <th class="text-center">Primer Apellido</th>
+                                        <th class="text-center">Segundo Apellido</th>
+                                        <th class="text-center">CURP</th>
+                                        <th class="text-center">RFC</th>
+                                        <th class="text-center">CUIP</th>
+                                        <th class="text-center">IFE</th>
+                                        <th class="text-center">SMN</th>
+                                        <th class="text-center">Fecha de Apertura</th>
+                                        <th class="text-center">Sexo</th>
+                                        <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
+                                
                                 <tbody>
                                     @foreach ($evaluados as $evaluado)
                                     <tr>
                                         <td class="text-center">{{ $evaluado->id }}</td>
-                                        <td class="text-center">{{ $evaluado->nombre }}</td>
-                                        <td class="text-center">{{ $evaluado->AP }}</td>
-                                        <td class="text-center">{{ $evaluado->AM }}</td>
+                                        <td class="text-center">{{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }}</td>
+                                        <td class="text-center">{{ $evaluado->primer_apellido }}</td>
+                                        <td class="text-center">{{ $evaluado->segundo_apellido }}</td>
                                         <td class="text-center">{{ $evaluado->CURP }}</td>
                                         <td class="text-center">{{ $evaluado->RFC }}</td>
                                         <td class="text-center">{{ $evaluado->CUIP }}</td>
@@ -184,62 +143,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            @foreach ($evaluados as $evaluado)
-                            <div class="mobile-card d-lg-none">
-                                <div class="row">
-                                    <div class="col-6"><label>ID:</label></div>
-                                    <div class="col-6">{{ $evaluado->id }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>Nombre Completo:</label></div>
-                                    <div class="col-6">{{ $evaluado->nombre }} {{ $evaluado->apellido_paterno }} {{ $evaluado->apellido_materno }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>CURP:</label></div>
-                                    <div class="col-6">{{ $evaluado->CURP }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>RFC:</label></div>
-                                    <div class="col-6">{{ $evaluado->RFC }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>CUIP:</label></div>
-                                    <div class="col-6">{{ $evaluado->CUIP }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>IFE:</label></div>
-                                    <div class="col-6">{{ $evaluado->IFE }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>SMN:</label></div>
-                                    <div class="col-6">{{ $evaluado->SMN }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>Fecha de Apertura:</label></div>
-                                    <div class="col-6">{{ $evaluado->fecha_apertura }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><label>Sexo:</label></div>
-                                    <div class="col-6">{{ $evaluado->sexo }}</div>
-                                </div>
-                                <div class="row action-buttons">
-                                    <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-warning btn-mobile">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <button type="button" class="btn btn-danger btn-mobile" onclick="confirmarEliminacion({{ $evaluado->id }})">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </button>
-                                    <form id="eliminar-form-{{ $evaluado->id }}" action="{{ route('evaluados.destroy', $evaluado->id) }}" method="POST" class="d-none">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </div>
+                            <div class="pagination justify-content-end">
+                                {!! $evaluados->links() !!}
                             </div>
-                            @endforeach
-                        </div>
-
-                        <div class="pagination justify-content-end">
-                            {!! $evaluados->links() !!}
                         </div>
                     </div>
                 </div>

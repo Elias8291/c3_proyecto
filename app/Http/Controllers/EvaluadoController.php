@@ -15,7 +15,7 @@ class EvaluadoController extends Controller
     public function index()
     {
         // Obtener todos los evaluados con paginación
-        $evaluados = Evaluado::paginate(900);  // Cambia '10' por la cantidad de registros por página que desees
+        $evaluados = Evaluado::paginate(100);  // Cambia '100' por la cantidad de registros por página que desees
     
         // Retornar la vista con los evaluados paginados
         return view('evaluados.index', compact('evaluados'));
@@ -40,27 +40,32 @@ class EvaluadoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        // Validar los datos de entrada
-        $validatedData = $request->validate([
-            'AP' => 'required|string|max:255',
-            'AM' => 'required|string|max:255',
-            'nombre' => 'required|string|max:255',
-            'CURP' => 'required|string|max:18|unique:evaluados',
-            'RFC' => 'nullable|string|max:13',
-            'CUIP' => 'nullable|string|max:13',
-            'IFE' => 'nullable|string|max:13',
-            'SMN' => 'nullable|string|max:13',
-            'fecha_apertura' => 'required|date',
-            'sexo' => 'required|in:M,F',
-        ]);
+{
+    // Validar los datos de entrada
+    $validatedData = $request->validate([
+        'primer_nombre' => 'required|string|max:255',
+        'segundo_nombre' => 'nullable|string|max:255',
+        'primer_apellido' => 'required|string|max:255',
+        'segundo_apellido' => 'nullable|string|max:255',
+        'CURP' => 'required|string|max:18|unique:evaluados',
+        'RFC' => 'nullable|string|max:13',
+        'CUIP' => 'nullable|string|max:13',
+        'IFE' => 'nullable|string|max:13',
+        'SMN' => 'nullable|string|max:13', // SMN es opcional
+        'fecha_apertura' => 'required|date',
+        'sexo' => 'required|in:M,H',
+        'estado_nacimiento' => 'required|string|max:2',
+        'fecha_nacimiento' => 'required|date',
+        'resultado_evaluacion' => 'required|boolean',
+    ]);
 
-        // Crear un nuevo evaluado
-        Evaluado::create($validatedData);
+    // Crear un nuevo evaluado
+    Evaluado::create($validatedData);
 
-        // Redirigir a la lista de evaluados con un mensaje de éxito
-        return redirect()->route('evaluados.index')->with('success', 'Evaluado creado exitosamente.');
-    }
+    // Redirigir a la lista de evaluados con un mensaje de éxito
+    return redirect()->route('evaluados.index')->with('success', 'Evaluado creado exitosamente.');
+}
+
 
     /**
      * Mostrar los detalles de un evaluado específico.
@@ -97,25 +102,29 @@ class EvaluadoController extends Controller
     {
         // Validar los datos actualizados
         $validatedData = $request->validate([
-            'AP' => 'required|string|max:255',
-            'AM' => 'required|string|max:255',
-            'nombre' => 'required|string|max:255',
+            'primer_nombre' => 'required|string|max:255',
+            'segundo_nombre' => 'nullable|string|max:255',
+            'primer_apellido' => 'required|string|max:255',
+            'segundo_apellido' => 'nullable|string|max:255',
             'CURP' => 'required|string|max:18|unique:evaluados,CURP,' . $evaluado->id,
             'RFC' => 'nullable|string|max:13',
             'CUIP' => 'nullable|string|max:13',
             'IFE' => 'nullable|string|max:13',
-            'SMN' => 'nullable|string|max:13',
+            'SMN' => 'nullable|string|max:13',  // SMN es opcional
             'fecha_apertura' => 'required|date',
-            'sexo' => 'required|in:M,F',
+            'sexo' => 'required|in:M,H',
+            'estado_nacimiento' => 'required|string|max:2',
+            'fecha_nacimiento' => 'required|date',
+            'resultado_evaluacion' => 'required|boolean',
         ]);
-
+    
         // Actualizar el evaluado con los datos validados
         $evaluado->update($validatedData);
-
+    
         // Redirigir a la lista de evaluados con un mensaje de éxito
         return redirect()->route('evaluados.index')->with('success', 'Evaluado actualizado exitosamente.');
     }
-
+    
     /**
      * Eliminar un evaluado específico de la base de datos.
      *

@@ -87,18 +87,19 @@ class UsuarioController extends Controller
             'telefono' => 'nullable|string|max:20',
             'email' => 'required|email|max:255|unique:users,email',
             'id_area' => 'required|exists:areas,id',
+            'password' => 'required|string|confirmed|min:8', // Validación de la contraseña
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'rol' => 'required|exists:roles,name', // Validar que el rol exista
         ]);
-
+    
         // Manejar la subida de la imagen
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('profile_images', 'public');
         } else {
             $imagePath = null;
         }
-
-        // Crear el usuario
+    
+        // Crear el usuario con la contraseña encriptada
         $usuario = User::create([
             'name' => $request->input('name'),
             'apellido_paterno' => $request->input('apellido_paterno'),
@@ -106,16 +107,17 @@ class UsuarioController extends Controller
             'telefono' => $request->input('telefono'),
             'email' => $request->input('email'),
             'id_area' => $request->input('id_area'),
-            'password' => Hash::make('password'), // Asigna una contraseña por defecto o genera una
+            'password' => Hash::make($request->input('password')), // Encriptar la contraseña
             'image' => $imagePath,
         ]);
-
+    
         // Asignar el rol al usuario
         $usuario->assignRole($request->input('rol'));
-
+    
         // Redirigir con mensaje de éxito
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
+    
 
     // Mostrar formulario de edición
     public function edit($id)

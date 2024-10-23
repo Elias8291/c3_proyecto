@@ -16,9 +16,10 @@ class Evaluado extends Model
      * @var array
      */
     protected $fillable = [
-        'AP',
-        'AM',
-        'nombre',
+        'primer_nombre',
+        'segundo_nombre',
+        'primer_apellido',
+        'segundo_apellido',
         'CURP',
         'RFC',
         'CUIP',
@@ -26,9 +27,11 @@ class Evaluado extends Model
         'SMN',
         'fecha_apertura',
         'sexo',
+        'estado_nacimiento',
+        'fecha_nacimiento',
+        'resultado_evaluacion',
     ];
     
-
     /**
      * Los atributos que deberían ser tratados como fechas.
      *
@@ -36,6 +39,7 @@ class Evaluado extends Model
      */
     protected $dates = [
         'fecha_apertura',  // Tratar fecha_apertura como un campo de fecha
+        'fecha_nacimiento',  // Tratar fecha_nacimiento como un campo de fecha
     ];
 
     /**

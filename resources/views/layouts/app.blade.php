@@ -18,7 +18,7 @@
         <link href="{{ asset('assets/css/@fortawesome/fontawesome-free/css/all.css') }}" rel="stylesheet" type="text/css">
 
   
-
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -36,7 +36,7 @@
 
     <style>
         .btn-back:hover {
-            background-color: #621132 !important;
+            background-color: #0572ffea !important;
             /* Guinda más oscuro al pasar el cursor */
         }
 
@@ -72,7 +72,7 @@
             text-decoration: none;
             transform: translateY(-5px);
             /* Desplazamiento vertical en hover */
-            background-color: #6a5acd;
+            background-color: #060222;
         }
 
         @media (max-width: 992px) {
