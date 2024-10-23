@@ -1,0 +1,6 @@
+header {
+    background-color: #FF0000; /* Cambia este valor al color que desees */
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
