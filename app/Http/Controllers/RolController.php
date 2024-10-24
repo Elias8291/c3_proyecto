@@ -49,18 +49,26 @@ class RolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
-    
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
-    
-        return redirect()->route('roles.index');                        
-    }
+   public function store(Request $request)
+{
+    $this->validate($request, [
+        'name' => 'required|unique:roles,name',
+        'description' => 'required|string|max:255',
+        'permission' => 'required|array',
+        'status' => 'required|in:activo,inactivo',
+    ]);
+
+    $role = Role::create([
+        'name' => $request->input('name'),
+        'description' => $request->input('description'),
+        'status' => $request->input('status'),
+    ]);
+
+    $role->syncPermissions($request->input('permission'));
+
+    return redirect()->route('roles.index')->with('success', 'Rol creado exitosamente.');
+}
+
 
     /**
      * Display the specified resource.
@@ -81,14 +89,16 @@ class RolController extends Controller
      */
     public function edit($id)
     {
-        $role = Role::find($id);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            ->all();
+        $role = Role::find($id);  // Encuentra el rol por ID
+        $permission = Permission::get();  // Obtiene todos los permisos
+        $rolePermissions = DB::table("role_has_permissions")
+                             ->where("role_id", $id)
+                             ->pluck('permission_id') // Obtiene los permisos del rol
+                             ->toArray();  // Convierte los permisos a un array simple
     
-        return view('roles.editar',compact('role','permission','rolePermissions'));
+        return view('roles.editar', compact('role', 'permission', 'rolePermissions'));  // Envia los datos a la vista
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -98,20 +108,29 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
-    
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->save();
-    
-        $role->syncPermissions($request->input('permission'));
-    
-        return redirect()->route('roles.index');                        
-    }
+{
+    $this->validate($request, [
+        'name' => 'required|unique:roles,name,' . $id,  // Ignora la validación única para el rol actual
+        'description' => 'required|string|max:255',
+        'permission' => 'required|array',
+        'status' => 'required|in:activo,inactivo',
+    ]);
+
+    // Buscar el rol por su ID
+    $role = Role::find($id);
+
+    // Actualizar los datos del rol
+    $role->name = $request->input('name');
+    $role->description = $request->input('description'); // Agregar la descripción
+    $role->status = $request->input('status');           // Agregar el estado
+    $role->save();
+
+    // Sincronizar los permisos
+    $role->syncPermissions($request->input('permission'));
+
+    return redirect()->route('roles.index')->with('success', 'Rol actualizado exitosamente.');
+}
+
 
     /**
      * Remove the specified resource from storage.

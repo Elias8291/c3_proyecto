@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <section class="section" style="min-height: 100vh; display: flex; align-items: center; ">
     <div class="container custom-container">
         <div class="row justify-content-center">

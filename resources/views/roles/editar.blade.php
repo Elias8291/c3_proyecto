@@ -1,240 +1,366 @@
 @extends('layouts.app')
 
-@section('content')
-<section class="section" style="background-color: #e0e0eb; min-height: 100vh; display: flex; align-items: center;">
-    <div class="container custom-container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow-lg border-0 rounded-lg">
-                    <div class="card-header d-flex align-items-center justify-content-between bg-primary text-white">
-                        <a href="{{ url()->previous() }}" class="btn btn-back text-white">
-                            <i class="fas fa-arrow-left mr-2"></i> Regresar
-                        </a>
-                        <h3 class="page__heading text-center flex-grow-1 m-0">
-                            <i class="fas fa-book mr-2"></i> Editar Roles
-                        </h3>
-                    </div>
-                    <div class="card-body p-4 bg-white">
-                        @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>¡Revise los campos!</strong>
-                            @foreach ($errors->all() as $error)
-                            <span class="badge badge-danger">{{ $error }}</span>
-                            @endforeach
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        @endif
+@section('title', 'Editar Rol')
 
-                        {!! Form::model($role, ['method' => 'PATCH', 'route' => ['roles.update', $role->id], 'class' => 'my-4']) !!}
-                        <div class="form-group floating-label">
-                            <label for="name">Nombre del Rol:</label>
-                            {!! Form::text('name', null, ['class' => 'form-control', 'required']) !!}
-                        </div>
-                        <div class="form-group">
-                            <label for="permission" class="form-label">Permisos para este Rol:</label>
-                            <br/>
-                            @foreach($permission as $value)
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    {{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, ['class' => 'form-check-input']) }}
-                                    {{ $value->name }}
-                                </label>
-                            </div>
-                            @endforeach
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-block btn-submit">Guardar</button>
-                        </div>
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-@endsection
-
-@section('scripts')
-<script>
-    // Agrega la clase 'active' cuando un campo de entrada está enfocado
-    $('input').focus(function() {
-        $(this).parent().addClass('active');
-    }).blur(function() {
-        if ($(this).val() === '') {
-            $(this).parent().removeClass('active');
-        }
-    });
-</script>
-@endsection
-
-@section('styles')
+@section('css')
+<!-- Agrega los mismos estilos del formulario de crear rol -->
 <style>
-    .bg-primary {
-        background-color: #4b479c;
-    }
-
-    .form-label {
-        font-weight: bold;
-        color: #4b479c;
-        margin-bottom: 5px;
-        font-size: 16px;
-    }
-
-    .form-control {
-        padding: 12px 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        width: 100%;
-        box-sizing: border-box;
-        transition: all 0.2s ease;
-        font-size: 16px;
-        background-color: #f9f9f9;
-    }
-
-    .form-control:focus {
-        border-color: #4b479c;
-        box-shadow: 0 0 8px rgba(75, 71, 156, 0.3);
-        background-color: #fff;
-    }
-
-    .input-group-text {
-        cursor: pointer;
-    }
-
-    .card {
-        border: none;
-        border-radius: 15px;
+    /* Reutiliza los estilos del formulario de usuario */
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        position: relative;
         overflow: hidden;
     }
 
-    .card-header {
-        padding: 20px;
-        background-color: #4b479c;
-        border-bottom: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #800020, #b30000);
     }
 
-    .card-header .btn-back {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        padding: 8px 12px;
-        border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.1);
-        transition: background-color 0.2s ease, color 0.2s ease;
+    .page-background {
+        background: linear-gradient(135deg, #f0f4f8 40%, #e0e0eb);
+        padding: 60px 0;
+        min-height: 100vh;
     }
 
-    .card-header .btn-back:hover {
-        background-color: #fff;
-        color: #4b479c;
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 16px;
+        letter-spacing: 0.3px;
+        display: block;
     }
 
-    .card-header .btn-back:hover .fa-arrow-left {
-        color: #4b479c;
-    }
-
-    .card-header .page__heading {
-        color: #ffffff;
-    }
-
-    .card-body {
-        padding: 30px;
+    .form-control {
+        padding: 12px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        width: 100%;
         background-color: #ffffff;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
-    .alert {
-        margin-bottom: 20px;
+    .form-control:focus {
+        border-color: #800020;
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+        background-color: #fff;
+    }
+
+    .form-control:hover {
+        border-color: #800020;
+    }
+
+    .form-error {
+        border-color: #e53e3e !important;
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2) !important;
     }
 
     .btn-submit {
-        transition: all 0.3s ease;
-        background-color: #4b479c;
+        background: linear-gradient(135deg, #800020 0%, #b30000 100%);
         color: #fff;
-        padding: 12px 20px;
+        padding: 14px 28px;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         font-size: 18px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
     }
 
     .btn-submit:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        background-color: #3a2c70;
+        box-shadow: 0 8px 15px rgba(128, 0, 32, 0.2);
     }
 
-    .btn-submit:focus {
-        outline: none;
-        box-shadow: 0 0 10px rgba(75, 71, 156, 0.3);
+    .btn-submit:active {
+        transform: translateY(1px);
     }
 
-    .section {
-        padding: 60px 0;
-        background-color: #e0e0eb;
-        min-height: 100vh;
+    .card-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 30px;
+        text-align: center;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .card-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #800020, #b30000);
+        border-radius: 2px;
+    }
+
+    .mb-4 {
+        margin-bottom: 25px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+        }
+    }
+
+    .alert-success, .alert-error {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin: 25px 0;
+        font-weight: 500;
         display: flex;
         align-items: center;
     }
 
-    .custom-container {
-        max-width: 800px;
-        margin: auto;
-        border: 3px solid #4b479c;
-        border-radius: 15px;
-        padding: 20px;
-        background-color: #ffffff;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
+    .alert-success {
+        background-color: #f0fdf4;
+        border-left: 5px solid #22c55e;
+        color: #166534;
     }
 
-    .custom-container:hover {
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-        transform: translateY(-2px);
+    .alert-error {
+        background-color: #fef2f2;
+        border-left: 5px solid #ef4444;
+        color: #991b1b;
     }
 
-    @media (max-width: 768px) {
-        .custom-container {
-            padding: 0 20px;
-        }
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        color: #800020;
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
     }
 
-    .select2-container .select2-selection--single {
-        height: 45px;
-        border-radius: 8px;
-        padding: 8px;
-        font-size: 16px;
-        border: 1px solid #ccc;
+    .btn-back i {
+        margin-right: 8px;
     }
 
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 45px;
-        padding-left: 10px;
-        color: #333;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 45px;
-    }
-
-    .select2-dropdown {
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: 1px solid #ccc;
-    }
-
-    .select2-results__option {
-        padding: 8px 10px;
-    }
-
-    .select2-results__option--highlighted {
-        background-color: #4b479c;
-        color: #350707;
+    .btn-back:hover {
+        color: #b30000;
     }
 </style>
+@endsection
+
+@section('content')
+<main class="profile-page">
+    <section class="page-background">
+        <div class="container">
+            <div class="text-left mb-4">
+                <a href="{{ route('roles.index') }}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+            </div>
+            <div class="text-center mb-4">
+                <h3 class="card-title">Editar Rol</h3>
+            </div>
+
+            <!-- Formulario -->
+            <form action="{{ route('roles.update', $role->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="form-row">
+                    <!-- Nombre del Rol -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="name">Nombre del Rol</label>
+                        <input name="name" value="{{ old('name', $role->name) }}"
+                            class="form-control @error('name') form-error @enderror" type="text" required>
+                        @error('name')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Descripción del Rol -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="description">Descripción del Rol</label>
+                        <textarea name="description" 
+                            class="form-control @error('description') form-error @enderror" 
+                            rows="4" required>{{ old('description', $role->description) }}</textarea>
+                        @error('description')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Permisos para este Rol -->
+                    <div class="form-group mb-4" style="flex: 2;">
+                        <label class="form-label">Permisos para este Rol</label>
+                        <div class="form-control" style="height: auto; padding: 10px;">
+                            @foreach($permission as $permiso)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                        name="permission[]" value="{{ $permiso->id }}" 
+                                        id="permiso_{{ $permiso->id }}"
+                                        {{ in_array($permiso->id, $rolePermissions) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="permiso_{{ $permiso->id }}">
+                                        {{ $permiso->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        @error('permission')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Estado del Rol -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="status">Estado del Rol</label>
+                        <select name="status" class="form-control @error('status') form-error @enderror" required>
+                            <option value="activo" {{ old('status', $role->status) == 'activo' ? 'selected' : '' }}>Activo</option>
+                            <option value="inactivo" {{ old('status', $role->status) == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                        </select>
+                        @error('status')
+                            <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Botón de Guardar Cambios -->
+                <button type="submit" class="btn-submit">Actualizar Rol</button>
+            </form>
+
+            <!-- Mensajes de éxito o error -->
+            @if(session('success'))
+                <div class="alert-success">
+                    <strong>¡Éxito!</strong> {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert-error">
+                    <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
+    </section>
+</main>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function () {
+        // Validaciones en tiempo real para Nombre del Rol y Descripción
+        function validarTextoSoloLetras(input) {
+            let valor = $(input).val();
+            valor = valor.replace(/[^A-Za-zÀ-ÿ\s]/g, ''); // Permitir solo letras y espacios
+            $(input).val(valor); // Asignar el valor filtrado al campo
+            if (valor === '') {
+                $(input).addClass('form-error');
+            } else {
+                $(input).removeClass('form-error');
+            }
+        }
+
+        // Validar el campo de descripción
+        function validarDescripcion(input) {
+            let valor = $(input).val();
+            if (valor === '' || valor.length > 255) {
+                $(input).addClass('form-error');
+            } else {
+                $(input).removeClass('form-error');
+            }
+        }
+
+        // Validar los permisos
+        function validarPermisos() {
+            if ($('input[name="permission[]"]:checked').length == 0) {
+                $('.form-control').addClass('form-error');
+                return false;
+            } else {
+                $('.form-control').removeClass('form-error');
+                return true;
+            }
+        }
+
+        // Validar en tiempo real nombre y descripción
+        $('input[name="name"]').on('input', function () {
+            validarTextoSoloLetras(this);
+        });
+
+        $('textarea[name="description"]').on('input', function () {
+            validarDescripcion(this);
+        });
+
+        // Validar permisos
+        $('input[name="permission[]"]').on('change', function () {
+            validarPermisos();
+        });
+
+        // Validar todos los campos al enviar
+        $('form').on('submit', function (e) {
+            let isValid = true;
+            let camposConErrores = [];
+
+            validarTextoSoloLetras($('input[name="name"]'));
+            validarDescripcion($('textarea[name="description"]'));
+
+            if ($('input[name="name"]').hasClass('form-error')) {
+                isValid = false;
+                camposConErrores.push('Nombre del Rol');
+            }
+
+            if ($('textarea[name="description"]').hasClass('form-error')) {
+                isValid = false;
+                camposConErrores.push('Descripción del Rol');
+            }
+
+            if (!validarPermisos()) {
+                isValid = false;
+                camposConErrores.push('Permisos');
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Por favor, corrige los siguientes campos: ' + camposConErrores.join(', '));
+            }
+        });
+
+        @if ($errors->any())
+        alert('Existen errores en el formulario. Por favor, revisa los campos marcados.');
+        @endif
+    });
+</script>
 @endsection

@@ -56,5 +56,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Area::class, 'id_area');
     }
+ 
 
 }

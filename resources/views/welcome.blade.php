@@ -134,11 +134,11 @@
             }
 
             .form-control:focus {
-                border-color: #850707;
+                border-color: #000000;
             }
 
             .btn-primary {
-                background-color: #9C3D55;
+                background-color: #000000;
                 color: #ffffff;
                 padding: 12px 20px;
                 border-radius: 25px;
@@ -150,7 +150,7 @@
             }
 
             .btn-secondary {
-                background-color: #0072bc;
+                background-color: #131313;
                 color: #ffffff;
                 padding: 12px 20px;
                 border-radius: 25px;
@@ -279,6 +279,145 @@
             .animate-fade-in-up {
                 animation: fadeInUp 1.5s ease-out;
             }
+
+            /* Contenedor principal y sombras */
+.custom-container {
+    max-width: 900px;
+    margin: auto;
+    border: 3px solid #4b479c;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.custom-container:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Botones de acción */
+.btn-submit {
+    transition: all 0.3s ease;
+    background-color: #4b479c;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    background-color: #3a2c70;
+}
+
+/* Fondo de la página y secciones */
+.bg-primary {
+    background-color: #4b479c;
+}
+
+.section {
+    padding: 60px 0;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.section-heading {
+    color: #4b479c;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Formularios */
+.form-label {
+    font-weight: bold;
+    color: #4b479c;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.form-control {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+.form-control:focus {
+    border-color: #4b479c;
+    box-shadow: 0 0 8px rgba(75, 71, 156, 0.3);
+    background-color: #ffffff;
+}
+
+/* Imágenes de perfil */
+.fixed-container {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    margin: 0 auto;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.fixed-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: center;
+}
+
+/* Iconos y elementos interactivos */
+.text-blueGray-600 {
+    color: #718096;
+}
+
+.text-blueGray-400 {
+    color: #a0aec0;
+}
+
+.text-blue-500 {
+    color: #4b479c;
+}
+
+.text-blue-500:hover {
+    color: #3a2c70;
+}
+
+.hover\\:underline:hover {
+    text-decoration: underline;
+}
+
+/* Redes sociales */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icons a {
+    font-size: 24px;
+    color: #4b479c;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #3a2c70;
+}
+
         </style>
     </head>
 

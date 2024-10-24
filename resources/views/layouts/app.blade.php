@@ -18,7 +18,7 @@
         <link href="{{ asset('assets/css/@fortawesome/fontawesome-free/css/all.css') }}" rel="stylesheet" type="text/css">
 
   
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -36,12 +36,12 @@
 
     <style>
         .btn-back:hover {
-            background-color: #0572ffea !important;
+            background-color: #7fafeeea !important;
             /* Guinda más oscuro al pasar el cursor */
         }
 
         .main-navbar {
-            background: linear-gradient(to right, #000000, #161616);
+            background: linear-gradient(to right, #700303, #690202);
             /* Predominancia de guinda */
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
             font-family: 'Lato', sans-serif;
@@ -51,9 +51,9 @@
         }
 
         .main-navbar:hover {
-            background: linear-gradient(to right, #000000, #181717);
+            background: linear-gradient(to right, #770202, #8b2323);
             /* Guinda más profundo al pasar el cursor */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 15px rgba(121, 3, 3, 0.2);
             /* Sombra más pronunciada */
         }
 
@@ -130,6 +130,8 @@
 <script src="{{ mix('assets/js/custom/custom.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
 
 @yield('page_js')
