@@ -15,24 +15,32 @@
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
     <link href="{{ asset('assets/css/sweetalert.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+
+    <style>
+        body {
+            background-color: #f3f4f6; /* Color de fondo sólido */
+            min-height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
-<div id="app">
-    <section class="section">
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    
-                    @yield('content')
-                    <div class="simple-footer">
-{{--                        Copyright &copy; {{ getSettingValue('application_name') }}  {{ date('Y') }}--}}
+    <div id="app">
+        <section class="section">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        
+                        @yield('content')
+                        <div class="simple-footer">
+                            {{-- Copyright &copy; {{ getSettingValue('application_name') }}  {{ date('Y') }} --}}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
 <!-- General JS Scripts -->
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>

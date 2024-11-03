@@ -21,7 +21,6 @@ class CreateEvaluadosTable extends Migration
             $table->string('segundo_apellido')->nullable();  // Segundo apellido (opcional)
             $table->string('CURP');  // CURP del evaluado (obligatorio)
             $table->string('RFC');  // RFC (obligatorio)
-            $table->string('CUIP');  // CUIP (obligatorio)
             $table->string('IFE');  // Identificación (obligatorio)
             $table->string('SMN')->nullable();  // Servicio Militar Nacional (opcional)
             $table->date('fecha_apertura');  // Fecha en que se abrió el expediente

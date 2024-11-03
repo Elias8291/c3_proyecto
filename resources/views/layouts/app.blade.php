@@ -75,6 +75,7 @@
             background-color: #060222;
         }
 
+        
         @media (max-width: 992px) {
             .navbar-expand-lg .navbar-nav .nav-link {
                 padding-right: 0.8rem;
@@ -85,6 +86,7 @@
                 background: linear-gradient(to right, #2b285c, #4b479c);
             }
         }
+        
     </style>
 
 
@@ -102,7 +104,7 @@
                 @include('layouts.sidebar')
             </div>
             <!-- Main Content -->
-            <div class="main-content" style="background-color:  #e0e0eb">
+            <div class="main-content" style="background-color:  #dbd6d7">
                 @yield('content')
             </div>
             <footer class="main-footer">

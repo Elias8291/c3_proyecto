@@ -338,6 +338,55 @@
     .search-input::placeholder {
         color: #999;
     }
+
+    .filters-container {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Add new styles for the year filter */
+    .filters-section {
+        margin-bottom: 20px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .year-filter {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .filter-label {
+        color: var(--primary-burgundy);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .year-select {
+        padding: 8px 15px;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        font-size: 14px;
+        min-width: 120px;
+        background: white;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .year-select:focus {
+        border-color: var(--primary-burgundy);
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+    }
 </style>
 
 @section('content')
@@ -355,12 +404,12 @@
                                 <i class="fas fa-plus"></i>
                                 <span>Nuevo Evaluado</span>
                             </a>
+
+                            
                         </div>
                     </div>
-                    <div class="search-container">
-                        <input type="text" id="searchByName" class="search-input" placeholder="Buscar por nombre...">
-                    </div>
                     <div class="table-container">
+
                         <div class="table-responsive">
                             <table class="table" id="miTabla2">
                                 <thead>
@@ -369,12 +418,11 @@
                                         <th>Nombre Completo</th>
                                         <th>CURP</th>
                                         <th>RFC</th>
-                                        <th>CUIP</th>
                                         <th>IFE</th>
                                         <th>SMN</th>
                                         <th>Fecha de Apertura</th>
                                         <th>Sexo</th>
-                                        <th>Actualizar</th>
+                                        
                                         <th>Eliminar</th>
                                     </tr>
                                 </thead>
@@ -386,20 +434,13 @@
                                             $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
                                         <td>{{ $evaluado->CURP }}</td>
                                         <td>{{ $evaluado->RFC }}</td>
-                                        <td>{{ $evaluado->CUIP }}</td>
                                         <td>{{ $evaluado->IFE }}</td>
                                         <td>{{ $evaluado->SMN }}</td>
                                         <td>{{ $evaluado->fecha_apertura }}</td>
                                         <td>{{ $evaluado->sexo }}</td>
+                                        
                                         <td>
-                                            <div class="action-buttons">
-                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}"
-                                                    class="btn btn-edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                        <td>
+                                            
                                             <div class="action-buttons">
                                                 <button type="button" class="btn btn-delete"
                                                     onclick="confirmarEliminacion({{ $evaluado->id }})">
@@ -429,58 +470,7 @@
 </section>
 
 <script>
-    new DataTable('#miTabla2', {
-        lengthMenu: [
-            [5, 10, 15, 25, 50],
-            [5, 10, 15, 25, 50]
-        ],
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
-            search: "_INPUT_",
-            searchPlaceholder: "Buscar evaluado...",
-            lengthMenu: "Mostrar _MENU_ registros"
-        },
-        pageLength: 10,
-        drawCallback: function() {
-            document.querySelectorAll('.paginate_button').forEach(button => {
-                button.classList.add('page-item');
-                const link = button.querySelector('a');
-                if (link) link.classList.add('page-link');
-            });
-        }
-    });
 
-    function confirmarEliminacion(evaluadoId) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Esta acción no se puede deshacer",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#800020',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            borderRadius: '10px'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('eliminar-form-' + evaluadoId).submit();
-                Swal.fire({
-                    title: '¡Eliminado!',
-                    text: 'El evaluado ha sido eliminado correctamente.',
-                    icon: 'success',
-                    timer: 3000,
-                    showConfirmButton: false,
-                    customClass: {
-                        popup: 'rounded-lg'
-                    }
-                });
-            }
-        });
-    }
-
-     document.getElementById('searchByName').addEventListener('keyup', function() {
-        let searchTerm = this.value;
-        table.column(1).search(searchTerm).draw(); // Column index 1 corresponds to the "Nombre Completo" column
-    });
 </script>
+
 @endsection

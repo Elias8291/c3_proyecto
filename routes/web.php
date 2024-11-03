@@ -41,5 +41,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('evaluados', EvaluadoController::class);
     Route::resource('documentos', DocumentoController::class);
     Route::resource('areas', AreaController::class);
+    
+Route::get('/evaluados/filterByYear', [EvaluadoController::class, 'filterByYear'])->name('evaluados.filterByYear');
+
 
 });
+// En routes/web.php

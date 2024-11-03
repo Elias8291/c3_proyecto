@@ -182,7 +182,7 @@
     .btn-new {
         background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
         color: white;
-        box-shadow: 0 4px 15px rgba(128, 0, 32, 0.2);
+        box-shadow: 0 4px 15px #ebe8e833;
         position: relative;
         overflow: hidden;
     }
@@ -308,64 +308,199 @@
             transform: translateY(0);
         }
     }
+    :root {
+    --primary-burgundy: #800020;
+    --light-burgundy: #98304b;
+    --pastel-pink: #ffd6e0;
+    --pastel-blue: #d6e5ff;
+    --pastel-purple: #e5d6ff;
+    --hover-pink: #ffecf1;
+    --gradient-start: #800020;
+    --gradient-end: #b31b41;
+}
+
+/* ... Tus estilos existentes ... */
+
+/* Agregar figuras decorativas al fondo del contenedor .card */
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before,
+.card::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.card::before {
+    width: 300px;
+    height: 300px;
+    background: var(--primary-burgundy);
+    top: -100px;
+    left: -100px;
+    transform: rotate(45deg);
+}
+
+.card::after {
+    width: 200px;
+    height: 200px;
+    background: var(--pastel-pink);
+    bottom: -50px;
+    right: -50px;
+    transform: rotate(-30deg);
+}
+
+/* Agregar figuras decorativas al fondo del contenedor .table-container */
+.table-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.table-container::before,
+.table-container::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.05;
+    z-index: 0;
+}
+
+.table-container::before {
+    width: 150px;
+    height: 150px;
+    background: var(--pastel-blue);
+    top: -50px;
+    right: -50px;
+    transform: rotate(60deg);
+}
+
+.table-container::after {
+    width: 100px;
+    height: 100px;
+    background: var(--pastel-purple);
+    bottom: -30px;
+    left: -30px;
+    transform: rotate(-45deg);
+}
+
+/* Asegurar que el contenido esté por encima de las figuras */
+.table-container > .table-responsive,
+.card > .actions-container,
+.card > .table-container,
+.card > .pagination,
+.section,
+.section-header,
+.section-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Agregar figuras abstractas al fondo del body */
+body {
+    position: relative;
+    background: linear-gradient(135deg, #f8f9fa, #fff5f7);
+    min-height: 100vh;
+    overflow: hidden; /* Previene barras de desplazamiento por las figuras */
+}
+
+body::before,
+body::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.02;
+    z-index: 0;
+}
+
+body::before {
+    width: 500px;
+    height: 500px;
+    background: var(--gradient-start);
+    top: -200px;
+    left: -200px;
+    transform: rotate(0deg);
+}
+
+body::after {
+    width: 400px;
+    height: 400px;
+    background: var(--gradient-end);
+    bottom: -150px;
+    right: -150px;
+    transform: rotate(90deg);
+}
+
+/* Opcional: Añadir una capa oscura sutil sobre el fondo para resaltar los contenedores */
+.section, .section-header, .section-body, .card, .table-container, .pagination {
+    position: relative;
+    z-index: 1;
+}
+
+    
 </style>
 
 @section('content')
-<section class="section">
-    <div class="section-header">
-        <h3 class="page__heading">Gestión de Roles</h3>
-    </div>
-    <div class="section-body">
-        <div class="card">
-            <div class="actions-container">
-                <div class="d-flex align-items-center">
-                    <a class="btn btn-new" href="{{ route('roles.create') }}">
-                        <i class="fas fa-plus"></i>
-                        <span>Nuevo Rol</span>
-                    </a>
+<div class="main-container">
+    <section class="section">
+        <div class="section-header">
+            <h3 class="page__heading">Gestión de Roles</h3>
+        </div>
+        <div class="section-body">
+            <div class="card">
+                <div class="actions-container">
+                    <div class="d-flex align-items-center">
+                        <a class="btn btn-new" href="{{ route('roles.create') }}">
+                            <i class="fas fa-plus"></i>
+                            <span>Nuevo Rol</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="table-container">
-                <div class="table-responsive">
-                    <table class="table" id="miTabla2">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Rol</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($roles as $role)
-                            <tr>
-                                <td>{{ $role->name }}</td>
-                                <td class="text-center">
-                                    <div class="action-buttons">
-                                        <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-edit">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
-                                        <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $role->id }})">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </button>
-                                        <form id="eliminar-form-{{ $role->id }}" action="{{ route('roles.destroy', $role->id) }}" method="POST" class="d-none">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table class="table" id="miTabla2">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Rol</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($roles as $role)
+                                <tr>
+                                    <td>{{ $role->name }}</td>
+                                    <td class="text-center">
+                                        <div class="action-buttons">
+                                            <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-edit">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $role->id }})">
+                                                <i class="fas fa-trash-alt"></i> Eliminar
+                                            </button>
+                                            <form id="eliminar-form-{{ $role->id }}" action="{{ route('roles.destroy', $role->id) }}" method="POST" class="d-none">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-
-            <div class="pagination justify-content-end">
-                {!! $roles->links() !!}
+                <div class="pagination justify-content-end">
+                    {!! $roles->links() !!}
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
+
+
 
 <script>
     new DataTable('#miTabla2', {

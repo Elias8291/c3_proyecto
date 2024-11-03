@@ -16,21 +16,9 @@ class Evaluado extends Model
      * @var array
      */
     protected $fillable = [
-        'primer_nombre',
-        'segundo_nombre',
-        'primer_apellido',
-        'segundo_apellido',
-        'CURP',
-        'RFC',
-        'CUIP',
-        'IFE',
-        'SMN',
-        'fecha_apertura',
-        'sexo',
-        'estado_nacimiento',
-        'fecha_nacimiento',
-        'resultado_evaluacion',
+        'primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido', 'CURP', 'RFC', 'IFE', 'SMN', 'fecha_apertura', 'sexo', 'estado_nacimiento', 'fecha_nacimiento', 'resultado_evaluacion'
     ];
+    
     
     /**
      * Los atributos que deberían ser tratados como fechas.

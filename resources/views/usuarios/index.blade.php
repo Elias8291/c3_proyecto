@@ -197,7 +197,7 @@
 
     .btn-new {
         background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        color: white;
+        color: rgb(0, 0, 0);
         box-shadow: 0 4px 15px rgba(128, 0, 32, 0.2);
         position: relative;
         overflow: hidden;
@@ -329,7 +329,7 @@
     /* Botón Nuevo Usuario Mejorado */
 .btn-new {
     background: linear-gradient(135deg, var(--primary-burgundy), var(--light-burgundy));
-    color: white; /* Asegura que el texto sea blanco */
+    color: rgb(3, 3, 3); /* Asegura que el texto sea blanco */
     padding: 12px 24px;
     border: none;
     border-radius: 30px;

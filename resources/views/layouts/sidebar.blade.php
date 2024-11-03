@@ -10,7 +10,7 @@
   
   <div class="sidebar-brand sidebar-brand-sm">
     <a href="{{ url('/') }}">
-      <img class="navbar-brand-full" src="https://i.ibb.co/R68Q7y7/carpeta.png" width="60px" alt="Student Icon"/>
+      <img class="navbar-brand-full"src="{{ asset('img/PD1.png') }}" width="60px" alt="Student Icon"/>
     </a>
   </div>
   <ul class="sidebar-menu">

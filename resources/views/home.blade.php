@@ -2,215 +2,280 @@
 <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 
 <style>
-    /* Variables para el esquema de colores */
-    :root {
-        --primary-burgundy: #800020;
-        --light-burgundy: #98304b;
-        --pastel-pink: #ffd6e0;
-        --pastel-blue: #d6e5ff;
-        --pastel-purple: #e5d6ff;
-        --hover-pink: #ffecf1;
-        --gradient-start: #800020;
-        --gradient-end: #b31b41;
-        
-        /* Colores para las tarjetas */
-        --card-users: linear-gradient(135deg, #800020 0%, #98304b 100%);
-        --card-evaluated: linear-gradient(135deg, #4B0082 0%, #663399 100%);
-        --card-roles: linear-gradient(135deg, #2E0854 0%, #4B0082 100%);
-        --card-logs: linear-gradient(135deg, #380036 0%, #4B0045 100%);
-    }
+   /* Variables para el esquema de colores */
+:root {
+    --primary-burgundy: #800020;
+    --secondary-navy: #1f2937;
+    --accent-gold: #d4b483;
+    --accent-cream: #f5ebe0;
+    --neutral-gray: #f3f4f6;
+    --deep-blue: #334155;
+    --soft-white: #ffffff;
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    
+    /* Gradientes suaves para las tarjetas */
+    --card-1: linear-gradient(145deg, #800020 0%, #9a1b3c 100%);
+    --card-2: linear-gradient(145deg, #1f2937 0%, #374151 100%);
+    --card-3: linear-gradient(145deg, #334155 0%, #475569 100%);
+    --card-4: linear-gradient(145deg, #292524 0%, #44403c 100%);
+}
 
+.section {
+    padding: 2rem;
+    background: var(--neutral-gray);
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(128, 0, 32, 0.03) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(31, 41, 55, 0.03) 0%, transparent 20%);
+    min-height: 100vh;
+}
+
+.section-header {
+    margin-bottom: 3rem;
+    position: relative;
+    text-align: center;
+}
+
+.page__heading {
+    color: var(--secondary-navy);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.page__heading::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--accent-gold);
+}
+
+.card-container {
+    background: var(--soft-white);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    margin-bottom: 2rem;
+}
+
+.card-custom {
+    border-radius: 12px;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    min-height: 160px;
+    position: relative;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Estilos de tarjetas específicos */
+.card-custom.bg-primary { background: var(--card-1); }
+.card-custom.bg-danger { background: var(--card-2); }
+.card-custom.bg-success { background: var(--card-3); }
+.card-custom.bg-info { background: var(--card-4); }
+
+.card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.card-custom .card-body {
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.card-custom .card-title {
+    color: var(--soft-white);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.card-custom .card-title i {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.card-custom h2 {
+    color: var(--soft-white);
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0.5rem 0 1rem;
+}
+
+.card-custom a.text-white {
+    color: var(--soft-white);
+    font-size: 0.875rem;
+    text-decoration: none;
+    opacity: 0.9;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-custom a.text-white:hover {
+    opacity: 1;
+    gap: 0.75rem;
+}
+
+/* Decoración de tarjetas moderna */
+.card-custom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+}
+
+.card-custom::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-30%, 30%);
+}
+
+/* Sección de bienvenida modernizada */
+.welcome-section {
+    background: var(--soft-white);
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    max-width: 800px;
+    margin: 3rem auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, 
+        var(--primary-burgundy),
+        var(--accent-gold),
+        var(--secondary-navy)
+    );
+}
+
+.welcome-title {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+
+.welcome-message {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* Animaciones refinadas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.row > div {
+    animation: fadeInUp 0.5s ease-out forwards;
+    animation-delay: calc(var(--animation-order) * 0.1s);
+}
+
+/* Mejoras responsivas */
+@media (max-width: 768px) {
     .section {
-        padding: 2rem;
-        background: linear-gradient(135deg, var(--pastel-pink) 0%, var(--pastel-purple) 100%);
-        min-height: 100vh;
-    }
-
-    .section-header {
-        margin-bottom: 2rem;
-    }
-
-    .page__heading {
-        color: var(--primary-burgundy);
-        font-size: 2.5rem;
-        font-weight: 700;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1.5rem;
-        text-align: center;
-        animation: titleFadeIn 0.8s ease-out;
-    }
-
-    .card.shadow {
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border: none;
-        box-shadow: 0 8px 32px rgba(128, 0, 32, 0.1);
         padding: 1.5rem;
     }
-
-    .card-custom {
-        border-radius: 15px;
-        border: none;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        height: 100%;
-        min-height: 150px; /* Reducido de 180px */
-        position: relative;
-        margin-bottom: 1.5rem;
+    
+    .card-container {
+        padding: 1.5rem;
     }
-
-    /* Estilos específicos para cada tipo de tarjeta */
-    .card-custom.bg-primary {
-        background: var(--card-users);
-    }
-
-    .card-custom.bg-danger {
-        background: var(--card-evaluated);
-    }
-
-    .card-custom.bg-success {
-        background: var(--card-roles);
-    }
-
-    .card-custom.bg-info {
-        background: var(--card-logs);
-    }
-
-    .card-custom:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Reducir el padding de las tarjetas */
-    .card-custom .card-body {
-        padding: 1rem; /* Antes: 1.5rem */
-    }
-
-    /* Reducir el tamaño de las fuentes */
-    .card-custom .card-title {
-        font-size: 1.1rem; /* Antes: 1.25rem */
-    }
-
-    .card-custom h2 {
-        font-size: 2rem; /* Antes: 2.5rem */
-    }
-
-    /* Ajustar el tamaño de los iconos */
-    .card-custom .card-title i {
-        font-size: 1.2rem; /* Antes: 1.5rem */
-    }
-
-    /* Ajustar los márgenes */
-    .card-custom {
-        min-height: 150px; /* Antes: 180px */
-    }
-
-    /* Ajustar el tamaño de los enlaces "Ver más" */
-    .card-custom a.text-white {
-        font-size: 0.9rem; /* Antes: 1rem aproximadamente */
-        padding: 0.3rem 0; /* Antes: 0.5rem 0 */
-    }
-
-    /* Efectos decorativos para las tarjetas */
-    .card-custom::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 80px; /* Reducido de 100px */
-        height: 80px; /* Reducido de 100px */
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        transform: translate(20%, -20%); /* Ajustado */
-    }
-
-    .card-custom::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 50%;
-        transform: translate(-30%, 30%);
-    }
-
-    /* Sección de bienvenida */
+    
     .welcome-section {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 3rem 2rem;
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(128, 0, 32, 0.1);
-        max-width: 800px;
-        margin: 3rem auto;
-        text-align: center;
+        padding: 2rem;
+        margin: 2rem auto;
     }
-
+    
     .welcome-title {
-        color: var(--primary-burgundy);
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        line-height: 1.2;
+        font-size: 1.75rem;
     }
-
-    .welcome-message {
-        color: #666;
-        font-size: 1.2rem;
-        line-height: 1.6;
-        margin-bottom: 2rem;
+    
+    .page__heading {
+        font-size: 1.75rem;
     }
+}
 
-    /* Animaciones mejoradas */
-    @keyframes titleFadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+@media (max-width: 576px) {
+    .section {
+        padding: 1rem;
     }
-
-    @keyframes cardFadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    
+    .card-container {
+        padding: 1rem;
     }
-
-    .row > div {
-        animation: cardFadeIn 0.6s ease-out forwards;
+    
+    .card-custom .card-body {
+        padding: 1.25rem;
     }
-
-    .row > div:nth-child(1) { animation-delay: 0.1s; }
-    .row > div:nth-child(2) { animation-delay: 0.2s; }
-    .row > div:nth-child(3) { animation-delay: 0.3s; }
-    .row > div:nth-child(4) { animation-delay: 0.4s; }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .card-custom {
-            margin-bottom: 1rem;
-        }
-        
-        .welcome-title {
-            font-size: 2rem;
-        }
-        
-        .page__heading {
-            font-size: 2rem;
-        }
+    
+    .welcome-section {
+        padding: 1.5rem;
     }
+}
+
+/* Estilos para destacar información importante */
+.highlight-text {
+    color: var(--primary-burgundy);
+    font-weight: 500;
+}
+
+.stat-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #10b981;
+    margin-top: 0.5rem;
+}
+
+.stat-trend.negative {
+    color: #ef4444;
+}
 </style>
 
 @section('content')
