@@ -302,6 +302,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -326,74 +327,79 @@
     .swal2-cancel {
         border-radius: 10px !important;
     }
+
     /* Botón Nuevo Usuario Mejorado */
-.btn-new {
-    background: linear-gradient(135deg, var(--primary-burgundy), var(--light-burgundy));
-    color: rgb(3, 3, 3); /* Asegura que el texto sea blanco */
-    padding: 12px 24px;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
-    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
+    .btn-new {
+        background: linear-gradient(135deg, var(--primary-burgundy), var(--light-burgundy));
+        color: rgb(3, 3, 3);
+        /* Asegura que el texto sea blanco */
+        padding: 12px 24px;
+        border: none;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
+        transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
 
-.btn-new:hover {
-    background: linear-gradient(135deg, var(--light-burgundy), var(--primary-burgundy));
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
-}
+    .btn-new:hover {
+        background: linear-gradient(135deg, var(--light-burgundy), var(--primary-burgundy));
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
+    }
 
-.btn-new:active {
-    transform: translateY(0);
-    box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
-}
+    .btn-new:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
+    }
 
-.btn-new i {
-    color: rgb(95, 39, 39); /* Asegura que el icono también sea blanco */
-    background: #494949; /* Fondo del icono */
-    padding: 8px; /* Espaciado interno del icono */
-    border-radius: 50%; /* Hace el fondo circular */
-    transition: transform 0.3s ease;
-}
+    .btn-new i {
+        color: rgb(95, 39, 39);
+        /* Asegura que el icono también sea blanco */
+        background: #494949;
+        /* Fondo del icono */
+        padding: 8px;
+        /* Espaciado interno del icono */
+        border-radius: 50%;
+        /* Hace el fondo circular */
+        transition: transform 0.3s ease;
+    }
 
-.btn-new:hover i {
-    transform: translateX(5px); /* Mueve el icono hacia la derecha al hacer hover */
-}
+    .btn-new:hover i {
+        transform: translateX(5px);
+        /* Mueve el icono hacia la derecha al hacer hover */
+    }
 
-/* Efecto Ripple al hacer clic */
-.btn-new::after {
-    content: "";
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background: rgba(12, 12, 12, 0.3);
-    border-radius: 50%;
-    transform: scale(0);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.5s ease, opacity 1s ease;
-}
+    /* Efecto Ripple al hacer clic */
+    .btn-new::after {
+        content: "";
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: rgba(12, 12, 12, 0.3);
+        border-radius: 50%;
+        transform: scale(0);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.5s ease, opacity 1s ease;
+    }
 
-.btn-new:active::after {
-    transform: scale(4);
-    opacity: 1;
-    transition: 0s;
-}
+    .btn-new:active::after {
+        transform: scale(4);
+        opacity: 1;
+        transition: 0s;
+    }
 
-/* Asegura que el texto dentro del span herede el color blanco */
-.btn-new span {
-    color: white;
-}
-
-
+    /* Asegura que el texto dentro del span herede el color blanco */
+    .btn-new span {
+        color: white;
+    }
 </style>
 
 @section('content')
@@ -434,20 +440,25 @@
                                     @foreach ($usuarios as $usuario)
                                     <tr>
                                         <td>{{ $usuario->id }}</td>
-                                        <td>{{ $usuario->name }} {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}</td>
+                                        <td>{{ $usuario->name }} {{ $usuario->apellido_paterno }} {{
+                                            $usuario->apellido_materno }}</td>
                                         <td>{{ $usuario->email }}</td>
                                         <td>{{ $usuario->telefono }}</td>
                                         <td>{{ $usuario->area->nombre_area ?? 'N/A' }}</td>
                                         <td>
                                             <div class="action-buttons">
-                                                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-edit">
+                                                <a href="{{ route('usuarios.edit', $usuario->id) }}"
+                                                    class="btn btn-edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $usuario->id }})">
+                                                <button type="button" class="btn btn-delete"
+                                                    onclick="confirmarEliminacion({{ $usuario->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
-                                            <form id="eliminar-form-{{ $usuario->id }}" action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="d-none">
+                                            <form id="eliminar-form-{{ $usuario->id }}"
+                                                action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST"
+                                                class="d-none">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>

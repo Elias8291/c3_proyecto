@@ -1,81 +1,43 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Carpeta;
+use App\Models\Evaluado;
+use App\Models\Caja;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CarpetaController extends Controller
 {
-    /**
-     * Mostrar la lista de carpetas.
-     */
     public function index()
     {
-        $carpetas = Carpeta::all();
+        $carpetas = Carpeta::with(['evaluado', 'caja'])->get();
         return view('carpetas.index', compact('carpetas'));
     }
 
-    /**
-     * Mostrar el formulario para crear una nueva carpeta.
-     */
-    public function create()
+    public function create(Request $request)
     {
-        return view('carpetas.crear');
+        $request->validate([
+            'evaluado_id' => 'required|exists:evaluados,id',
+        ]);
+
+        $evaluado = Evaluado::findOrFail($request->input('evaluado_id'));
+        $cajas = Caja::all(); // Pasamos todas las cajas
+
+        return view('carpetas.crear', compact('evaluado', 'cajas'));
     }
 
-    /**
-     * Almacenar una nueva carpeta en la base de datos.
-     */
+    
+
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'evaluado_id' => 'required|exists:evaluados,id',
-            'numero_documentos' => 'required|integer',
+        $request->validate([
+            'id_evaluado' => 'required|exists:evaluados,id',
+            'id_caja' => 'required|exists:cajas,id',
         ]);
 
-        Carpeta::create($validatedData);
+        Carpeta::create($request->only(['id_evaluado', 'id_caja']));
 
-        return redirect()->route('carpetas.index')->with('success', 'Carpeta creada exitosamente.');
-    }
-
-    /**
-     * Mostrar los detalles de una carpeta.
-     */
-    public function show(Carpeta $carpeta)
-    {
-        return view('carpetas.show', compact('carpeta'));
-    }
-
-    /**
-     * Mostrar el formulario para editar una carpeta existente.
-     */
-    public function edit(Carpeta $carpeta)
-    {
-        return view('carpetas.editar', compact('carpeta'));
-    }
-
-    /**
-     * Actualizar una carpeta existente en la base de datos.
-     */
-    public function update(Request $request, Carpeta $carpeta)
-    {
-        $validatedData = $request->validate([
-            'evaluado_id' => 'required|exists:evaluados,id',
-            'numero_documentos' => 'required|integer',
-        ]);
-
-        $carpeta->update($validatedData);
-
-        return redirect()->route('carpetas.index')->with('success', 'Carpeta actualizada exitosamente.');
-    }
-
-    /**
-     * Eliminar una carpeta.
-     */
-    public function destroy(Carpeta $carpeta)
-    {
-        $carpeta->delete();
-        return redirect()->route('carpetas.index')->with('success', 'Carpeta eliminada exitosamente.');
+        return redirect()->route('carpetas.index')->with('success', 'Carpeta creada correctamente.');
     }
 }

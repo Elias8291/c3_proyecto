@@ -16,10 +16,11 @@ class CreateCajasTable extends Migration
         Schema::create('cajas', function (Blueprint $table) {
             $table->id();  // Llave primaria
             $table->integer('numero_caja');  // Número de caja
-            $table->string('mes');  // Mes de almacenamiento (por ejemplo, Enero)
-            $table->year('año');  // Año de almacenamiento
-            $table->string('ubicacion');  // Ubicación física de la caja
-            $table->string('rango_alfabetico');  // Rango alfabético de los documentos (por ejemplo, A-C)
+            $table->string('mes');  // Mes asociado a la caja
+            $table->year('anio');  // Año asociado a la caja
+            $table->string('ubicacion');  // Ubicación de la caja
+            $table->string('rango_alfabetico');  // Rango alfabético de documentos en la caja
+            $table->integer('maximo_carpetas')->default(0);  // Máximo de carpetas permitidas en la caja
             $table->timestamps();  // Campos created_at y updated_at
         });
     }

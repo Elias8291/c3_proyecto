@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Evaluado;
 use Illuminate\Http\Request;
+use App\Models\Carpeta;
+use App\Models\Documento;
+use Illuminate\Support\Str;
 
 class EvaluadoController extends Controller
 {
@@ -41,7 +44,6 @@ class EvaluadoController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos de entrada
         $validatedData = $request->validate([
             'primer_nombre' => 'required|string|max:255',
             'segundo_nombre' => 'nullable|string|max:255',
@@ -49,36 +51,21 @@ class EvaluadoController extends Controller
             'segundo_apellido' => 'nullable|string|max:255',
             'CURP' => 'required|string|max:18|unique:evaluados',
             'RFC' => 'nullable|string|max:13',
-            'IFE' => 'nullable|string|size:13|regex:/^[A-Z0-9]{13}$/',  // Opcional pero con tamaño exacto y regex
-            'SMN' => ['nullable', 'regex:/^[A-Z0-9]{3}-\d{2}-\d{6}$/'],  // Opcional pero debe cumplir con el formato
-            'fecha_apertura' => 'required|date',  // Fecha de evaluación (apertura)
-            'sexo' => 'required|in:M,H',  // M para mujer, H para hombre
-            'estado_nacimiento' => 'required|string|max:2',  // Código de estado de nacimiento
-            'fecha_nacimiento' => 'required|date',  // Fecha de nacimiento válida
-            'resultado_evaluacion' => 'required|boolean',  // Aprobado o No Aprobado
+            'IFE' => 'nullable|string|size:13|regex:/^[A-Z0-9]{13}$/',
+            'SMN' => 'nullable|string|max:13',
+            'fecha_apertura' => 'required|date',
+            'sexo' => 'required|in:M,H',
+            'estado_nacimiento' => 'required|string|max:2',
+            'fecha_nacimiento' => 'required|date',
+            'resultado_evaluacion' => 'required|boolean',
         ]);
-    
-        // Crear un nuevo evaluado con los datos validados
-        Evaluado::create([
-            'primer_nombre' => $validatedData['primer_nombre'],
-            'segundo_nombre' => $validatedData['segundo_nombre'],
-            'primer_apellido' => $validatedData['primer_apellido'],
-            'segundo_apellido' => $validatedData['segundo_apellido'],
-            'CURP' => $validatedData['CURP'],
-            'RFC' => $validatedData['RFC'],
-            'IFE' => $validatedData['IFE'],
-            'SMN' => $validatedData['SMN'],
-            'fecha_apertura' => $validatedData['fecha_apertura'],
-            'sexo' => $validatedData['sexo'],
-            'estado_nacimiento' => $validatedData['estado_nacimiento'],
-            'fecha_nacimiento' => $validatedData['fecha_nacimiento'],
-            'resultado_evaluacion' => $validatedData['resultado_evaluacion'],
-        ]);
-    
-        // Redirigir a la lista de evaluados con un mensaje de éxito
-        return redirect()->route('evaluados.index')->with('success', 'Registro agregado con éxito');
+
+        $evaluado = Evaluado::create($validatedData);
+
+        // Redirigir a la vista de creación de carpeta, pasando el ID del evaluado
+        return redirect()->route('carpetas.create', ['evaluado_id' => $evaluado->id]);
     }
-    
+
 
     /**
      * Mostrar los detalles de un evaluado específico.
@@ -139,13 +126,13 @@ class EvaluadoController extends Controller
     }
 
     // En tu controlador EvaluadoController
-// En tu controlador EvaluadoController
-public function filterByYear(Request $request)
-{
-    $year = $request->input('year');
-    $evaluados = Evaluado::whereYear('fecha_apertura', $year)->get();
-    return response()->json($evaluados);
-}
+    // En tu controlador EvaluadoController
+    public function filterByYear(Request $request)
+    {
+        $year = $request->input('year');
+        $evaluados = Evaluado::whereYear('fecha_apertura', $year)->get();
+        return response()->json($evaluados);
+    }
 
 
 
@@ -163,4 +150,5 @@ public function filterByYear(Request $request)
         // Redirigir a la lista de evaluados con un mensaje de éxito
         return redirect()->route('evaluados.index')->with('success', 'Evaluado eliminado exitosamente.');
     }
+    
 }

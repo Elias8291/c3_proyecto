@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SeederPermisosC3::class);
         $this->call(UserSeeder::class);
         $this->call(EvaluadosSeeder::class);
+        $this->call(CajasSeeder::class);
     }
 }

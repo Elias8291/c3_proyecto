@@ -36,7 +36,7 @@
 
     <style>
         .btn-back:hover {
-            background-color: #7fafeeea !important;
+            background-color: #9b0324ea !important;
             /* Guinda más oscuro al pasar el cursor */
         }
 
@@ -83,7 +83,7 @@
             }
 
             .main-navbar {
-                background: linear-gradient(to right, #2b285c, #4b479c);
+                background: linear-gradient(to right, #910232, #8f000c);
             }
         }
         

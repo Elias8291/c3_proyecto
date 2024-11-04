@@ -1,608 +1,757 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Rol')
+@section('title', 'Crear Evaluado')
 
 @section('css')
-<!-- Flatpickr CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-<!-- Estilos Personalizados -->
 <style>
-    /* Gradiente Principal con los nuevos colores */
-    .bg-gradient-primary {
-        background: linear-gradient(45deg, #800020 0%, #b30000 100%);
+    /* Reutiliza los estilos del formulario de usuario */
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #800020, #b30000);
+    }
+
+    .page-background {
+        background: linear-gradient(135deg, #f0f4f8 40%, #e0e0eb);
+        padding: 60px 0;
+        min-height: 100vh;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 16px;
+        letter-spacing: 0.3px;
+        display: block;
     }
 
     .form-control {
-        border-radius: 0.5rem;
-        border: 1px solid #e3e6f0;
-        padding: 0.75rem 1rem;
-        transition: all 0.2s;
+        padding: 12px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 16px;
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
     .form-control:focus {
         border-color: #800020;
-        box-shadow: 0 0 0 0.2rem rgba(128, 0, 32, 0.25);
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+        background-color: #fff;
     }
 
-    .btn {
-        border-radius: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 600;
-        transition: all 0.2s;
+    .form-control:hover {
+        border-color: #800020;
     }
 
-    .card {
-        border-radius: 1rem;
-        transition: all 0.3s;
+    .form-error {
+        border-color: #e53e3e !important;
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2) !important;
     }
 
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-    .form-group label {
-        color: #800020;
-        margin-bottom: 0.5rem;
-    }
-
-    .alert {
-        border-radius: 1rem;
-    }
-
-    .input-group-text {
-        background-color: #800020;
-        color: white;
+    .btn-submit {
+        background: linear-gradient(135deg, #800020 0%, #b30000 100%);
+        color: #fff;
+        padding: 14px 28px;
         border: none;
-        border-radius: 0.5rem 0 0 0.5rem;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
     }
 
-    .btn-primary {
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(128, 0, 32, 0.2);
+    }
+
+    .btn-submit:active {
+        transform: translateY(1px);
+    }
+
+    .card-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 30px;
+        text-align: center;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .card-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #800020, #b30000);
+        border-radius: 2px;
+    }
+
+    .mb-4 {
+        margin-bottom: 25px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+        }
+    }
+
+    .alert-success,
+    .alert-error {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin: 25px 0;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+    }
+
+    .alert-success {
+        background-color: #f0fdf4;
+        border-left: 5px solid #22c55e;
+        color: #166534;
+    }
+
+    .alert-error {
+        background-color: #fef2f2;
+        border-left: 5px solid #ef4444;
+        color: #991b1b;
+    }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        color: #800020;
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .btn-back i {
+        margin-right: 8px;
+    }
+
+    .btn-back:hover {
+        color: #b30000;
+    }
+
+    .page-background {
+        background-color: #dbd6d7;
+        background-image:
+            linear-gradient(45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%),
+            linear-gradient(-45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
+            linear-gradient(-45deg, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
+            radial-gradient(circle at 50% 50%, rgba(0, 48, 73, 0.05) 2px, transparent 3px);
+        background-size: 50px 50px, 50px 50px, 50px 50px, 50px 50px, 25px 25px;
+        background-position: 0 0, 25px 0, 25px -25px, 0 0, 0 0;
+        position: relative;
+        padding: 60px 0;
+        min-height: 100vh;
+    }
+
+    .page-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 30% 30%, rgba(0, 48, 73, 0.08) 0%, transparent 60%),
+            radial-gradient(circle at 70% 70%, rgba(0, 48, 73, 0.08) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #ffffff 0%, #fcfafa 100%);
+        padding: 40px;
+        box-shadow:
+            0 15px 35px rgba(128, 0, 32, 0.1),
+            0 5px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(128, 0, 32, 0.1);
+        backdrop-filter: blur(5px);
+    }
+
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg,
+                #800020 0%,
+                #a31545 25%,
+                #800020 50%,
+                #a31545 75%,
+                #800020 100%);
+        background-size: 200% auto;
+        animation: gradient 3s linear infinite;
+    }
+
+    .container::after {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% center;
+        }
+
+        100% {
+            background-position: 200% center;
+        }
+    }
+
+    /* Efecto hover para el container */
+    .container:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            0 20px 40px rgba(128, 0, 32, 0.15),
+            0 10px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Decoración adicional */
+    .decoration {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .decoration::before {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        background: radial-gradient(circle at center, rgba(128, 0, 32, 0.01) 0%, transparent 50%);
+        animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Mejoras para los campos del formulario */
+    .form-control {
+        padding: 12px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-size: 22px;
+        /* Aumenta el tamaño de letra aquí */
+        width: 100%;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .form-control:focus {
+        border-color: #800020;
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+        background-color: #fff;
+        font-size: 20px;
+        /* Aumenta el tamaño de letra en enfoque */
+    }
+
+
+    /* Efecto de brillo en el borde superior */
+    @keyframes shimmer {
+        0% {
+            background-position: -200% center;
+        }
+
+        100% {
+            background-position: 200% center;
+        }
+    }
+
+    .container::before {
+        animation: shimmer 6s linear infinite;
+        background-size: 200% auto;
+    }
+
+    /* Estilo para el grupo de botones de radio */
+    .form-check-inline {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 15px;
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .form-check-input {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #800020;
+        border-radius: 50%;
+        margin-right: 8px;
+        outline: none;
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .form-check-input:checked {
         background-color: #800020;
+        border-color: #800020;
+    }
+
+    .form-check-input:checked::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 10px;
+        height: 10px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .form-check-input:hover {
         border-color: #b30000;
     }
 
-    .btn-primary:hover {
-        background-color: #b30000;
-        border-color: #800020;
+    /* Enfocar en el botón de radio cuando está seleccionado o en hover */
+    .form-check-input:focus {
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.2);
     }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 17px !important;
+        /* Forzar el tamaño de fuente */
+        letter-spacing: 0.3px;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+        font-size: 17px !important;
+    }
+
 </style>
 @endsection
 
 @section('content')
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<main class="profile-page">
+    <section class="page-background">
+        <div class="container">
+            <div class="text-left mb-4">
+                <a href="{{ route('evaluados.index') }}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+            </div>
+            <div class="text-center mb-4">
+                <h3 class="card-title">Crear Nuevo Evaluado</h3>
+            </div>
 
-<section class="section py-5" style="background-color: #f8f9fa;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <!-- Card Principal -->
-                <div class="card shadow-lg border-0 rounded-lg">
-                    <!-- Encabezado -->
-                    <div
-                        class="card-header bg-gradient-primary text-white p-4 d-flex align-items-center justify-content-between">
-                        <a href="{{ url()->previous() }}" class="btn btn-light btn-sm">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
-                        <h3 class="m-0 text-center flex-grow-1">
-                            <i class="fas fa-user-plus"></i> Registro de Evaluado
-                        </h3>
-                        <div style="width: 40px;"></div>
+            <!-- Formulario -->
+            <form action="{{ route('evaluados.store') }}" method="POST">
+                @csrf
+
+                <div class="form-row">
+                    <!-- Primer Nombre -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="primer_nombre">Primer Nombre</label>
+                        <input name="primer_nombre" value="{{ old('primer_nombre') }}" class="form-control @error('primer_nombre') form-error @enderror" type="text" required pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$" title="Solo se permite un nombre sin números ni caracteres especiales.">
+                        @error('primer_nombre')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <!-- Cuerpo -->
-                    <div class="card-body p-4">
-                        <!-- Alertas de Error -->
-                        @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-                            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Errores Detectados
-                            </h5>
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                        </div>
-                        @endif
-
-                        <form action="{{ route('evaluados.store') }}" method="POST" id="evaluado-form">
-                            @csrf
-                            <div class="row">
-                                <!-- Columna Izquierda: Información Personal -->
-                                <div class="col-md-4">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title text-maroon border-bottom pb-3 mb-4">
-                                                <i class="fas fa-user-circle"></i> Información Personal
-                                            </h5>
-                                            <div class="form-group">
-                                                <label class="font-weight-bold" style="font-size: 18px;">
-                                                    <i class="fas fa-user" style="font-size: 18px;"></i> Primer Nombre *
-                                                </label>
-                                                <input type="text" name="primer_nombre"
-                                                    class="form-control form-control-lg @error('primer_nombre') is-invalid @enderror"
-                                                    style="font-size: 18px;"
-                                                    value="{{ old('primer_nombre') }}" required>
-                                                @error('primer_nombre')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-                                            
-
-                                            <!-- Segundo Nombre -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-user"></i> Segundo
-                                                    Nombre</label>
-                                                <input type="text" name="segundo_nombre"
-                                                    class="form-control form-control-lg @error('segundo_nombre') is-invalid @enderror"
-                                                    value="{{ old('segundo_nombre') }}">
-                                                @error('segundo_nombre')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Primer Apellido -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-user"></i> Primer
-                                                    Apellido *</label>
-                                                <input type="text" name="primer_apellido"
-                                                    class="form-control form-control-lg @error('primer_apellido') is-invalid @enderror"
-                                                    value="{{ old('primer_apellido') }}" required>
-                                                @error('primer_apellido')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Segundo Apellido -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-user"></i> Segundo
-                                                    Apellido</label>
-                                                <input type="text" name="segundo_apellido"
-                                                    class="form-control form-control-lg @error('segundo_apellido') is-invalid @enderror"
-                                                    value="{{ old('segundo_apellido') }}">
-                                                @error('segundo_apellido')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Sexo -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-venus-mars"></i> Sexo
-                                                    *</label>
-                                                <select name="sexo"
-                                                    class="form-control form-control-lg @error('sexo') is-invalid @enderror"
-                                                    required>
-                                                    <option value="" disabled selected>Seleccione el sexo</option>
-                                                    <option value="H" {{ old('sexo')=='H' ? 'selected' : '' }}>Hombre
-                                                    </option>
-                                                    <option value="M" {{ old('sexo')=='M' ? 'selected' : '' }}>Mujer
-                                                    </option>
-                                                </select>
-                                                @error('sexo')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Fecha de Nacimiento -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-calendar-alt"></i>
-                                                    Fecha de Nacimiento *</label>
-                                                <input type="text" name="fecha_nacimiento" id="fecha_nacimiento"
-                                                    class="form-control form-control-lg @error('fecha_nacimiento') is-invalid @enderror"
-                                                    value="{{ old('fecha_nacimiento') }}" required>
-                                                @error('fecha_nacimiento')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <div>
-                                                <label for="estado_nacimiento"
-                                                    class="block text-red-900 font-medium mb-2">Estado de Nacimiento
-                                                    *</label>
-                                                <select name="estado_nacimiento" id="estado_nacimiento"
-                                                    class="w-full border border-gray-300 rounded-md p-2 focus:ring-red-800 focus:border-red-800 @error('estado_nacimiento') border-red-500 @enderror"
-                                                    required>
-                                                    <option value="">Seleccione...</option>
-                                                    <option value="AG" {{ old('estado_nacimiento')=='AG' ? 'selected'
-                                                        : '' }}>Aguascalientes</option>
-                                                    <option value="BC" {{ old('estado_nacimiento')=='BC' ? 'selected'
-                                                        : '' }}>Baja California</option>
-                                                    <option value="BS" {{ old('estado_nacimiento')=='BS' ? 'selected'
-                                                        : '' }}>Baja California Sur</option>
-                                                    <option value="CM" {{ old('estado_nacimiento')=='CM' ? 'selected'
-                                                        : '' }}>Campeche</option>
-                                                    <option value="CS" {{ old('estado_nacimiento')=='CS' ? 'selected'
-                                                        : '' }}>Chiapas</option>
-                                                    <option value="CH" {{ old('estado_nacimiento')=='CH' ? 'selected'
-                                                        : '' }}>Chihuahua</option>
-                                                    <option value="CO" {{ old('estado_nacimiento')=='CO' ? 'selected'
-                                                        : '' }}>Coahuila</option>
-                                                    <option value="CL" {{ old('estado_nacimiento')=='CL' ? 'selected'
-                                                        : '' }}>Colima</option>
-                                                    <option value="DG" {{ old('estado_nacimiento')=='DG' ? 'selected'
-                                                        : '' }}>Durango</option>
-                                                    <option value="GT" {{ old('estado_nacimiento')=='GT' ? 'selected'
-                                                        : '' }}>Guanajuato</option>
-                                                    <option value="GR" {{ old('estado_nacimiento')=='GR' ? 'selected'
-                                                        : '' }}>Guerrero</option>
-                                                    <option value="HG" {{ old('estado_nacimiento')=='HG' ? 'selected'
-                                                        : '' }}>Hidalgo</option>
-                                                    <option value="JA" {{ old('estado_nacimiento')=='JA' ? 'selected'
-                                                        : '' }}>Jalisco</option>
-                                                    <option value="MX" {{ old('estado_nacimiento')=='MX' ? 'selected'
-                                                        : '' }}>Estado de México</option>
-                                                    <option value="MI" {{ old('estado_nacimiento')=='MI' ? 'selected'
-                                                        : '' }}>Michoacán</option>
-                                                    <option value="MO" {{ old('estado_nacimiento')=='MO' ? 'selected'
-                                                        : '' }}>Morelos</option>
-                                                    <option value="NA" {{ old('estado_nacimiento')=='NA' ? 'selected'
-                                                        : '' }}>Nayarit</option>
-                                                    <option value="NL" {{ old('estado_nacimiento')=='NL' ? 'selected'
-                                                        : '' }}>Nuevo León</option>
-                                                    <option value="OA" {{ old('estado_nacimiento')=='OA' ? 'selected'
-                                                        : '' }}>Oaxaca</option>
-                                                    <option value="PU" {{ old('estado_nacimiento')=='PU' ? 'selected'
-                                                        : '' }}>Puebla</option>
-                                                    <option value="QE" {{ old('estado_nacimiento')=='QE' ? 'selected'
-                                                        : '' }}>Querétaro</option>
-                                                    <option value="QR" {{ old('estado_nacimiento')=='QR' ? 'selected'
-                                                        : '' }}>Quintana Roo</option>
-                                                    <option value="SL" {{ old('estado_nacimiento')=='SL' ? 'selected'
-                                                        : '' }}>San Luis Potosí</option>
-                                                    <option value="SI" {{ old('estado_nacimiento')=='SI' ? 'selected'
-                                                        : '' }}>Sinaloa</option>
-                                                    <option value="SO" {{ old('estado_nacimiento')=='SO' ? 'selected'
-                                                        : '' }}>Sonora</option>
-                                                    <option value="TB" {{ old('estado_nacimiento')=='TB' ? 'selected'
-                                                        : '' }}>Tabasco</option>
-                                                    <option value="TM" {{ old('estado_nacimiento')=='TM' ? 'selected'
-                                                        : '' }}>Tamaulipas</option>
-                                                    <option value="TL" {{ old('estado_nacimiento')=='TL' ? 'selected'
-                                                        : '' }}>Tlaxcala</option>
-                                                    <option value="VE" {{ old('estado_nacimiento')=='VE' ? 'selected'
-                                                        : '' }}>Veracruz</option>
-                                                    <option value="YU" {{ old('estado_nacimiento')=='YU' ? 'selected'
-                                                        : '' }}>Yucatán</option>
-                                                    <option value="ZA" {{ old('estado_nacimiento')=='ZA' ? 'selected'
-                                                        : '' }}>Zacatecas</option>
-                                                    <option value="DF" {{ old('estado_nacimiento')=='DF' ? 'selected'
-                                                        : '' }}>Ciudad de México</option>
-                                                </select>
-                                                @error('estado_nacimiento')
-                                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-
-                                <!-- Columna Central: Documentación -->
-                                <div class="col-md-4">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title text-maroon border-bottom pb-3 mb-4">
-                                                <i class="fas fa-id-card"></i> Documentación
-                                            </h5>
-
-                                            <!-- Clave de Elector Faltante -->
-                                            <!-- CURP Faltante (Últimos 3 dígitos) -->
-                                            <div class="form-group">
-                                                <label for="CURP_faltante" class="form-label">CURP Faltante (Últimos 2
-                                                    dígitos)</label>
-                                                <input type="text" name="CURP_faltante" id="CURP_faltante"
-                                                    class="form-control @error('CURP_faltante') is-invalid @enderror"
-                                                    pattern="[A-Z0-9]{2}" maxlength="2" placeholder="Ej:12"
-                                                    value="{{ old('CURP_faltante') }}">
-                                                @error('CURP_faltante')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-
-
-                                            <!-- CURP -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-fingerprint"></i> CURP
-                                                    *</label>
-                                                <input type="text" name="CURP" id="CURP"
-                                                    class="form-control form-control-lg @error('CURP') is-invalid @enderror"
-                                                    value="{{ old('CURP') }}" required maxlength="18">
-                                                @error('CURP')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="RFC_faltante" class="form-label">RFC Faltante (Últimos 2
-                                                    dígitos)</label>
-                                                <input type="text" name="RFC_faltante" id="RFC_faltante"
-                                                    class="form-control @error('RFC_faltante') is-invalid @enderror"
-                                                    pattern="\d{2}" maxlength="2" placeholder="Ej: 34"
-                                                    value="{{ old('RFC_faltante') }}">
-                                                @error('RFC_faltante')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- RFC -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-file-alt"></i>
-                                                    RFC</label>
-                                                <input type="text" name="RFC" id="RFC"
-                                                    class="form-control form-control-lg @error('RFC') is-invalid @enderror"
-                                                    value="{{ old('RFC') }}" maxlength="13">
-                                                @error('RFC')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Clave de Elector Faltante -->
-                                            <!-- Clave de Elector Faltante -->
-                                            <div class="form-group">
-                                                <label for="clave_elector_faltante" class="form-label">Clave de Elector
-                                                    Faltante (Últimos 3 dígitos)</label>
-                                                <input type="text" name="clave_elector_faltante"
-                                                    id="clave_elector_faltante"
-                                                    class="form-control @error('clave_elector_faltante') is-invalid @enderror"
-                                                    pattern="\d{3}" maxlength="3" placeholder="Ej: 123"
-                                                    value="{{ old('clave_elector_faltante') }}">
-                                                @error('clave_elector_faltante')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-
-                                            <!-- IFE -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-id-card"></i> IFE
-                                                    *</label>
-                                                <input type="text" name="IFE" id="IFE"
-                                                    class="form-control form-control-lg @error('IFE') is-invalid @enderror"
-                                                    value="{{ old('IFE') }}" required maxlength="13"
-                                                    pattern="[A-Z0-9]{13}">
-                                                @error('IFE')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                                <small class="form-text text-muted">Debe tener 13 caracteres
-                                                    alfanuméricos.</small>
-                                            </div>
-
-
-                                            <!-- SMN -->
-                                            <!-- SMN (Servicio Militar Número) -->
-                                            <!-- SMN (Servicio Militar Número) -->
-                                            <!-- SMN (Servicio Militar Número) -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-id-card"></i>
-                                                    SMN</label>
-                                                <input type="text" name="SMN" id="SMN"
-                                                    class="form-control form-control-lg @error('SMN') is-invalid @enderror"
-                                                    value="{{ old('SMN') }}" pattern="[A-Z0-9]{3}-\d{2}-[A-Z0-9]{6}"
-                                                    placeholder="ABC-12-123ABC" maxlength="13" required>
-                                                <small class="form-text text-muted">Formato: ABC-12-123ABC</small>
-                                                @error('SMN')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Columna Derecha: Información Adicional -->
-                                <div class="col-md-4">
-                                    <div class="card h-100 border-0 shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title text-maroon border-bottom pb-3 mb-4">
-                                                <i class="fas fa-calendar-alt"></i> Información Adicional
-                                            </h5>
-
-                                            <!-- Fecha de Apertura -->
-                                            <div class="form-group">
-                                                <label class="font-weight-bold"><i class="fas fa-calendar-alt"></i>
-                                                    Fecha de Apertura *</label>
-                                                <input type="date" name="fecha_apertura" id="fecha_apertura"
-                                                    class="form-control form-control-lg @error('fecha_apertura') is-invalid @enderror"
-                                                    value="{{ old('fecha_apertura') }}" required>
-                                                @error('fecha_apertura')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-
-                                            <!-- Fecha de Nacimiento -->
-                                            <!-- Ya incluido en la columna izquierda -->
-
-                                            <!-- Sexo -->
-                                            <!-- Ya incluido en la columna izquierda -->
-
-                                            <!-- Estado de Nacimiento -->
-                                            <!-- Ya incluido en la columna izquierda -->
-
-                                            <!-- Resultado de Evaluación -->
-                                            <div class="form-group">
-                                                <label for="resultado_evaluacion" class="font-weight-bold">Resultado de
-                                                    Evaluación *</label>
-                                                <select name="resultado_evaluacion"
-                                                    class="form-control form-control-lg @error('resultado_evaluacion') is-invalid @enderror"
-                                                    id="resultado_evaluacion" required>
-                                                    <option value="" disabled selected>Seleccione el resultado</option>
-                                                    <option value="1" {{ old('resultado_evaluacion')=='1' ? 'selected'
-                                                        : '' }}>Aprobado</option>
-                                                    <option value="0" {{ old('resultado_evaluacion')=='0' ? 'selected'
-                                                        : '' }}>No Aprobado</option>
-                                                </select>
-                                                @error('resultado_evaluacion')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Botón de Envío -->
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
-                                    <i class="fas fa-save mr-2"></i> Guardar Registro
-                                </button>
-                                <a href="{{ route('evaluados.index') }}" class="btn btn-light btn-lg px-5 py-3 ml-2">
-                                    Cancelar
-                                </a>
-                            </div>
-                        </form>
+                    <!-- Segundo Nombre -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="segundo_nombre">Segundo Nombre</label>
+                        <input name="segundo_nombre" value="{{ old('segundo_nombre') }}" class="form-control @error('segundo_nombre') form-error @enderror" type="text" pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$" title="Solo se permite un nombre sin números ni caracteres especiales.">
+                        @error('segundo_nombre')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
+
+                <div class="form-row">
+                    <!-- Primer Apellido -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="primer_apellido">Primer Apellido</label>
+                        <input name="primer_apellido" value="{{ old('primer_apellido') }}" class="form-control @error('primer_apellido') form-error @enderror" type="text" required>
+                        @error('primer_apellido')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Segundo Apellido -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="segundo_apellido">Segundo Apellido</label>
+                        <input name="segundo_apellido" value="{{ old('segundo_apellido') }}" class="form-control @error('segundo_apellido') form-error @enderror" type="text">
+                        @error('segundo_apellido')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- CURP -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="CURP">CURP</label>
+                        <input name="CURP" value="{{ old('CURP') }}" class="form-control @error('CURP') form-error @enderror" type="text" required>
+                        @error('CURP')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- RFC -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="RFC">RFC</label>
+                        <input name="RFC" value="{{ old('RFC') }}" class="form-control @error('RFC') form-error @enderror" type="text">
+                        @error('RFC')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Género (Radio Buttons) -->
+                    <div class="form-group mb-4">
+                        <label class="form-label">Género</label>
+                        <div>
+                            <label class="form-check-inline">
+                                <input type="radio" name="sexo" value="M" class="form-check-input @error('sexo') form-error @enderror" {{ old('sexo')=='M'
+                                    ? 'checked' : '' }} required> Mujer
+                            </label>
+                            <label class="form-check-inline">
+                                <input type="radio" name="sexo" value="H" class="form-check-input @error('sexo') form-error @enderror" {{ old('sexo')=='H'
+                                    ? 'checked' : '' }} required> Hombre
+                            </label>
+                        </div>
+                        @error('sexo')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- IFE -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="IFE">IFE</label>
+                        <input name="IFE" value="{{ old('IFE') }}" class="form-control @error('IFE') form-error @enderror" type="text">
+                        @error('IFE')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- SMN -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="SMN">SMN</label>
+                        <input name="SMN" value="{{ old('SMN') }}" class="form-control @error('SMN') form-error @enderror" type="text">
+                        @error('SMN')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Fecha Apertura -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="fecha_apertura">Fecha de Apertura</label>
+                        <input name="fecha_apertura" value="{{ old('fecha_apertura') }}" class="form-control @error('fecha_apertura') form-error @enderror" type="date" required id="fecha_apertura">
+                        @error('fecha_apertura')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <!-- Estado de Nacimiento -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="estado_nacimiento">Estado de Nacimiento</label>
+                        <select name="estado_nacimiento" class="form-control @error('estado_nacimiento') form-error @enderror" required>
+                            <option value="">Seleccione el Estado</option>
+                            <option value="AS" {{ old('estado_nacimiento')=='AS' ? 'selected' : '' }}>Aguascalientes
+                                (AS)</option>
+                            <option value="BC" {{ old('estado_nacimiento')=='BC' ? 'selected' : '' }}>Baja California
+                                (BC)</option>
+                            <option value="BS" {{ old('estado_nacimiento')=='BS' ? 'selected' : '' }}>Baja California
+                                Sur (BS)</option>
+                            <option value="CC" {{ old('estado_nacimiento')=='CC' ? 'selected' : '' }}>Campeche (CC)
+                            </option>
+                            <option value="CL" {{ old('estado_nacimiento')=='CL' ? 'selected' : '' }}>Coahuila (CL)
+                            </option>
+                            <option value="CM" {{ old('estado_nacimiento')=='CM' ? 'selected' : '' }}>Colima (CM)
+                            </option>
+                            <option value="CS" {{ old('estado_nacimiento')=='CS' ? 'selected' : '' }}>Chiapas (CS)
+                            </option>
+                            <option value="CH" {{ old('estado_nacimiento')=='CH' ? 'selected' : '' }}>Chihuahua (CH)
+                            </option>
+                            <option value="DF" {{ old('estado_nacimiento')=='DF' ? 'selected' : '' }}>Ciudad de México
+                                (DF)</option>
+                            <option value="DG" {{ old('estado_nacimiento')=='DG' ? 'selected' : '' }}>Durango (DG)
+                            </option>
+                            <option value="GT" {{ old('estado_nacimiento')=='GT' ? 'selected' : '' }}>Guanajuato (GT)
+                            </option>
+                            <option value="GR" {{ old('estado_nacimiento')=='GR' ? 'selected' : '' }}>Guerrero (GR)
+                            </option>
+                            <option value="HG" {{ old('estado_nacimiento')=='HG' ? 'selected' : '' }}>Hidalgo (HG)
+                            </option>
+                            <option value="JC" {{ old('estado_nacimiento')=='JC' ? 'selected' : '' }}>Jalisco (JC)
+                            </option>
+                            <option value="MC" {{ old('estado_nacimiento')=='MC' ? 'selected' : '' }}>México (MC)
+                            </option>
+                            <option value="MN" {{ old('estado_nacimiento')=='MN' ? 'selected' : '' }}>Michoacán (MN)
+                            </option>
+                            <option value="MS" {{ old('estado_nacimiento')=='MS' ? 'selected' : '' }}>Morelos (MS)
+                            </option>
+                            <option value="NT" {{ old('estado_nacimiento')=='NT' ? 'selected' : '' }}>Nayarit (NT)
+                            </option>
+                            <option value="NL" {{ old('estado_nacimiento')=='NL' ? 'selected' : '' }}>Nuevo León (NL)
+                            </option>
+                            <option value="OC" {{ old('estado_nacimiento')=='OC' ? 'selected' : '' }}>Oaxaca (OC)
+                            </option>
+                            <option value="PL" {{ old('estado_nacimiento')=='PL' ? 'selected' : '' }}>Puebla (PL)
+                            </option>
+                            <option value="QT" {{ old('estado_nacimiento')=='QT' ? 'selected' : '' }}>Querétaro (QT)
+                            </option>
+                            <option value="QR" {{ old('estado_nacimiento')=='QR' ? 'selected' : '' }}>Quintana Roo (QR)
+                            </option>
+                            <option value="SP" {{ old('estado_nacimiento')=='SP' ? 'selected' : '' }}>San Luis Potosí
+                                (SP)</option>
+                            <option value="SL" {{ old('estado_nacimiento')=='SL' ? 'selected' : '' }}>Sinaloa (SL)
+                            </option>
+                            <option value="SR" {{ old('estado_nacimiento')=='SR' ? 'selected' : '' }}>Sonora (SR)
+                            </option>
+                            <option value="TC" {{ old('estado_nacimiento')=='TC' ? 'selected' : '' }}>Tabasco (TC)
+                            </option>
+                            <option value="TS" {{ old('estado_nacimiento')=='TS' ? 'selected' : '' }}>Tamaulipas (TS)
+                            </option>
+                            <option value="TL" {{ old('estado_nacimiento')=='TL' ? 'selected' : '' }}>Tlaxcala (TL)
+                            </option>
+                            <option value="VZ" {{ old('estado_nacimiento')=='VZ' ? 'selected' : '' }}>Veracruz (VZ)
+                            </option>
+                            <option value="YN" {{ old('estado_nacimiento')=='YN' ? 'selected' : '' }}>Yucatán (YN)
+                            </option>
+                            <option value="ZS" {{ old('estado_nacimiento')=='ZS' ? 'selected' : '' }}>Zacatecas (ZS)
+                            </option>
+                            <option value="NE" {{ old('estado_nacimiento')=='NE' ? 'selected' : '' }}>Nacido en el
+                                Extranjero (NE)</option>
+                        </select>
+                        @error('estado_nacimiento')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                    <!-- Fecha de Nacimiento -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento</label>
+                        <input name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}" class="form-control @error('fecha_nacimiento') form-error @enderror" type="date" required id="fecha_nacimiento">
+                        @error('fecha_nacimiento')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Resultado de Evaluación -->
+                <div class="form-group mb-4">
+                    <label class="form-label" for="resultado_evaluacion">Resultado de Evaluación</label>
+                    <select name="resultado_evaluacion" class="form-control @error('resultado_evaluacion') form-error @enderror" required>
+                        <option value="">Seleccione el Resultado</option>
+                        <option value="1" {{ old('resultado_evaluacion')=='1' ? 'selected' : '' }}>Aprobado</option>
+                        <option value="0" {{ old('resultado_evaluacion')=='0' ? 'selected' : '' }}>No Aprobado</option>
+                    </select>
+                    @error('resultado_evaluacion')
+                    <p class="form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Botón de Guardar Cambios -->
+                <button type="submit" class="btn-submit">Crear Evaluado</button>
+            </form>
+
+
+            <!-- Mensajes de éxito o error -->
+            @if(session('success'))
+            <div class="alert-success">
+                <strong>¡Éxito!</strong> {{ session('success') }}
             </div>
+            @endif
+
+            @if ($errors->any())
+            <div class="alert-error">
+                <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
         </div>
-    </div>
-</section>
+    </section>
+</main>
 @endsection
 
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar Flatpickr en el campo de fecha de nacimiento
-    flatpickr("#fecha_nacimiento", {
-        dateFormat: "Y-m-d",
-        allowInput: true,
-        altInput: true,
-        altFormat: "F j, Y",
-        maxDate: "today",
-        locale: "es"
-    });
+        const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
+        const fechaAperturaInput = document.getElementById('fecha_apertura');
 
-    // Funciones para generar CURP, RFC y Clave de Elector
-    function generarCURP() {
-        var primerNombre = document.querySelector('input[name="primer_nombre"]').value.trim().toUpperCase();
-        var primerApellido = document.querySelector('input[name="primer_apellido"]').value.trim().toUpperCase();
-        var segundoApellido = document.querySelector('input[name="segundo_apellido"]').value.trim().toUpperCase();
-        var sexo = document.querySelector('select[name="sexo"]').value;
-        var fechaNacimiento = document.querySelector('input[name="fecha_nacimiento"]').value;
-        var estadoNacimiento = document.querySelector('select[name="estado_nacimiento"]').value;
-        var curpFaltante = document.getElementById('CURP_faltante') ? document.getElementById('CURP_faltante').value : '';
+        // Calcular la fecha máxima permitida para que el evaluado sea mayor de 18 años
+        const hoy = new Date();
+        const añoMayorEdad = hoy.getFullYear() - 18;
+        const mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+        const dia = hoy.getDate().toString().padStart(2, '0');
+        const fechaMaximaNacimiento = `${añoMayorEdad}-${mes}-${dia}`;
+        const fechaMaximaApertura = `${hoy.getFullYear()}-${mes}-${dia}`;
 
-        if (primerNombre && primerApellido && segundoApellido && sexo && fechaNacimiento && estadoNacimiento && curpFaltante.length === 2) {
-            var curp = primerApellido.charAt(0) + primerApellido.charAt(1) + 
-                       segundoApellido.charAt(0) + 
-                       primerNombre.charAt(0) +
-                       fechaNacimiento.substring(2, 4) + 
-                       fechaNacimiento.substring(5, 7) + 
-                       fechaNacimiento.substring(8, 10) +
-                       sexo +
-                       estadoNacimiento +
-                       curpFaltante;
-            document.getElementById('CURP').value = curp.toUpperCase();
-        } else {
-            document.getElementById('CURP').value = '';
+        // Establecer el valor máximo en los campos de fecha
+        fechaNacimientoInput.setAttribute('max', fechaMaximaNacimiento);
+        fechaAperturaInput.setAttribute('max', fechaMaximaApertura);
+
+        // Validación en tiempo real para el campo de Fecha de Apertura
+        fechaAperturaInput.addEventListener('input', function() {
+            const fechaSeleccionada = new Date(fechaAperturaInput.value);
+            const fechaHoy = new Date(fechaMaximaApertura);
+
+            if (fechaSeleccionada > fechaHoy) {
+                alert("La fecha de apertura no puede ser posterior a la fecha actual.");
+                fechaAperturaInput.value = '';
+            }
+        });
+
+        // Validación en tiempo real para nombres y apellidos
+        const campoValidacion = {
+            primer_nombre: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/, // Solo letras, sin espacios
+            segundo_nombre: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/, // Solo letras, sin espacios
+            primer_apellido: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s[a-zA-ZÀ-ÿ\u00f1\u00d1]+)?$/, // Solo letras, permite un espacio y otra palabra
+            segundo_apellido: /^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s[a-zA-ZÀ-ÿ\u00f1\u00d1]+)?$/ // Solo letras, permite un espacio y otra palabra
+        };
+
+        Object.keys(campoValidacion).forEach(campoId => {
+            const campo = document.getElementsByName(campoId)[0];
+            campo.addEventListener('input', function() {
+                const regex = campoValidacion[campoId];
+                if (!regex.test(campo.value)) {
+                    campo.value = campo.value.slice(0, -1); // Remueve el último carácter si no cumple con el regex
+                }
+            });
+        });
+
+         // Define campos obligatorios en el orden de activación
+         const campos = [
+            'primer_nombre', 'primer_apellido', 'CURP', 'fecha_apertura', 'fecha_nacimiento'
+        ];
+        
+        // Define los campos opcionales
+        const opcionales = ['segundo_nombre', 'segundo_apellido', 'RFC', 'IFE', 'SMN'];
+
+        // Función para habilitar el siguiente campo si el actual está completo
+        function activarSiguienteCampo(index) {
+            if (index < campos.length - 1) {
+                const campoActual = document.getElementsByName(campos[index])[0];
+                const siguienteCampo = document.getElementsByName(campos[index + 1])[0];
+                
+                campoActual.addEventListener('input', function() {
+                    if (campoActual.value.trim() !== '') {
+                        siguienteCampo.disabled = false;  // Activa el siguiente campo
+                    } else {
+                        siguienteCampo.disabled = true;  // Desactiva si el actual está vacío
+                        // Desactiva y limpia todos los campos posteriores
+                        for (let i = index + 1; i < campos.length; i++) {
+                            const campoPosterior = document.getElementsByName(campos[i])[0];
+                            campoPosterior.value = '';
+                            campoPosterior.disabled = true;
+                        }
+                    }
+                });
+            }
         }
-    }
 
-    function generarRFC() {
-        var primerNombre = document.querySelector('input[name="primer_nombre"]').value.trim().toUpperCase();
-        var primerApellido = document.querySelector('input[name="primer_apellido"]').value.trim().toUpperCase();
-        var segundoApellido = document.querySelector('input[name="segundo_apellido"]').value.trim().toUpperCase();
-        var fechaNacimiento = document.querySelector('input[name="fecha_nacimiento"]').value;
-        var rfcFaltante = document.getElementById('RFC_faltante') ? document.getElementById('RFC_faltante').value : '';
+        // Inicializa campos obligatorios
+        campos.forEach((campo, index) => {
+            const elemento = document.getElementsByName(campo)[0];
+            if (index !== 0) elemento.disabled = true;  // Desactiva todos excepto el primero
+            activarSiguienteCampo(index);  // Configura la activación secuencial
+        });
 
-        if (primerNombre && primerApellido && segundoApellido && fechaNacimiento && rfcFaltante.length === 2) {
-            var rfc = primerApellido.charAt(0) + primerApellido.charAt(1) + 
-                      segundoApellido.charAt(0) + 
-                      primerNombre.charAt(0) +
-                      fechaNacimiento.substring(2, 4) + 
-                      fechaNacimiento.substring(5, 7) + 
-                      fechaNacimiento.substring(8, 10) +
-                      rfcFaltante;
-            document.getElementById('RFC').value = rfc.toUpperCase();
-        } else {
-            document.getElementById('RFC').value = '';
-        }
-    }
-
-    function generarIFE() {
-    var primerNombre = $('input[name="primer_nombre"]').val().trim().toUpperCase();
-    var primerApellido = $('input[name="primer_apellido"]').val().trim().toUpperCase();
-    var segundoApellido = $('input[name="segundo_apellido"]').val().trim().toUpperCase();
-    var fechaNacimiento = $('input[name="fecha_nacimiento"]').val();
-    var claveElectorFaltante = $('#clave_elector_faltante').val().trim();
-
-    if (primerNombre && primerApellido && segundoApellido && fechaNacimiento && claveElectorFaltante.length === 3) {
-        var ife = primerApellido.substring(0, 2) + 
-                  segundoApellido.charAt(0) + 
-                  primerNombre.charAt(0) +
-                  fechaNacimiento.substring(2, 4) + 
-                  fechaNacimiento.substring(5, 7) + 
-                  fechaNacimiento.substring(8, 10) + 
-                  claveElectorFaltante;
-        $('#IFE').val(ife.toUpperCase());
-    } else {
-        $('#IFE').val('');
-    }
-}
-
-
-    // Función para formatear automáticamente el campo SMN
-    document.querySelector('#SMN').addEventListener('input', function() {
-    // Permitir solo letras y números, eliminar otros caracteres
-    var smn = this.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-    
-    // Insertar guiones después de los primeros 3 y 5 caracteres
-    if (smn.length > 3) smn = smn.slice(0, 3) + '-' + smn.slice(3);
-    if (smn.length > 6) smn = smn.slice(0, 6) + '-' + smn.slice(6);
-    
-    // Limitar a 13 caracteres (incluyendo los guiones)
-    this.value = smn.slice(0, 13);
-});
-
-
-    // Detectar cambios en campos clave y actualizar automáticamente CURP, RFC y Clave de Elector
-    $('input[name="primer_nombre"], input[name="primer_apellido"], input[name="segundo_apellido"], input[name="fecha_nacimiento"], #CURP_faltante, #RFC_faltante, #clave_elector_faltante').on('input change', function() {
-    generarCURP();
-    generarRFC();
-    generarIFE();
+        // Inicializa los campos opcionales (sin restricciones)
+        opcionales.forEach(opcional => {
+            const elemento = document.getElementsByName(opcional)[0];
+            elemento.disabled = false;  // Siempre habilitados
+        });
     });
-
-    
-
-});
-
 </script>
 @endsection
+

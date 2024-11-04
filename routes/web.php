@@ -16,6 +16,8 @@ use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\EvaluadoController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\CajaController;
+use App\Http\Controllers\CarpetaController;
 
 // Ruta para la página de bienvenida, accesible para todos los usuarios
 Route::get('/', [WelcomeController::class, 'showWelcomePage'])->name('welcome');
@@ -28,7 +30,7 @@ Route::post('/usuarios/updateProfile', [App\Http\Controllers\UsuarioController::
 Route::get('/usuarios/user-list', [App\Http\Controllers\UsuarioController::class, 'getUserList'])->name('usuarios.getUserList');
 
 // Grupo de rutas protegidas por el middleware 'auth'
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RolController::class);
     Route::resource('usuarios', UsuarioController::class);
     Route::resource('blogs', BlogController::class);
@@ -41,8 +43,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('evaluados', EvaluadoController::class);
     Route::resource('documentos', DocumentoController::class);
     Route::resource('areas', AreaController::class);
-    
-Route::get('/evaluados/filterByYear', [EvaluadoController::class, 'filterByYear'])->name('evaluados.filterByYear');
+
+    Route::get('/evaluados/filterByYear', [EvaluadoController::class, 'filterByYear'])->name('evaluados.filterByYear');
+    Route::resource('cajas', CajaController::class);
+    Route::resource('carpetas', CarpetaController::class);
+    Route::get('/carpetas/creaR/{evaluado_id}', [CarpetaController::class, 'crear'])->name('carpetas.crear');
 
 
 });

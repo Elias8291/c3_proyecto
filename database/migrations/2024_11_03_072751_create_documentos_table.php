@@ -15,12 +15,13 @@ class CreateDocumentosTable extends Migration
     {
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();  // Llave primaria
-            $table->integer('numero_fojas');  // Número de hojas en el documento
+            $table->string('numero_hojas');
             $table->date('fecha_creacion');  // Fecha de creación del documento
-            $table->string('motivo_evaluacion');  // Motivo de la evaluación
-            $table->string('folio');  // Folio del documento
-            $table->string('area_origen');  // Área de origen del documento
-            $table->foreignId('evaluado_id')->constrained('evaluados')->onDelete('cascade');  // Relación con evaluados
+            $table->string('motivo_evaluacion');  // Motivo de evaluación
+            $table->string('estado');  // Estado del documento
+            $table->foreignId('id_evaluado')->constrained('evaluados')->onDelete('cascade');  // Llave foránea con 'evaluados'
+            $table->foreignId('id_area')->constrained('areas');  // Llave foránea con 'areas'
+            $table->foreignId('id_carpeta')->nullable()->constrained('carpetas')->onDelete('cascade'); // Relación con 'carpetas'
             $table->timestamps();  // Campos created_at y updated_at
         });
     }

@@ -444,6 +444,24 @@
             /* Opacidad completa */
         }
     }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 17px !important;
+        letter-spacing: 0.3px;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="email"] ,
+    select,
+    textarea {
+        font-size: 17px !important;
+    }
+    
 </style>
 @endsection
 

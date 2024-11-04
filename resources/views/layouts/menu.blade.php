@@ -193,11 +193,18 @@
         </a>
     </li>
     <li class="side-menu-item" style="--item-index: 5">
-        <a href="/icon-box" class="side-menu-link">
+        <a href="/cajas" class="side-menu-link">
             <i class="fas fa-box side-menu-icon"></i>
-            <span class="side-menu-text">Caja con Icono</span>
+            <span class="side-menu-text">Cajas</span>
         </a>
     </li>
+    <li class="side-menu-item" style="--item-index: 5">
+        <a href="/carpetas" class="side-menu-link">
+            <i class="fas fa-folder side-menu-icon"></i>
+            <span class="side-menu-text">Carpetas</span>
+        </a>
+    </li>
+    
     
 </ul>
 @endif

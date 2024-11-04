@@ -9,16 +9,25 @@ class Carpeta extends Model
 {
     use HasFactory;
 
+    protected $table = 'carpetas';
+
     protected $fillable = [
-        'nombre',
-        'descripcion', // Otros campos necesarios según tu lógica
+        'id_evaluado',
+        'id_caja'
     ];
 
-    // Relación 1 a N con Documento
+    public function caja()
+    {
+        return $this->belongsTo(Caja::class, 'id_caja');
+    }
     public function documentos()
     {
-        return $this->hasMany(Documento::class);
+        return $this->hasMany(Documento::class, 'id_carpeta');
+    }
+    public function evaluado()
+    {
+        return $this->belongsTo(Evaluado::class, 'id_evaluado'); // Ajusta el nombre de la llave foránea si es diferente
     }
 
-    // Otras relaciones o métodos según tu lógica
+
 }

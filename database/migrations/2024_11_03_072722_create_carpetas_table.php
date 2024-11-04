@@ -15,8 +15,8 @@ class CreateCarpetasTable extends Migration
     {
         Schema::create('carpetas', function (Blueprint $table) {
             $table->id();  // Llave primaria
-            $table->foreignId('evaluado_id')->constrained('evaluados')->onDelete('cascade');  // Relación con evaluados
-            $table->integer('numero_documentos');  // Número de documentos en la carpeta
+            $table->foreignId('id_evaluado')->constrained('evaluados')->onDelete('cascade');  // Llave foránea con 'evaluados'
+            $table->foreignId('id_caja')->constrained('cajas')->onDelete('cascade');  // Llave foránea con 'cajas'
             $table->timestamps();  // Campos created_at y updated_at
         });
     }

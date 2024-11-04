@@ -137,7 +137,8 @@
         }
     }
 
-    .alert-success, .alert-error {
+    .alert-success,
+    .alert-error {
         padding: 16px 20px;
         border-radius: 12px;
         margin: 25px 0;
@@ -174,35 +175,51 @@
     .btn-back:hover {
         color: #b30000;
     }
-    
-    
-    
-    .page-background {
-    background-color: #dbd6d7;
-    background-image: 
-        linear-gradient(45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
-        linear-gradient(-45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
-        radial-gradient(circle at 50% 50%, rgba(0, 48, 73, 0.02) 0%, rgba(0, 48, 73, 0.02) 50%, transparent 50.1%);
-    background-size: 60px 60px, 60px 60px, 120px 120px;
-    background-position: 0 0, 30px 30px, 0 0;
-    position: relative;
-    padding: 60px 0;
-    min-height: 100vh;
-}
 
-.page-background::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 15% 15%, rgba(0, 48, 73, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 85% 85%, rgba(0, 48, 73, 0.08) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: -1;
-}
+
+
+    .page-background {
+        background-color: #dbd6d7;
+        background-image:
+            linear-gradient(45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
+            linear-gradient(-45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
+            radial-gradient(circle at 50% 50%, rgba(0, 48, 73, 0.02) 0%, rgba(0, 48, 73, 0.02) 50%, transparent 50.1%);
+        background-size: 60px 60px, 60px 60px, 120px 120px;
+        background-position: 0 0, 30px 30px, 0 0;
+        position: relative;
+        padding: 60px 0;
+        min-height: 100vh;
+    }
+
+    .page-background::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 15% 15%, rgba(0, 48, 73, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 85% 85%, rgba(0, 48, 73, 0.08) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 17px !important;
+        letter-spacing: 0.3px;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+        font-size: 17px !important;
+    }
 </style>
 @endsection
 
@@ -231,18 +248,17 @@
                         <input name="name" value="{{ old('name', $role->name) }}"
                             class="form-control @error('name') form-error @enderror" type="text" required>
                         @error('name')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Descripción del Rol -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="description">Descripción del Rol</label>
-                        <textarea name="description" 
-                            class="form-control @error('description') form-error @enderror" 
+                        <textarea name="description" class="form-control @error('description') form-error @enderror"
                             rows="4" required>{{ old('description', $role->description) }}</textarea>
                         @error('description')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -253,19 +269,18 @@
                         <label class="form-label">Permisos para este Rol</label>
                         <div class="form-control" style="height: auto; padding: 10px;">
                             @foreach($permission as $permiso)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" 
-                                        name="permission[]" value="{{ $permiso->id }}" 
-                                        id="permiso_{{ $permiso->id }}"
-                                        {{ in_array($permiso->id, $rolePermissions) ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="permiso_{{ $permiso->id }}">
-                                        {{ $permiso->name }}
-                                    </label>
-                                </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="permission[]"
+                                    value="{{ $permiso->id }}" id="permiso_{{ $permiso->id }}" {{ in_array($permiso->id,
+                                $rolePermissions) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="permiso_{{ $permiso->id }}">
+                                    {{ $permiso->name }}
+                                </label>
+                            </div>
                             @endforeach
                         </div>
                         @error('permission')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -273,11 +288,13 @@
                     <div class="form-group mb-4">
                         <label class="form-label" for="status">Estado del Rol</label>
                         <select name="status" class="form-control @error('status') form-error @enderror" required>
-                            <option value="activo" {{ old('status', $role->status) == 'activo' ? 'selected' : '' }}>Activo</option>
-                            <option value="inactivo" {{ old('status', $role->status) == 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                            <option value="activo" {{ old('status', $role->status) == 'activo' ? 'selected' : ''
+                                }}>Activo</option>
+                            <option value="inactivo" {{ old('status', $role->status) == 'inactivo' ? 'selected' : ''
+                                }}>Inactivo</option>
                         </select>
                         @error('status')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -288,20 +305,20 @@
 
             <!-- Mensajes de éxito o error -->
             @if(session('success'))
-                <div class="alert-success">
-                    <strong>¡Éxito!</strong> {{ session('success') }}
-                </div>
+            <div class="alert-success">
+                <strong>¡Éxito!</strong> {{ session('success') }}
+            </div>
             @endif
 
             @if ($errors->any())
-                <div class="alert-error">
-                    <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="alert-error">
+                <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
         </div>
     </section>

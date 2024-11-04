@@ -5,15 +5,16 @@
 @section('css')
 <style>
     .container {
-    max-width: 900px;
-    margin: -50px auto; /* Margen negativo aún mayor */
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-}
+        max-width: 900px;
+        margin: -50px auto;
+        /* Margen negativo aún mayor */
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
 
 
     .container::before {
@@ -160,7 +161,8 @@
         }
     }
 
-    .alert-success, .alert-error {
+    .alert-success,
+    .alert-error {
         padding: 16px 20px;
         border-radius: 12px;
         margin: 25px 0;
@@ -180,23 +182,25 @@
         border-left: 5px solid #ef4444;
         color: #991b1b;
     }
+
     .btn-back {
-    display: inline-flex;
-    align-items: center;
-    color: #800020;
-    font-size: 18px;
-    font-weight: 600;
-    text-decoration: none;
-}
+        display: inline-flex;
+        align-items: center;
+        color: #800020;
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+    }
 
-.btn-back i {
-    margin-right: 8px;
-}
+    .btn-back i {
+        margin-right: 8px;
+    }
 
-.btn-back:hover {
-    color: #b30000;
-}
-.page-background {
+    .btn-back:hover {
+        color: #b30000;
+    }
+
+    .page-background {
         background-color: #dbd6d7;
         background-image:
             linear-gradient(45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
@@ -222,6 +226,23 @@
         pointer-events: none;
         z-index: -1;
     }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 17px !important;
+        letter-spacing: 0.3px;
+        display: block;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="email"] ,
+    select,
+    textarea {
+        font-size: 17px !important;
+    }
+   
 </style>
 @endsection
 
@@ -241,9 +262,9 @@
             <!-- Imagen de Perfil -->
             <div class="fixed-container mb-4">
                 @if ($usuario->image)
-                    <img alt="Imagen de perfil" src="{{ asset('storage/'.$usuario->image) }}" class="fixed-image">
+                <img alt="Imagen de perfil" src="{{ asset('storage/'.$usuario->image) }}" class="fixed-image">
                 @else
-                    <img alt="Imagen no disponible" src="https://via.placeholder.com/150" class="fixed-image">
+                <img alt="Imagen no disponible" src="https://via.placeholder.com/150" class="fixed-image">
                 @endif
             </div>
 
@@ -259,18 +280,17 @@
                         <input name="name" value="{{ old('name', $usuario->name) }}"
                             class="form-control @error('name') form-error @enderror" type="text" required>
                         @error('name')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Apellido Paterno -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="apellido_paterno">Apellido Paterno</label>
-                        <input name="apellido_paterno"
-                            value="{{ old('apellido_paterno', $usuario->apellido_paterno) }}"
+                        <input name="apellido_paterno" value="{{ old('apellido_paterno', $usuario->apellido_paterno) }}"
                             class="form-control @error('apellido_paterno') form-error @enderror" type="text" required>
                         @error('apellido_paterno')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -279,11 +299,10 @@
                     <!-- Apellido Materno -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="apellido_materno">Apellido Materno</label>
-                        <input name="apellido_materno"
-                            value="{{ old('apellido_materno', $usuario->apellido_materno) }}"
+                        <input name="apellido_materno" value="{{ old('apellido_materno', $usuario->apellido_materno) }}"
                             class="form-control @error('apellido_materno') form-error @enderror" type="text">
                         @error('apellido_materno')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -293,7 +312,7 @@
                         <input name="telefono" value="{{ old('telefono', $usuario->telefono) }}"
                             class="form-control @error('telefono') form-error @enderror" type="text">
                         @error('telefono')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -305,7 +324,7 @@
                         <input name="email" type="email" value="{{ old('email', $usuario->email) }}"
                             class="form-control @error('email') form-error @enderror" required>
                         @error('email')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -314,7 +333,8 @@
                         <label class="form-label" for="rol">Rol</label>
                         <select name="rol" class="form-control" required>
                             @foreach($roles as $rol)
-                            <option value="{{ $rol->name }}" {{ $usuario->roles->first()->name == $rol->name ? 'selected' : '' }}>
+                            <option value="{{ $rol->name }}" {{ $usuario->roles->first()->name == $rol->name ?
+                                'selected' : '' }}>
                                 {{ $rol->name }}
                             </option>
                             @endforeach
@@ -329,22 +349,24 @@
                         <select name="id_area" class="form-control @error('id_area') form-error @enderror" required>
                             <option value="">Seleccione un Área</option>
                             @foreach($areas as $area)
-                                <option value="{{ $area->id }}" {{ old('id_area', $usuario->id_area) == $area->id ? 'selected' : '' }}>
-                                    {{ $area->nombre_area }}
-                                </option>
+                            <option value="{{ $area->id }}" {{ old('id_area', $usuario->id_area) == $area->id ?
+                                'selected' : '' }}>
+                                {{ $area->nombre_area }}
+                            </option>
                             @endforeach
                         </select>
                         @error('id_area')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Imagen de Perfil -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="image">Imagen de Perfil</label>
-                        <input name="image" type="file" accept="image/*" class="form-control @error('image') form-error @enderror">
+                        <input name="image" type="file" accept="image/*"
+                            class="form-control @error('image') form-error @enderror">
                         @error('image')
-                            <p class="form-error">{{ $message }}</p>
+                        <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
@@ -355,20 +377,20 @@
 
             <!-- Mensajes de éxito o error -->
             @if(session('success'))
-                <div class="alert-success">
-                    <strong>¡Éxito!</strong> {{ session('success') }}
-                </div>
+            <div class="alert-success">
+                <strong>¡Éxito!</strong> {{ session('success') }}
+            </div>
             @endif
 
             @if ($errors->any())
-                <div class="alert-error">
-                    <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="alert-error">
+                <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
         </div>
     </section>

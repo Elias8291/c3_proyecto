@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\Periodo;
 use Spatie\Permission\Models\Role;
 use App\Observers\LogObserver;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,5 +45,9 @@ class AppServiceProvider extends ServiceProvider
         User::observe(LogObserver::class);
         Role::observe(LogObserver::class);
         Periodo::observe(LogObserver::class);
+        Carbon::setLocale('es');
+     setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'es', 'Spanish_Spain.1252', 'es_MX.UTF-8');
+
+
     }
 }

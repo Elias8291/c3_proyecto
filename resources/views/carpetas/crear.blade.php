@@ -1,25 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Rol')
+@section('title', 'Crear Carpeta')
 
 @section('css')
 <style>
-    .side-menu {
-        padding: 0;
-        margin: 0;
-    }
-
-    /* Reutiliza los estilos del formulario de usuario */
     .container {
         max-width: 900px;
-        margin: 50px auto;
-        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        margin: -80px auto;
+        /* Margen superior negativo */
+        background: linear-gradient(135deg, #ffffff 0%, #fcfafa 100%);
         padding: 40px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        box-shadow:
+            0 15px 35px rgba(128, 0, 32, 0.1),
+            0 5px 15px rgba(0, 0, 0, 0.05);
         border-radius: 20px;
         position: relative;
         overflow: hidden;
+        border: 1px solid rgba(128, 0, 32, 0.1);
+        backdrop-filter: blur(5px);
+        animation: slideIn 0.8s ease-out;
     }
+
 
 
     .container::before {
@@ -181,6 +182,80 @@
         color: #b30000;
     }
 
+    .validation-tooltip {
+        position: absolute;
+        background: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #991b1b;
+        border: 1px solid #991b1b;
+        display: none;
+        width: max-content;
+        max-width: 250px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        right: 0;
+        top: 100%;
+        margin-top: 5px;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .password-requirements {
+        display: none;
+        position: absolute;
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        border: 1px solid #e2e8f0;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        top: 100%;
+        margin-top: 5px;
+    }
+
+    .requirement {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        color: #64748b;
+    }
+
+    .requirement.valid {
+        color: #22c55e;
+    }
+
+    .requirement i {
+        font-size: 12px;
+    }
+
+    .password-requirements,
+    .email-requirements {
+        display: none;
+        position: absolute;
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        border: 1px solid #e2e8f0;
+        width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        top: 100%;
+        margin-top: 5px;
+    }
+
+    .email-requirements {
+        width: 250px;
+        /* Puedes ajustar este valor según tus necesidades */
+    }
+
     .page-background {
         background-color: #dbd6d7;
         background-image:
@@ -209,6 +284,7 @@
         pointer-events: none;
         z-index: -1;
     }
+
 
     .container {
         max-width: 900px;
@@ -335,12 +411,57 @@
         background-size: 200% auto;
     }
 
+    /* Movimiento al cargar la página */
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #ffffff 0%, #fcfafa 100%);
+        padding: 40px;
+        box-shadow:
+            0 15px 35px rgba(128, 0, 32, 0.1),
+            0 5px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(128, 0, 32, 0.1);
+        backdrop-filter: blur(5px);
+        animation: slideIn 0.8s ease-out;
+        /* Añadimos la animación */
+    }
+
+    @keyframes slideIn {
+        0% {
+            transform: translateY(50px);
+            /* Empieza 50px abajo */
+            opacity: 0;
+            /* Empieza transparente */
+        }
+
+        100% {
+            transform: translateY(0);
+            /* Llega a su posición original */
+            opacity: 1;
+            /* Opacidad completa */
+        }
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 10px;
+        font-size: 17px !important;
+        letter-spacing: 0.3px;
+        display: block;
+    }
+
     input[type="text"],
     input[type="date"],
+    input[type="email"] ,
     select,
     textarea {
         font-size: 17px !important;
     }
+    
 </style>
 @endsection
 
@@ -349,184 +470,71 @@
     <section class="page-background">
         <div class="container">
             <div class="text-left mb-4">
-                <a href="{{ route('roles.index') }}" class="btn-back">
+                <a href="{{ route('evaluados.index') }}" class="btn-back">
                     <i class="fas fa-arrow-left"></i> Regresar
                 </a>
             </div>
             <div class="text-center mb-4">
-                <h3 class="card-title">Crear Nuevo Rol</h3>
+                <h3 class="card-title">Crear Nueva Carpeta</h3>
             </div>
 
-            <!-- Formulario -->
-            <form action="{{ route('roles.store') }}" method="POST">
+            <form action="{{ route('carpetas.store') }}" method="POST">
                 @csrf
-
-                <div class="form-row">
-                    <!-- Nombre del Rol -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="name">Nombre del Rol</label>
-                        <input name="name" value="{{ old('name') }}"
-                            class="form-control @error('name') form-error @enderror" type="text" required>
-                        @error('name')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Descripción del Rol -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="description">Descripción del Rol</label>
-                        <textarea name="description" class="form-control @error('description') form-error @enderror"
-                            rows="4" required>{{ old('description') }}</textarea>
-                        @error('description')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
+                
+                <div class="form-group mt-3">
+                    <label>Evaluado</label>
+                    <p class="form-control-plaintext">
+                        {{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}
+                        <br>
+                        Fecha de Inicio Evaluaciones: {{ strftime('%d de %B de %Y', strtotime($evaluado->fecha_apertura)) }}
+                    </p>
+                    <input type="hidden" name="id_evaluado" value="{{ $evaluado->id }}">
                 </div>
+        
+                <div class="form-group mt-3">
+                    <label for="id_caja">Caja</label>
+                    @php
+                        // Obtener el mes y año de fecha_apertura
+                        setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain.1252');
+                        $fechaApertura = strtotime($evaluado->fecha_apertura);
+                        $mesApertura = ucfirst(strftime('%B', $fechaApertura)); // Convertir a formato "Febrero"
+                        $anioApertura = date('Y', $fechaApertura);
 
-                <div class="form-row">
-                    <!-- Permisos para este Rol -->
-                    <div class="form-group mb-4" style="flex: 2;">
-                        <label class="form-label">Permisos para este Rol</label>
-                        <div class="form-control" style="height: auto; padding: 10px;">
-                            @foreach($permission as $permiso)
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="permission[]"
-                                    value="{{ $permiso->id }}" id="permiso_{{ $permiso->id }}" {{
-                                    (is_array(old('permission')) && in_array($permiso->id, old('permission'))) ?
-                                'checked' : '' }}>
-                                <label class="form-check-label" for="permiso_{{ $permiso->id }}">
-                                    {{ $permiso->name }}
-                                </label>
-                            </div>
+                        // Filtrar las cajas comparando el texto del mes y el año
+                        $cajasDisponibles = $cajas->filter(function($caja) use ($mesApertura, $anioApertura) {
+                            // Extraer mes y año de la caja (formato "Febrero 2017")
+                            $partesCaja = explode(' ', $caja->mes);
+                            $mesCaja = $partesCaja[0]; // "Febrero"
+                            $anioCaja = $caja->anio;
+                            
+                            return $mesCaja === $mesApertura && $anioCaja == $anioApertura;
+                        });
+                    @endphp
+
+                    @if($cajasDisponibles->count() > 0)
+                        <select name="id_caja" id="id_caja" class="form-control select-caja" required>
+                            <option value="">Selecciona una caja</option>
+                            @foreach($cajasDisponibles as $caja)
+                                <option value="{{ $caja->id }}">
+                                    Caja #{{ $caja->numero_caja }} - {{ $caja->mes }} {{ $caja->anio }}
+                                </option>
                             @endforeach
-                        </div>
-                        @error('permission')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Estado del Rol -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="status">Estado del Rol</label>
-                        <select name="status" class="form-control @error('status') form-error @enderror" required>
-                            <option value="">Seleccione un Estado</option>
-                            <option value="activo" {{ old('status')=='activo' ? 'selected' : '' }}>Activo</option>
-                            <option value="inactivo" {{ old('status')=='inactivo' ? 'selected' : '' }}>Inactivo</option>
                         </select>
-                        @error('status')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="caja-info">
+                            Mostrando cajas para: {{ $mesApertura }} {{ $anioApertura }}
+                        </div>
+                    @else
+                        <div class="no-cajas-message">
+                            No hay cajas disponibles para {{ $mesApertura }} {{ $anioApertura }}
+                        </div>
+                    @endif
                 </div>
-
-                <!-- Botón de Guardar Cambios -->
-                <button type="submit" class="btn-submit">Crear Rol</button>
+                
+                @if($cajasDisponibles->count() > 0)
+                    <button type="submit" class="btn-submit mt-4">Crear Carpeta</button>
+                @endif
             </form>
-
-            <!-- Mensajes de éxito o error -->
-            @if(session('success'))
-            <div class="alert-success">
-                <strong>¡Éxito!</strong> {{ session('success') }}
-            </div>
-            @endif
-
-            @if ($errors->any())
-            <div class="alert-error">
-                <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
         </div>
     </section>
 </main>
-@endsection
-
-@section('scripts')
-<script>
-    $(document).ready(function () {
-    // Validaciones en tiempo real
-    function validarTextoSoloLetras(input) {
-        let valor = $(input).val();
-        valor = valor.replace(/[^A-Za-zÀ-ÿ\s]/g, ''); // Permitir solo letras y espacios
-        $(input).val(valor); // Asignar el valor filtrado al campo
-        if (valor === '') {
-            $(input).addClass('form-error');
-        } else {
-            $(input).removeClass('form-error');
-        }
-    }
-
-    // Validar el campo de descripción
-    function validarDescripcion(input) {
-        let valor = $(input).val();
-        if (valor === '' || valor.length > 255) {
-            $(input).addClass('form-error');
-        } else {
-            $(input).removeClass('form-error');
-        }
-    }
-
-    // Validar los permisos
-    function validarPermisos() {
-        if ($('input[name="permission[]"]:checked').length == 0) {
-            $('.form-control').addClass('form-error');
-            return false;
-        } else {
-            $('.form-control').removeClass('form-error');
-            return true;
-        }
-    }
-
-    // Validar en tiempo real nombre y descripción
-    $('input[name="name"]').on('input', function () {
-        validarTextoSoloLetras(this);
-    });
-
-    $('textarea[name="description"]').on('input', function () {
-        validarDescripcion(this);
-    });
-
-    // Validar permisos
-    $('input[name="permission[]"]').on('change', function () {
-        validarPermisos();
-    });
-
-    // Validar todos los campos al enviar
-    $('form').on('submit', function (e) {
-        let isValid = true;
-        let camposConErrores = [];
-
-        validarTextoSoloLetras($('input[name="name"]'));
-        validarDescripcion($('textarea[name="description"]'));
-
-        if ($('input[name="name"]').hasClass('form-error')) {
-            isValid = false;
-            camposConErrores.push('Nombre del Rol');
-        }
-
-        if ($('textarea[name="description"]').hasClass('form-error')) {
-            isValid = false;
-            camposConErrores.push('Descripción del Rol');
-        }
-
-        if (!validarPermisos()) {
-            isValid = false;
-            camposConErrores.push('Permisos');
-        }
-
-        if (!isValid) {
-            e.preventDefault();
-            alert('Por favor, corrige los siguientes campos: ' + camposConErrores.join(', '));
-        }
-    });
-
-    @if ($errors->any())
-    alert('Existen errores en el formulario. Por favor, revisa los campos marcados.');
-    @endif
-});
-</script>
 @endsection
