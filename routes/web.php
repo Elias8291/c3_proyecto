@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('cajas', CajaController::class);
     Route::resource('carpetas', CarpetaController::class);
     Route::get('/carpetas/creaR/{evaluado_id}', [CarpetaController::class, 'crear'])->name('carpetas.crear');
+    Route::get('/cajas/{id}', [CajaController::class, 'show'])->name('cajas.show');
+    Route::get('/evaluados/{id}/datos', [EvaluadoController::class, 'getDatosEvaluado']);
 
 
 });

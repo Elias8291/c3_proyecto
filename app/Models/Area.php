@@ -7,13 +7,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Area extends Model
 {
+    protected $table = 'areas'; // Asegúrate de que este es el nombre de tu tabla
     protected $fillable = ['nombre'];
 
-    /**
-     * Relación: un área tiene muchos usuarios.
-     */
-    public function users(): HasMany
+    public function users()
     {
         return $this->hasMany(User::class, 'id_area');
     }
+    
 }

@@ -17,6 +17,11 @@ class CajaController extends Controller
     {
         return view('cajas.create');
     }
+    public function show($id)
+    {
+        $caja = Caja::with('carpetas.evaluado')->findOrFail($id);
+        return view('cajas.show', compact('caja'));
+    }
 
     public function store(Request $request)
     {

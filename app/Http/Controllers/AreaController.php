@@ -43,7 +43,7 @@ class AreaController extends Controller
     // Mostrar el formulario de edición
     public function edit($id)
     {
-        $area = Area::find($id);
+        $area = Area::findOrFail($id);
         return view('areas.editar', compact('area'));
     }
 
@@ -54,7 +54,7 @@ class AreaController extends Controller
             'nombre' => 'required|string|max:255|unique:areas,nombre,' . $id,
         ]);
 
-        $area = Area::find($id);
+        $area = Area::findOrFail($id);
         $area->update($validatedData);
 
         return redirect()->route('areas.index')->with('success', 'Área actualizada exitosamente.');
@@ -63,7 +63,8 @@ class AreaController extends Controller
     // Eliminar un área de la base de datos
     public function destroy($id)
     {
-        Area::find($id)->delete();
+        $area = Area::findOrFail($id);
+        $area->delete();
         return redirect()->route('areas.index')->with('success', 'Área eliminada exitosamente.');
     }
 }

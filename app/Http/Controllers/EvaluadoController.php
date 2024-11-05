@@ -67,6 +67,33 @@ class EvaluadoController extends Controller
     }
 
 
+   // Al final de tu EvaluadoController, antes del cierre de la clase
+public function getDatosEvaluado($id)
+{
+    $evaluado = Evaluado::find($id);
+
+    if ($evaluado) {
+        // Formatear la fecha de apertura
+        setlocale(LC_TIME, 'es_ES.UTF-8');
+        $fechaApertura = strtotime($evaluado->fecha_apertura);
+        $mesApertura = ucfirst(strftime('%B', $fechaApertura));
+        $anioApertura = date('Y', $fechaApertura);
+
+        return response()->json([
+            'primer_nombre' => $evaluado->primer_nombre,
+            'segundo_nombre' => $evaluado->segundo_nombre,
+            'primer_apellido' => $evaluado->primer_apellido,
+            'segundo_apellido' => $evaluado->segundo_apellido,
+            'fecha_apertura' => $evaluado->fecha_apertura,
+            'mes_apertura' => $mesApertura,
+            'anio_apertura' => $anioApertura,
+        ]);
+    } else {
+        return response()->json(['error' => 'Evaluado no encontrado'], 404);
+    }
+}
+
+
     /**
      * Mostrar los detalles de un evaluado específico.
      *
