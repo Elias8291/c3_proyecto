@@ -16,13 +16,12 @@ class EvaluadoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        // Obtener todos los evaluados con paginación
-        $evaluados = Evaluado::paginate(100);  // Cambia '100' por la cantidad de registros por página que desees
+{
+    // Obtener todos los evaluados con su carpeta si existe
+    $evaluados = Evaluado::with('carpeta')->paginate(100); // Cambia '100' según el número deseado de registros por página
+    return view('evaluados.index', compact('evaluados'));
+}
 
-        // Retornar la vista con los evaluados paginados
-        return view('evaluados.index', compact('evaluados'));
-    }
 
 
     /**
@@ -51,8 +50,6 @@ class EvaluadoController extends Controller
             'segundo_apellido' => 'nullable|string|max:255',
             'CURP' => 'required|string|max:18|unique:evaluados',
             'RFC' => 'nullable|string|max:13',
-            'IFE' => 'nullable|string|size:13|regex:/^[A-Z0-9]{13}$/',
-            'SMN' => 'nullable|string|max:13',
             'fecha_apertura' => 'required|date',
             'sexo' => 'required|in:M,H',
             'estado_nacimiento' => 'required|string|max:2',
@@ -62,36 +59,41 @@ class EvaluadoController extends Controller
 
         $evaluado = Evaluado::create($validatedData);
 
-        // Redirigir a la vista de creación de carpeta, pasando el ID del evaluado
-        return redirect()->route('carpetas.create', ['evaluado_id' => $evaluado->id]);
-    }
-
-
-   // Al final de tu EvaluadoController, antes del cierre de la clase
-public function getDatosEvaluado($id)
-{
-    $evaluado = Evaluado::find($id);
-
-    if ($evaluado) {
-        // Formatear la fecha de apertura
-        setlocale(LC_TIME, 'es_ES.UTF-8');
-        $fechaApertura = strtotime($evaluado->fecha_apertura);
-        $mesApertura = ucfirst(strftime('%B', $fechaApertura));
-        $anioApertura = date('Y', $fechaApertura);
-
-        return response()->json([
-            'primer_nombre' => $evaluado->primer_nombre,
-            'segundo_nombre' => $evaluado->segundo_nombre,
-            'primer_apellido' => $evaluado->primer_apellido,
-            'segundo_apellido' => $evaluado->segundo_apellido,
-            'fecha_apertura' => $evaluado->fecha_apertura,
-            'mes_apertura' => $mesApertura,
-            'anio_apertura' => $anioApertura,
+        // Redirigir a la lista de evaluados con un mensaje de éxito y activar el modal
+        return redirect()->route('evaluados.index')->with([
+            'success' => '¡Evaluado creado exitosamente!',
+            'showCreateFolderModal' => true  // Activa el modal para crear carpeta
         ]);
-    } else {
-        return response()->json(['error' => 'Evaluado no encontrado'], 404);
     }
-}
+
+
+
+
+    // Al final de tu EvaluadoController, antes del cierre de la clase
+    public function getDatosEvaluado($id)
+    {
+        $evaluado = Evaluado::find($id);
+
+        if ($evaluado) {
+            // Formatear la fecha de apertura
+            setlocale(LC_TIME, 'es_ES.UTF-8');
+            $fechaApertura = strtotime($evaluado->fecha_apertura);
+            $mesApertura = ucfirst(strftime('%B', $fechaApertura));
+            $anioApertura = date('Y', $fechaApertura);
+
+            return response()->json([
+                'primer_nombre' => $evaluado->primer_nombre,
+                'segundo_nombre' => $evaluado->segundo_nombre,
+                'primer_apellido' => $evaluado->primer_apellido,
+                'segundo_apellido' => $evaluado->segundo_apellido,
+                'fecha_apertura' => $evaluado->fecha_apertura,
+                'mes_apertura' => $mesApertura,
+                'anio_apertura' => $anioApertura,
+            ]);
+        } else {
+            return response()->json(['error' => 'Evaluado no encontrado'], 404);
+        }
+    }
 
 
     /**
@@ -135,9 +137,6 @@ public function getDatosEvaluado($id)
             'segundo_apellido' => 'nullable|string|max:255',
             'CURP' => 'required|string|max:18|unique:evaluados,CURP,' . $evaluado->id,
             'RFC' => 'nullable|string|max:13',
-            'IFE' => 'required|string|size:13|regex:/^[A-Z0-9]{13}$/',  // Obligatorio
-
-            'SMN' => 'nullable|string|max:13',  // SMN es opcional
             'fecha_apertura' => 'required|date',
             'sexo' => 'required|in:M,H',
             'estado_nacimiento' => 'required|string|max:2',
@@ -177,5 +176,4 @@ public function getDatosEvaluado($id)
         // Redirigir a la lista de evaluados con un mensaje de éxito
         return redirect()->route('evaluados.index')->with('success', 'Evaluado eliminado exitosamente.');
     }
-    
 }

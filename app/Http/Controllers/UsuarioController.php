@@ -84,13 +84,14 @@ class UsuarioController extends Controller
             'name' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'nullable|string|max:255',
-            'telefono' => 'nullable|string|max:20',
+            'telefono' => 'nullable|string|max:10', // Límite de 10 caracteres en teléfono
             'email' => 'required|email|max:255|unique:users,email',
             'id_area' => 'required|exists:areas,id',
-            'password' => 'required|string|confirmed|min:8', // Validación de la contraseña
+            'password' => 'required|string|confirmed|min:8',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'rol' => 'required|exists:roles,name', // Validar que el rol exista
+            'rol' => 'required|exists:roles,name',
         ]);
+        
     
         // Manejar la subida de la imagen
         if ($request->hasFile('image')) {

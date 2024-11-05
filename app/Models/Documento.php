@@ -14,7 +14,6 @@ class Documento extends Model
     protected $fillable = [
         'numero_hojas',
         'fecha_creacion',
-        'motivo_evaluacion',
         'estado',
         'id_evaluado',
         'id_area',
@@ -25,4 +24,11 @@ class Documento extends Model
     {
         return $this->belongsTo(Carpeta::class, 'id_carpeta');
     }
+    // Documento.php
+
+public function area()
+{
+    return $this->belongsTo(Area::class, 'id_area');
+}
+
 }

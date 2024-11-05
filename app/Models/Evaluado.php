@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-USE App\Models\Carpeta;
+use App\Models\Carpeta;
 
 class Evaluado extends Model
 {
@@ -16,9 +16,8 @@ class Evaluado extends Model
      * @var array
      */
     protected $fillable = [
-        'primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido', 'CURP', 'RFC', 'IFE', 'SMN', 'fecha_apertura', 'sexo', 'estado_nacimiento', 'fecha_nacimiento', 'resultado_evaluacion'
+        'primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido', 'CURP', 'RFC', 'fecha_apertura', 'sexo', 'estado_nacimiento', 'fecha_nacimiento', 'resultado_evaluacion'
     ];
-    
     
     /**
      * Los atributos que deberían ser tratados como fechas.
@@ -36,10 +35,11 @@ class Evaluado extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function carpeta()
-    {
-        return $this->hasOne(Carpeta::class);
-    }
+    // En el modelo Evaluado.php
+public function carpeta()
+{
+    return $this->hasOne(Carpeta::class, 'id_evaluado', 'id');
+}
 
     /**
      * Relación con la tabla de documentos.

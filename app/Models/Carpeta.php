@@ -11,10 +11,7 @@ class Carpeta extends Model
 
     protected $table = 'carpetas';
 
-    protected $fillable = [
-        'id_evaluado',
-        'id_caja'
-    ];
+    protected $fillable = ['id_evaluado', 'id_caja'];
 
     public function caja()
     {
@@ -29,5 +26,6 @@ class Carpeta extends Model
         return $this->belongsTo(Evaluado::class, 'id_evaluado'); // Ajusta el nombre de la llave foránea si es diferente
     }
 
+    
 
 }

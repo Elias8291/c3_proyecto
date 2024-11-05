@@ -23,8 +23,7 @@ class EvaluadosSeeder extends Seeder
                 'segundo_apellido' => 'Gómez',
                 'CURP' => 'PEGO900101HDFRRL01',
                 'RFC' => 'PEGO900101ABC',
-                'IFE' => 'IFE1234567890',
-                'SMN' => 'SMN12345',  // Valor obligatorio
+               
                 'fecha_apertura' => '2024-01-10',
                 'sexo' => 'H',
                 'estado_nacimiento' => 'DF',
@@ -38,8 +37,6 @@ class EvaluadosSeeder extends Seeder
                 'segundo_apellido' => 'Hernández',
                 'CURP' => 'ROHM920505MDFRNN01',
                 'RFC' => 'ROHM920505XYZ',
-                'IFE' => 'IFE2345678912',
-                'SMN' => 'N/A',  // Usar 'N/A' en lugar de null si no aplica
                 'fecha_apertura' => '2024-02-01',
                 'sexo' => 'M',
                 'estado_nacimiento' => 'DF',

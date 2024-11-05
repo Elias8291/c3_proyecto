@@ -1,26 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Usuario')
-
-@section('css')
+@section('content')
 <style>
+    .side-menu {
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Reutiliza los estilos del formulario de usuario */
     .container {
         max-width: 900px;
-        margin: -80px auto;
-        /* Margen superior negativo */
-        background: linear-gradient(135deg, #ffffff 0%, #fcfafa 100%);
+        margin: 50px auto;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
         padding: 40px;
-        box-shadow:
-            0 15px 35px rgba(128, 0, 32, 0.1),
-            0 5px 15px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         border-radius: 20px;
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(128, 0, 32, 0.1);
-        backdrop-filter: blur(5px);
-        animation: slideIn 0.8s ease-out;
     }
-
 
 
     .container::before {
@@ -182,80 +179,6 @@
         color: #b30000;
     }
 
-    .validation-tooltip {
-        position: absolute;
-        background: white;
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 14px;
-        color: #991b1b;
-        border: 1px solid #991b1b;
-        display: none;
-        width: max-content;
-        max-width: 250px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 100;
-        right: 0;
-        top: 100%;
-        margin-top: 5px;
-    }
-
-    .form-group {
-        position: relative;
-    }
-
-    .password-requirements {
-        display: none;
-        position: absolute;
-        background: white;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 14px;
-        border: 1px solid #e2e8f0;
-        width: 100%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 100;
-        top: 100%;
-        margin-top: 5px;
-    }
-
-    .requirement {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-        color: #64748b;
-    }
-
-    .requirement.valid {
-        color: #22c55e;
-    }
-
-    .requirement i {
-        font-size: 12px;
-    }
-
-    .password-requirements,
-    .email-requirements {
-        display: none;
-        position: absolute;
-        background: white;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 14px;
-        border: 1px solid #e2e8f0;
-        width: 100%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 100;
-        top: 100%;
-        margin-top: 5px;
-    }
-
-    .email-requirements {
-        width: 250px;
-        /* Puedes ajustar este valor según tus necesidades */
-    }
-
     .page-background {
         background-color: #dbd6d7;
         background-image:
@@ -284,7 +207,6 @@
         pointer-events: none;
         z-index: -1;
     }
-
 
     .container {
         max-width: 900px;
@@ -370,6 +292,9 @@
         animation: rotate 30s linear infinite;
     }
 
+
+    
+
     @keyframes rotate {
         0% {
             transform: rotate(0deg);
@@ -411,372 +336,601 @@
         background-size: 200% auto;
     }
 
-    /* Movimiento al cargar la página */
-    .container {
-        max-width: 900px;
-        margin: 50px auto;
-        background: linear-gradient(135deg, #ffffff 0%, #fcfafa 100%);
-        padding: 40px;
-        box-shadow:
-            0 15px 35px rgba(128, 0, 32, 0.1),
-            0 5px 15px rgba(0, 0, 0, 0.05);
-        border-radius: 20px;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(128, 0, 32, 0.1);
-        backdrop-filter: blur(5px);
-        animation: slideIn 0.8s ease-out;
-        /* Añadimos la animación */
-    }
-
-    @keyframes slideIn {
-        0% {
-            transform: translateY(50px);
-            /* Empieza 50px abajo */
-            opacity: 0;
-            /* Empieza transparente */
-        }
-
-        100% {
-            transform: translateY(0);
-            /* Llega a su posición original */
-            opacity: 1;
-            /* Opacidad completa */
-        }
-    }
-
-    .form-label {
-        font-weight: 600;
-        color: #2d3748;
-        margin-bottom: 10px;
-        font-size: 17px !important;
-        letter-spacing: 0.3px;
-        display: block;
-    }
-
     input[type="text"],
     input[type="date"],
-    input[type="email"] ,
     select,
     textarea {
         font-size: 17px !important;
     }
+
+    .password-requirements {
+        margin-top: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        border: 1px solid #e2e8f0;
+    }
+
+    .requirement-item {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        font-size: 14px;
+        color: #64748b;
+        transition: all 0.3s ease;
+    }
+
+    .requirement-item i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .requirement-item.valid {
+        color: #22c55e;
+    }
+
+    .requirement-item.invalid {
+        color: #64748b;
+    }
+
+    .requirement-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .requirement-icon.valid {
+        background-color: #22c55e;
+        color: white;
+    }
+
+    .requirement-icon.invalid {
+        background-color: #e2e8f0;
+        color: #64748b;
+    }
+
+    .password-strength {
+        margin-top: 10px;
+        height: 4px;
+        background-color: #e2e8f0;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .strength-text {
+        font-size: 14px;
+        margin-top: 5px;
+        text-align: right;
+    }
+
+    .password-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        padding: 4px;
+        cursor: pointer;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+    }
+
+    .password-toggle:hover {
+        color: #800020;
+    }
+
+    .password-toggle:focus {
+        outline: none;
+        color: #800020;
+    }
+
+    .form-control.with-toggle {
+        padding-right: 40px;
+    }
+
+    /* Estilo para el ícono cuando la contraseña es visible */
+    .password-toggle.visible {
+        color: #800020;
+    }
+
+    /* Estilo hover para el contenedor de la contraseña */
+    .password-wrapper:hover .password-toggle {
+        opacity: 1;
+    }
+
+    .password-requirements {
+        margin-top: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        border: 1px solid #e2e8f0;
+    }
+
+    .requirement-item {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        font-size: 14px;
+        color: #64748b;
+        transition: all 0.3s ease;
+    }
+
+    .requirement-item i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    .requirement-item.valid {
+        color: #22c55e;
+    }
+
+    .requirement-item.invalid {
+        color: #64748b;
+    }
+
+    .requirement-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .requirement-icon.valid {
+        background-color: #22c55e;
+        color: white;
+    }
+
+    .requirement-icon.invalid {
+        background-color: #e2e8f0;
+        color: #64748b;
+    }
+
+    .password-strength {
+        margin-top: 10px;
+        height: 4px;
+        background-color: #e2e8f0;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .password-strength-bar {
+        height: 100%;
+        width: 0;
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .strength-text {
+        font-size: 14px;
+        margin-top: 5px;
+        text-align: right;
+    }
     
 </style>
-@endsection
+<div class="container">
+    <h2>Crear Usuario</h2>
 
-@section('content')
-<main class="profile-page">
-    <section class="page-background">
-        <div class="container">
-            <div class="text-left mb-4">
-                <a href="javascript:history.back()" class="btn-back">
-                    <i class="fas fa-arrow-left"></i> Regresar
-                </a>
+    <!-- Mostrar mensajes de éxito o error -->
+    @if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <!-- Mostrar errores de validación -->
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <form action="{{ route('usuarios.store') }}" method="POST" enctype="multipart/form-data">
+        <p class="mt-3"><span class="text-danger">*</span> Campos obligatorios</p>
+        @csrf
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">Nombre <span class="text-danger">*</span></label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
             </div>
-            <div class="text-center mb-4">
-                <h3 class="card-title">Crear Nuevo Usuario</h3>
+            
+
+            <div class="form-group">
+                <label for="apellido_paterno">Apellido Paterno <span class="text-danger">*</span></label>
+                <input type="text" name="apellido_paterno" id="apellido_paterno" class="form-control" value="{{ old('apellido_paterno') }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="apellido_materno">Apellido Materno</label>
+                <input type="text" name="apellido_materno" id="apellido_materno" class="form-control" value="{{ old('apellido_materno') }}">
             </div>
 
-            <!-- Formulario -->
-            <form action="{{ route('usuarios.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
-                <div class="form-row">
-                    <!-- Nombre -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="name">Nombre</label>
-                        <input name="name" value="{{ old('name') }}"
-                            class="form-control @error('name') form-error @enderror" type="text" required>
-                        @error('name')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="text" name="telefono" id="telefono" class="form-control" value="{{ old('telefono') }}">
+                <!-- Contenedor para los requisitos del teléfono, inicialmente oculto -->
+                <div class="phone-requirements" style="display: none;">
+                    <div class="requirement-item" data-requirement="length">
+                        <span class="requirement-icon">•</span>
+                        Exactamente 10 dígitos
                     </div>
-
-                    <!-- Apellido Paterno -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="apellido_paterno">Apellido Paterno</label>
-                        <input name="apellido_paterno" value="{{ old('apellido_paterno') }}"
-                            class="form-control @error('apellido_paterno') form-error @enderror" type="text" required>
-                        @error('apellido_paterno')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
+                    <div class="requirement-item" data-requirement="digits">
+                        <span class="requirement-icon">•</span>
+                        Solo números
                     </div>
                 </div>
-
-                <div class="form-row">
-                    <!-- Apellido Materno -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="apellido_materno">Apellido Materno</label>
-                        <input name="apellido_materno" value="{{ old('apellido_materno') }}"
-                            class="form-control @error('apellido_materno') form-error @enderror" type="text">
-                        @error('apellido_materno')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Teléfono -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="telefono">Teléfono</label>
-                        <input name="telefono" value="{{ old('telefono') }}"
-                            class="form-control @error('telefono') form-error @enderror" type="text">
-                        @error('telefono')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <!-- Email -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="email">Email</label>
-                        <input name="email" type="email" value="{{ old('email') }}"
-                            class="form-control @error('email') form-error @enderror" required>
-                        @error('email')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Contraseña -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="password">Contraseña</label>
-                        <input name="password" type="password"
-                            class="form-control @error('password') form-error @enderror" required>
-                        @error('password')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <!-- Confirmar Contraseña -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="password_confirmation">Confirmar Contraseña</label>
-                        <input name="password_confirmation" type="password" class="form-control" required>
-                    </div>
-
-                    <!-- Rol -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="rol">Rol</label>
-                        <select name="rol" class="form-control" required>
-                            <option value="">Seleccione un Rol</option>
-                            @foreach($roles as $rol)
-                            <option value="{{ $rol->name }}" {{ old('rol')==$rol->name ? 'selected' : '' }}>
-                                {{ $rol->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <!-- Área -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="id_area">Área</label>
-                        <select name="id_area" class="form-control @error('id_area') form-error @enderror" required>
-                            <option value="">Seleccione un Área</option>
-                            @foreach($areas as $area)
-                            <option value="{{ $area->id }}" {{ old('id_area')==$area->id ? 'selected' : '' }}>
-                                {{ $area->nombre_area }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('id_area')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Imagen de Perfil -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="image">Imagen de Perfil</label>
-                        <input name="image" type="file" accept="image/*"
-                            class="form-control @error('image') form-error @enderror">
-                        @error('image')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <!-- Botón de Guardar Cambios -->
-                <button type="submit" class="btn-submit">Crear Usuario</button>
-            </form>
-
-            <!-- Mensajes de éxito o error -->
-            @if(session('success'))
-            <div class="alert-success">
-                <strong>¡Éxito!</strong> {{ session('success') }}
             </div>
-            @endif
+            
+        </div>
 
-            @if ($errors->any())
-            <div class="alert-error">
-                <strong>¡Error!</strong> Por favor, revisa los siguientes campos:
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="email">Correo Electrónico <span class="text-danger">*</span></label>
+                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
+                <!-- Contenedor para los requisitos del correo, inicialmente oculto -->
+                <div class="email-requirements" style="display: none;">
+                    <div class="requirement-item" data-requirement="format">
+                        <span class="requirement-icon">•</span>
+                        Formato válido (por ejemplo: usuario@dominio.com)
+                    </div>
+                    <div class="requirement-item" data-requirement="domain">
+                        <span class="requirement-icon">•</span>
+                        Dominio válido (com, org, net, etc.)
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="id_area">Área <span class="text-danger">*</span></label>
+                <select name="id_area" class="form-control @error('id_area') form-error @enderror" required>
+                    <option value="">Seleccione un Área</option>
+                    @foreach($areas as $area)
+                    <option value="{{ $area->id }}" {{ old('id_area')==$area->id ? 'selected' : '' }}>{{
+                        $area->nombre_area }}</option>
                     @endforeach
-                </ul>
+                </select>
+                @error('id_area')
+                <p class="form-error">{{ $message }}</p>
+                @enderror
             </div>
-            @endif
         </div>
-    </section>
-</main>
-@endsection
 
-@section('scripts')
+        <div class="form-row">
+            <div class="form-group">
+                <label for="rol">Rol <span class="text-danger">*</span></label>
+                <select name="rol" class="form-control" required>
+                    <option value="">Seleccione un rol</option>
+                    @foreach ($roles as $rol)
+                    <option value="{{ $rol->name }}" {{ old('rol')==$rol->name ? 'selected' : '' }}>{{ $rol->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="password">Contraseña <span class="text-danger">*</span></label>
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="password" class="form-control with-toggle" required>
+                    <button type="button" class="password-toggle" data-target="password"
+                        title="Mostrar/Ocultar contraseña">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="eye-icon-show" viewBox="0 0 16 16">
+                            <path
+                                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                            <path
+                                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="eye-icon-hide" viewBox="0 0 16 16" style="display: none;">
+                            <path
+                                d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z" />
+                            <path
+                                d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z" />
+                            <path
+                                d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- Contenedor para los requisitos de la contraseña -->
+                <div class="password-requirements" style="display: none;">
+                    <div class="requirement-item" data-requirement="length">
+                        <span class="requirement-icon">✓</span>
+                        Mínimo 8 caracteres
+                    </div>
+                    <div class="requirement-item" data-requirement="lowercase">
+                        <span class="requirement-icon">✓</span>
+                        Una letra minúscula
+                    </div>
+                    <div class="requirement-item" data-requirement="uppercase">
+                        <span class="requirement-icon">✓</span>
+                        Una letra mayúscula
+                    </div>
+                    <div class="requirement-item" data-requirement="number">
+                        <span class="requirement-icon">✓</span>
+                        Un número
+                    </div>
+                    <div class="requirement-item" data-requirement="special">
+                        <span class="requirement-icon">✓</span>
+                        Un carácter especial
+                    </div>
+
+                    <!-- Barra de fortaleza de la contraseña -->
+                    <div class="password-strength">
+                        <div class="password-strength-bar"></div>
+                    </div>
+                    <div class="strength-text">Fortaleza de la contraseña: <span id="strength-value">Débil</span></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password_confirmation">Confirmar Contraseña <span class="text-danger">*</span></label>
+                <div class="password-wrapper">
+                    <input type="password" name="password_confirmation" id="password_confirmation"
+                        class="form-control with-toggle" required>
+                    <button type="button" class="password-toggle" data-target="password_confirmation"
+                        title="Mostrar/Ocultar contraseña">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="eye-icon-show" viewBox="0 0 16 16">
+                            <path
+                                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                            <path
+                                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="eye-icon-hide" viewBox="0 0 16 16" style="display: none;">
+                            <path
+                                d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z" />
+                            <path
+                                d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z" />
+                            <path
+                                d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="password-match-message" class="mt-2" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Imagen de Perfil</label>
+            <input type="file" name="image" class="form-control-file">
+        </div>
+
+        <button type="submit" class="btn btn-submit">Crear Usuario</button>
+    </form>
+
+
+</div>
 <script>
-    $(document).ready(function () {
-        // Validaciones en tiempo real
-        function validarTextoSoloLetras(input) {
-            let valor = $(input).val();
-            valor = valor.replace(/[^A-Za-zÀ-ÿ\s]/g, ''); // Permitir solo letras y espacios
-            $(input).val(valor); // Asignar el valor filtrado al campo
-            if (valor === '') {
-                $(input).addClass('form-error');
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('password_confirmation');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('telefono');
+    const requirementsBox = document.querySelector('.password-requirements');
+    const emailRequirementsBox = document.querySelector('.email-requirements');
+    const phoneRequirementsBox = document.querySelector('.phone-requirements');
+    const strengthBar = document.querySelector('.password-strength-bar');
+    const strengthText = document.getElementById('strength-value');
+    const matchMessage = document.getElementById('password-match-message');
+    const nameInput = document.getElementById('name');
+    const apellidoPaternoInput = document.getElementById('apellido_paterno');
+    const apellidoMaternoInput = document.getElementById('apellido_materno');
+
+    function restrictToLettersOnly(input) {
+        input.addEventListener('input', function() {
+            // Elimina cualquier carácter que no sea una letra o contiene espacios
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]+/g, '');
+        });
+    }
+
+    restrictToLettersOnly(nameInput);
+    restrictToLettersOnly(apellidoPaternoInput);
+    restrictToLettersOnly(apellidoMaternoInput);
+    const phoneRequirements = {
+        length: str => str.length === 10,
+        digits: str => /^\d+$/.test(str)
+    };
+
+    const emailRequirements = {
+        format: str => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str), // Formato básico de correo
+        domain: str => /\.(com|org|net|edu|gov|mx)$/.test(str) // Dominio comúnmente válido
+    }; 
+    const requirements = {
+        length: str => str.length >= 8,
+        lowercase: str => /[a-z]/.test(str),
+        uppercase: str => /[A-Z]/.test(str),
+        number: str => /[0-9]/.test(str),
+        special: str => /[@$!%*#?&]/.test(str)
+    };
+
+    function updateRequirements(password) {
+        let validCount = 0;
+
+        // Verificar cada requisito
+        for (const [requirement, validateFn] of Object.entries(requirements)) {
+            const element = document.querySelector(`[data-requirement="${requirement}"]`);
+            const isValid = validateFn(password);
+
+            element.classList.toggle('valid', isValid);
+            element.classList.toggle('invalid', !isValid);
+
+            const icon = element.querySelector('.requirement-icon');
+            icon.textContent = isValid ? '✓' : '•';
+            icon.classList.toggle('valid', isValid);
+            icon.classList.toggle('invalid', !isValid);
+
+            if (isValid) validCount++;
+        }
+
+        // Actualizar la barra de fortaleza
+        const strength = (validCount / Object.keys(requirements).length) * 100;
+        strengthBar.style.width = `${strength}%`;
+
+        // Actualizar el color de la barra según la fortaleza
+        if (strength <= 25) {
+            strengthBar.style.backgroundColor = '#ef4444';
+            strengthText.textContent = 'Débil';
+        } else if (strength <= 50) {
+            strengthBar.style.backgroundColor = '#f97316';
+            strengthText.textContent = 'Regular';
+        } else if (strength <= 75) {
+            strengthBar.style.backgroundColor = '#eab308';
+            strengthText.textContent = 'Buena';
+        } else {
+            strengthBar.style.backgroundColor = '#22c55e';
+            strengthText.textContent = 'Fuerte';
+        }
+    }
+    function updatePhoneRequirements(phone) {
+        for (const [requirement, validateFn] of Object.entries(phoneRequirements)) {
+            const element = document.querySelector(`[data-requirement="${requirement}"]`);
+            const isValid = validateFn(phone);
+
+            element.classList.toggle('valid', isValid);
+            element.classList.toggle('invalid', !isValid);
+
+            const icon = element.querySelector('.requirement-icon');
+            icon.textContent = isValid ? '✓' : '•';
+            icon.classList.toggle('valid', isValid);
+            icon.classList.toggle('invalid', !isValid);
+        }
+    }
+
+    phoneInput.addEventListener('input', function() {
+        if (this.value.length > 0) {
+            phoneRequirementsBox.style.display = 'block';
+        } else {
+            phoneRequirementsBox.style.display = 'none';
+        }
+
+        updatePhoneRequirements(this.value);
+    });
+
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (confirmPassword) {
+            matchMessage.style.display = 'block';
+            if (password === confirmPassword) {
+                matchMessage.textContent = 'Las contraseñas coinciden';
+                matchMessage.style.color = '#22c55e';
             } else {
-                $(input).removeClass('form-error');
+                matchMessage.textContent = 'Las contraseñas no coinciden';
+                matchMessage.style.color = '#ef4444';
             }
+        } else {
+            matchMessage.style.display = 'none';
+        }
+    }
+
+    passwordInput.addEventListener('input', function() {
+        // Mostrar el cuadro de validación al empezar a escribir y ocultarlo si está vacío
+        if (this.value.length > 0) {
+            requirementsBox.style.display = 'block';
+        } else {
+            requirementsBox.style.display = 'none';
         }
 
-        // Validar el campo de teléfono
-        function validarTelefono(input) {
-            let valor = $(input).val();
-            valor = valor.replace(/[^0-9]/g, ''); // Permitir solo números
-            $(input).val(valor);
-            if (valor.length !== 10) {
-                $(input).addClass('form-error');
+        updateRequirements(this.value);
+        checkPasswordMatch();
+    });
+
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+
+    function updateEmailRequirements(email) {
+        let validCount = 0;
+
+        for (const [requirement, validateFn] of Object.entries(emailRequirements)) {
+            const element = document.querySelector(`[data-requirement="${requirement}"]`);
+            const isValid = validateFn(email);
+
+            element.classList.toggle('valid', isValid);
+            element.classList.toggle('invalid', !isValid);
+
+            const icon = element.querySelector('.requirement-icon');
+            icon.textContent = isValid ? '✓' : '•';
+            icon.classList.toggle('valid', isValid);
+            icon.classList.toggle('invalid', !isValid);
+
+            if (isValid) validCount++;
+        }
+    }
+
+    passwordInput.addEventListener('input', function() {
+        if (this.value.length > 0) {
+            requirementsBox.style.display = 'block';
+        } else {
+            requirementsBox.style.display = 'none';
+        }
+
+        updateRequirements(this.value);
+        checkPasswordMatch();
+    });
+
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+    emailInput.addEventListener('input', function() {
+        if (this.value.length > 0) {
+            emailRequirementsBox.style.display = 'block';
+        } else {
+            emailRequirementsBox.style.display = 'none';
+        }
+
+        updateEmailRequirements(this.value);
+    });
+});
+
+    document.querySelectorAll('.password-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const showIcon = this.querySelector('.eye-icon-show');
+            const hideIcon = this.querySelector('.eye-icon-hide');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                showIcon.style.display = 'none';
+                hideIcon.style.display = 'block';
+                this.classList.add('visible');
             } else {
-                $(input).removeClass('form-error');
-            }
-        }
-
-        // Validar en tiempo real nombre, apellidos y teléfono
-        $('input[name="name"], input[name="apellido_paterno"], input[name="apellido_materno"]').on('input', function () {
-            validarTextoSoloLetras(this);
-        });
-        $('input[name="telefono"]').on('input', function () {
-            validarTelefono(this);
-        });
-
-        // Validar todos los campos al enviar
-        $('form').on('submit', function (e) {
-            let isValid = true;
-            let camposConErrores = [];
-
-            $('input[name="name"], input[name="apellido_paterno"], input[name="apellido_materno"]').each(function () {
-                validarTextoSoloLetras(this);
-                if ($(this).hasClass('form-error')) {
-                    isValid = false;
-                    camposConErrores.push($(this).prev('label').text());
-                }
-            });
-
-            validarTelefono($('input[name="telefono"]'));
-            if ($('input[name="telefono"]').hasClass('form-error')) {
-                isValid = false;
-                camposConErrores.push('Teléfono');
-            }
-
-            if (!isValid && camposConErrores.length > 0) {
-                e.preventDefault();
-                alert('Por favor, corrige los siguientes campos: ' + camposConErrores.join(', '));
+                input.type = 'password';
+                showIcon.style.display = 'block';
+                hideIcon.style.display = 'none';
+                this.classList.remove('visible');
             }
         });
-
-        @if ($errors->any())
-        alert('Existen errores en el formulario. Por favor, revisa los campos marcados.');
-        @endif
-
-        const passwordInput = $('input[name="password"]');
-    const requirementsBox = $(`
-        <div class="password-requirements">
-            <div class="requirement length">
-                <i class="fas fa-times-circle"></i>
-                Mínimo 8 caracteres
-            </div>
-            <div class="requirement uppercase">
-                <i class="fas fa-times-circle"></i>
-                Al menos una mayúscula
-            </div>
-            <div class="requirement lowercase">
-                <i class="fas fa-times-circle"></i>
-                Al menos una minúscula
-            </div>
-            <div class="requirement number">
-                <i class="fas fa-times-circle"></i>
-                Al menos un número
-            </div>
-            <div class="requirement special">
-                <i class="fas fa-times-circle"></i>
-                Al menos un carácter especial
-            </div>
-        </div>
-    `);
-    
-    passwordInput.parent().append(requirementsBox);
-
-    passwordInput.on('focus', function() {
-        requirementsBox.show();
     });
 
-    passwordInput.on('blur', function() {
-        requirementsBox.hide();
-    });
-
-    passwordInput.on('input', function() {
-        const password = $(this).val();
-        let isValid = true;
-
-        // Validar longitud
-        if (password.length >= 8) {
-            requirementsBox.find('.length').addClass('valid').find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
-        } else {
-            isValid = false;
-            requirementsBox.find('.length').removeClass('valid').find('i').addClass('fa-times-circle').removeClass('fa-check-circle');
-        }
-
-        // Validar mayúscula
-        if (/[A-Z]/.test(password)) {
-            requirementsBox.find('.uppercase').addClass('valid').find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
-        } else {
-            isValid = false;
-            requirementsBox.find('.uppercase').removeClass('valid').find('i').addClass('fa-times-circle').removeClass('fa-check-circle');
-        }
-
-        // Validar minúscula
-        if (/[a-z]/.test(password)) {
-            requirementsBox.find('.lowercase').addClass('valid').find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
-        } else {
-            isValid = false;
-            requirementsBox.find('.lowercase').removeClass('valid').find('i').addClass('fa-times-circle').removeClass('fa-check-circle');
-        }
-
-        // Validar número
-        if (/[0-9]/.test(password)) {
-            requirementsBox.find('.number').addClass('valid').find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
-        } else {
-            isValid = false;
-            requirementsBox.find('.number').removeClass('valid').find('i').addClass('fa-times-circle').removeClass('fa-check-circle');
-        }
-
-        // Validar carácter especial
-        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-            requirementsBox.find('.special').addClass('valid').find('i').removeClass('fa-times-circle').addClass('fa-check-circle');
-        } else {
-            isValid = false;
-            requirementsBox.find('.special').removeClass('valid').find('i').addClass('fa-times-circle').removeClass('fa-check-circle');
-        }
-
-        if (!isValid && password.length > 0) {
-            $(this).addClass('form-error');
-        } else {
-            $(this).removeClass('form-error');
-        }
-    });
-
-  
-
-   
-    });
 </script>
 @endsection

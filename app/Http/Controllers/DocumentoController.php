@@ -30,7 +30,6 @@ class DocumentoController extends Controller
     $validatedData = $request->validate([
         'numero_hojas' => 'required|string',
         'fecha_creacion' => 'required|date',
-        'motivo_evaluacion' => 'required|string',
         'estado' => 'required|string',
         'id_evaluado' => 'required|exists:evaluados,id',
         'id_carpeta' => 'required|exists:carpetas,id',

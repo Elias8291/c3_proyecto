@@ -533,6 +533,16 @@
                     <p class="form-error">{{ $message }}</p>
                     @enderror
                 </div>
+                <!-- Cantidad Máxima de Carpetas -->
+                <div class="form-group mb-4">
+                    <label class="form-label" for="maximo_carpetas">Cantidad Máxima de Carpetas</label>
+                    <input name="maximo_carpetas" value="{{ old('maximo_carpetas') }}"
+                        class="form-control @error('maximo_carpetas') form-error @enderror" type="number" min="1"
+                        required>
+                    @error('maximo_carpetas')
+                    <p class="form-error">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 <!-- Vista Previa -->
                 <div class="form-preview">
@@ -554,8 +564,8 @@
                             <span id="previewUbicacion">-</span>
                         </div>
                         <div class="preview-item">
-                            <span class="preview-label">Rango Alfabético:</span>
-                            <span id="previewRangoAlfabetico">-</span>
+                            <span class="preview-label">Cantidad Máxima de Carpetas:</span>
+                            <span id="previewMaximoCarpetas">-</span>
                         </div>
                     </div>
                 </div>
@@ -569,7 +579,7 @@
 
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('cajaForm');
     const inputs = form.querySelectorAll('input, select');
     const rangoAlfabeticoInput = form.rango_alfabetico;
@@ -577,8 +587,7 @@
     const anioInput = document.querySelector('input[name="anio"]');
     const numeroCajaError = document.getElementById('numeroCajaError');
     const submitButton = document.querySelector('.btn-submit');
-
-
+    const maximoCarpetasInput = document.querySelector('input[name="maximo_carpetas"]'); // Asegurarse de seleccionar el campo de cantidad máxima
 
     function updatePreview() {
         document.getElementById('previewNumeroCaja').textContent = form.numero_caja.value || '-';
@@ -586,34 +595,24 @@
         document.getElementById('previewAnio').textContent = form.anio.value || '-';
         document.getElementById('previewUbicacion').textContent = form.ubicacion.value || '-';
         document.getElementById('previewRangoAlfabetico').textContent = form.rango_alfabetico.value || '-';
+        document.getElementById('previewMaximoCarpetas').textContent = form.maximo_carpetas.value || '-'; // Actualización correcta de la cantidad máxima
     }
 
     // Función para manejar el input en rango alfabético
     rangoAlfabeticoInput.addEventListener('input', function() {
-        // Obtener el valor ingresado y convertir a mayúsculas
         let value = rangoAlfabeticoInput.value.toUpperCase();
-
-        // Remover cualquier carácter que no sea una letra o guion
         value = value.replace(/[^A-Z-]/g, '');
-
-        // Añadir el guion automáticamente después de la primera letra si no está presente
         if (value.length === 2 && /^[A-Z]$/.test(value[0]) && value[1] !== '-') {
             value = value[0] + '-' + value[1];
         }
-
-        // Limitar la entrada a un formato "A-Z" (una letra, un guion, una segunda letra)
         if (value.length > 3) {
             value = value.slice(0, 3);
         }
-
-        // Actualizar el valor del input y la vista previa
         rangoAlfabeticoInput.value = value;
         updatePreview();
 
-        // Validar el formato completo y mostrar mensaje de error si es necesario
         const regex = /^[A-Z]-[A-Z]?$/;
         const errorMessage = document.querySelector('.error-rango-alfabetico');
-
         if (!regex.test(value) && value.length === 3) {
             rangoAlfabeticoInput.classList.add('form-error');
             if (!errorMessage) {
@@ -646,22 +645,20 @@
                     if (data.exists) {
                         numeroCajaError.style.display = 'block';
                         numeroCajaInput.classList.add('form-error');
-                        submitButton.disabled = true; // Desactiva el botón de enviar
+                        submitButton.disabled = true;
                     } else {
                         numeroCajaError.style.display = 'none';
                         numeroCajaInput.classList.remove('form-error');
-                        submitButton.disabled = false; // Activa el botón de enviar
+                        submitButton.disabled = false;
                     }
                 })
                 .catch(error => console.error('Error:', error));
         }
     }
 
-  // Validar cuando se cambie el año o el número de caja
-  numeroCajaInput.addEventListener('input', validateNumeroCaja);
+    numeroCajaInput.addEventListener('input', validateNumeroCaja);
     anioInput.addEventListener('input', validateNumeroCaja);
 
-    // Validación para permitir solo números positivos
     numeroCajaInput.addEventListener('input', function() {
         if (numeroCajaInput.value < 1) {
             numeroCajaInput.value = '';

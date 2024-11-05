@@ -327,10 +327,11 @@
             <form action="{{ route('evaluados.store') }}" method="POST">
                 @csrf
 
+                <p class="text-muted" style="font-size: 0.9em; color: #800020; font-weight: bold;">Los campos marcados con <span style="color: #e53e3e;">*</span> son obligatorios.</p>
                 <div class="form-row">
                     <!-- Primer Nombre -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="primer_nombre">Primer Nombre</label>
+                        <label class="form-label" for="primer_nombre">Primer Nombre <span style="color: #e53e3e;">*</span></label>
                         <input name="primer_nombre" value="{{ old('primer_nombre') }}"
                             class="form-control @error('primer_nombre') form-error @enderror" type="text" required
                             pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
@@ -342,7 +343,7 @@
 
                     <!-- Segundo Nombre -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="segundo_nombre">Segundo Nombre</label>
+                        <label class="form-label" for="segundo_nombre">Segundo Nombre </label>
                         <input name="segundo_nombre" value="{{ old('segundo_nombre') }}"
                             class="form-control @error('segundo_nombre') form-error @enderror" type="text"
                             pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
@@ -357,7 +358,7 @@
                 <div class="form-row">
                     <!-- Primer Apellido -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="primer_apellido">Primer Apellido</label>
+                        <label class="form-label" for="primer_apellido">Primer Apellido <span style="color: #e53e3e;">*</span></label> </label>
                         <input name="primer_apellido" value="{{ old('primer_apellido') }}"
                             class="form-control @error('primer_apellido') form-error @enderror" type="text" required
                             pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$" title="Solo se permiten letras y espacios."
@@ -383,7 +384,7 @@
                 <div class="form-row">
                     <!-- Fecha de Nacimiento -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento</label>
+                        <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento <span style="color: #e53e3e;">*</span></label></label>
                         <input name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
                             class="form-control @error('fecha_nacimiento') form-error @enderror" type="date" required
                             id="fecha_nacimiento" disabled>
@@ -394,7 +395,7 @@
 
                     <!-- Género (Radio Buttons) -->
                     <div class="form-group mb-4">
-                        <label class="form-label">Género</label>
+                        <label class="form-label">Género <span style="color: #e53e3e;">*</span></label></label>
                         <div>
                             <label class="form-check-inline">
                                 <input type="radio" name="sexo" value="M"
@@ -416,7 +417,7 @@
                 <div class="form-row">
                     <!-- Estado de Nacimiento (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="estado_nacimiento">Estado de Nacimiento</label>
+                        <label class="form-label" for="estado_nacimiento">Estado de Nacimiento <span style="color: #e53e3e;">*</span></label></label>
                         <select name="estado_nacimiento"
                             class="form-control @error('estado_nacimiento') form-error @enderror" required disabled>
                             <option value="">Seleccione el Estado</option>
@@ -497,7 +498,7 @@
 
                     <!-- 2 Últimos Dígitos de CURP (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="curp_last2">2 Últimos Dígitos de CURP</label>
+                        <label class="form-label" for="curp_last2">2 Últimos Dígitos de CURP <span style="color: #e53e3e;">*</span></label> </label>
                         <input name="curp_last2" value="{{ old('curp_last2') }}"
                             class="form-control @error('curp_last2') form-error @enderror" type="text" required
                             pattern="^[A-Z0-9]{2}$"
@@ -509,21 +510,50 @@
                     </div>
 
                     <!-- CURP (generado automáticamente) -->
+                    <!-- CURP (generado automáticamente) -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="CURP">CURP</label>
                         <input name="CURP" value="{{ old('CURP') }}"
-                            class="form-control @error('CURP') form-error @enderror" type="text" disabled>
+                            class="form-control @error('CURP') form-error @enderror" type="text" readonly>
                         @error('CURP')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
+
                 </div>
 
                 <div class="form-row">
+
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="rfc_last3">Últimos 3 Dígitos de RFC <span style="color: #e53e3e;">*</span></label></label>
+                        <input name="rfc_last3" value="{{ old('rfc_last3') }}"
+                            class="form-control @error('rfc_last3') form-error @enderror" type="text" required
+                            pattern="^[A-Z0-9]{3}$"
+                            title="Ingresa exactamente 3 caracteres alfanuméricos en mayúsculas (letras y/o números)."
+                            maxlength="3" disabled>
+                        @error('rfc_last3')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <!-- RFC -->
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="RFC">RFC</label>
+                        <input name="RFC" value="{{ old('RFC') }}"
+                            class="form-control @error('RFC') form-error @enderror" type="text" maxlength="13" readonly>
+                        @error('RFC')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+
+                </div>
+
+                <div class="form-row">
+
                     <!-- Fecha de Apertura (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="fecha_apertura">Fecha de Apertura</label>
+                        <label class="form-label" for="fecha_apertura">Fecha de Apertura <span style="color: #e53e3e;">*</span></label></label>
                         <input name="fecha_apertura" value="{{ old('fecha_apertura') }}"
                             class="form-control @error('fecha_apertura') form-error @enderror" type="date" required
                             id="fecha_apertura" disabled>
@@ -534,7 +564,7 @@
 
                     <!-- Resultado de Evaluación (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label">Resultado de Evaluación</label>
+                        <label class="form-label">Resultado de Evaluación <span style="color: #e53e3e;">*</span></label></label>
                         <div>
                             <label class="form-check-inline">
                                 <input type="radio" name="resultado_evaluacion" value="1"
@@ -551,56 +581,22 @@
                         <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="rfc_last3">Últimos 3 Dígitos de RFC</label>
-                        <input name="rfc_last3" value="{{ old('rfc_last3') }}"
-                            class="form-control @error('rfc_last3') form-error @enderror" type="text" required
-                            pattern="^[A-Z0-9]{3}$"
-                            title="Ingresa exactamente 3 caracteres alfanuméricos en mayúsculas (letras y/o números)."
-                            maxlength="3" disabled>
-                        @error('rfc_last3')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
 
-                </div>
-
-                <div class="form-row">
-                    <!-- RFC -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="RFC">RFC</label>
-                        <input name="RFC" value="{{ old('RFC') }}"
-                            class="form-control @error('RFC') form-error @enderror" type="text" maxlength="13" disabled>
-                        @error('RFC')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- SMN -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="SMN">SMN</label>
-                        <input name="SMN" value="{{ old('SMN') }}"
-                            class="form-control @error('SMN') form-error @enderror" type="text" maxlength="10" disabled>
-                        @error('SMN')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- IFE -->
-                    <div class="form-group mb-4">
-                        <label class="form-label" for="IFE">IFE</label>
-                        <input name="IFE" value="{{ old('IFE') }}"
-                            class="form-control @error('IFE') form-error @enderror" type="text" maxlength="20" disabled>
-                        @error('IFE')
-                        <p class="form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
 
                 <!-- Botón de Guardar Cambios -->
                 <button type="submit" class="btn-submit">Crear Evaluado</button>
             </form>
-
+            <div id="carpetaModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <h4>¡Evaluado creado exitosamente!</h4>
+                    <p>¿Deseas agregar una carpeta para este evaluado?</p>
+                    <div class="modal-buttons">
+                        <a href="{{ route('carpetas.create') }}" class="btn-confirm">Sí, agregar carpeta</a>
+                        <button onclick="closeModal()" class="btn-cancel">No, gracias</button>
+                    </div>
+                </div>
+            </div>
             <!-- Mensajes de éxito o error -->
             @if(session('success'))
             <div class="alert-success">
@@ -649,6 +645,11 @@
         dateFormat: "Y-m-d",
         locale: "es" // Esto asegura que el calendario esté en español
     });
+
+    @if(session('showCreateFolderModal'))
+            showModal();
+        @endif
+
         // Función para habilitar el siguiente campo en la secuencia
         function habilitarCampoSiguiente(campoActual) {
             switch (campoActual) {
@@ -747,6 +748,9 @@
                     break;
             }
         }
+        document.querySelector('form').addEventListener('submit', function() {
+        curpInput.disabled = false;  // Habilitar el campo CURP al enviar el formulario
+    });
 
         // Función para limpiar y deshabilitar campos posteriores
         function limpiarCamposPosteriores(campos) {
@@ -1008,5 +1012,12 @@ sexoInputs.forEach(radio => {
 
     });
 
+    function showModal() {
+        document.getElementById("successModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("successModal").style.display = "none";
+    }
 </script>
 @endsection

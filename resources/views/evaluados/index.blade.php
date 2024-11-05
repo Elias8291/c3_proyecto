@@ -418,12 +418,9 @@
                                         <th>Nombre Completo</th>
                                         <th>CURP</th>
                                         <th>RFC</th>
-                                        <th>IFE</th>
-                                        <th>SMN</th>
                                         <th>Fecha de Apertura</th>
                                         <th>Sexo</th>
-                                        
-                                        <th>Eliminar</th>
+                                        <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -434,14 +431,18 @@
                                             $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
                                         <td>{{ $evaluado->CURP }}</td>
                                         <td>{{ $evaluado->RFC }}</td>
-                                        <td>{{ $evaluado->IFE }}</td>
-                                        <td>{{ $evaluado->SMN }}</td>
                                         <td>{{ $evaluado->fecha_apertura }}</td>
                                         <td>{{ $evaluado->sexo }}</td>
                                         
                                         <td>
                                             
                                             <div class="action-buttons">
+                                                @if($evaluado->carpeta)
+                                                <i class="fas fa-folder" style="color: var(--primary-burgundy);" title="Carpeta asociada"></i>
+                                            @endif
+                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit">
+                                                    <i class="fas fa-edit"></i> 
+                                                </a>
                                                 <button type="button" class="btn btn-delete"
                                                     onclick="confirmarEliminacion({{ $evaluado->id }})">
                                                     <i class="fas fa-trash-alt"></i>
@@ -452,6 +453,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
+
                                             </div>
                                         </td>
                                     </tr>
@@ -470,6 +472,22 @@
 </section>
 
 <script>
+function confirmarEliminacion(evaluadoId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#800020',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Usa evaluadoId en lugar de $evaluadoId
+            document.getElementById('eliminar-form-' + evaluadoId).submit();
+        }
+    });
+}
 
 </script>
 

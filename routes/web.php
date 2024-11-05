@@ -18,6 +18,7 @@ use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CarpetaController;
+use App\Models\Caja;
 
 // Ruta para la página de bienvenida, accesible para todos los usuarios
 Route::get('/', [WelcomeController::class, 'showWelcomePage'])->name('welcome');
@@ -50,7 +51,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/carpetas/creaR/{evaluado_id}', [CarpetaController::class, 'crear'])->name('carpetas.crear');
     Route::get('/cajas/{id}', [CajaController::class, 'show'])->name('cajas.show');
     Route::get('/evaluados/{id}/datos', [EvaluadoController::class, 'getDatosEvaluado']);
-
+    Route::get('/cajas/todas', function () {
+        return response()->json(Caja::all());
+    });
 
 });
 // En routes/web.php

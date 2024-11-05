@@ -1,11 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Carpeta')
+@section('title', 'Editar Carpeta')
 
 @section('css')
 <style>
-    /* Estilos aplicados del formulario de "Crear Rol" */
-
+    /* Estilos aplicados para el formulario de edición */
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(128, 0, 32, 0.1);
+        backdrop-filter: blur(5px);
+        animation: slideIn 0.8s ease-out;
+    }
+   
     .container {
         max-width: 900px;
         margin: 50px auto;
@@ -443,7 +456,7 @@
     }
 }
 
-    
+
 </style>
 @endsection
 
@@ -457,48 +470,29 @@
                 </a>
             </div>
             <div class="text-center mb-4">
-                <h3 class="card-title">Crear Nueva Carpeta</h3>
+                <h3 class="card-title">Editar Carpeta #{{ $carpeta->id }}</h3>
             </div>
 
             <!-- Formulario -->
-            <form action="{{ route('carpetas.store') }}" method="POST">
+            <form action="{{ route('carpetas.update', $carpeta->id) }}" method="POST">
                 @csrf
+                @method('PUT')
 
-                <input type="hidden" name="documentos" id="documentos-input">
-
-                 <div class="form-group mb-4">
-                    <label class="form-label" for="id_evaluado">Seleccionar Evaluado</label>
-                    <select name="id_evaluado" id="id_evaluado" class="form-control" required>
-                        <option value="">Seleccione un evaluado</option>
-                        @foreach($evaluados as $evaluado)
-                        <option value="{{ $evaluado->id }}" 
-                            @if($evaluado->carpetas->isNotEmpty()) 
-                                disabled 
-                                class="disabled-option" 
-                            @endif>
-                            {{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}
-                            @if($evaluado->carpetas->isNotEmpty()) 
-                                (Ya tiene carpeta) 
-                            @endif
-                        </option>
-                        @endforeach
-                    </select>
+                <div class="form-group mb-4">
+                    <label class="form-label" for="id_evaluado">Evaluado</label>
+                    <p id="evaluado-info" class="form-control-static">
+                        {{ $carpeta->evaluado->primer_nombre }} {{ $carpeta->evaluado->segundo_nombre ?? '' }} {{ $carpeta->evaluado->primer_apellido }} {{ $carpeta->evaluado->segundo_apellido ?? '' }}
+                    </p>
+                    <input type="hidden" name="id_evaluado" value="{{ $carpeta->id_evaluado }}">
                 </div>
 
-
-                <!-- Información del Evaluado -->
-                <div id="evaluado-info" class="mb-4">
-                    <!-- Los datos se cargarán aquí mediante JavaScript -->
-                </div>
-
-                <!-- Selección de Caja -->
-                <!-- Selección de Caja -->
                 <div class="form-group mb-4">
                     <label class="form-label" for="id_caja">Caja</label>
                     <select name="id_caja" id="id_caja" class="form-control" required>
                         <option value="">Seleccione una caja</option>
                         @foreach($cajas as $caja)
-                        <option value="{{ $caja->id }}">
+                        <option value="{{ $caja->id }}"
+                            {{ $caja->id == $carpeta->id_caja ? 'selected' : '' }}>
                             Caja #{{ $caja->numero_caja }} - {{ $caja->mes }} {{ $caja->anio }}
                         </option>
                         @endforeach
@@ -506,68 +500,8 @@
                     <div class="caja-info" id="caja-info"></div>
                 </div>
 
-
-                <div class="document-section">
-                    <h4><i class="fas fa-file-alt"></i> Agregar Documento</h4>
-                    <div class="document-form-grid">
-                        <div class="document-form-group">
-                            <label for="numero_hojas">Número de Hojas</label>
-                            <input type="number" id="numero_hojas" name="numero_hojas" placeholder="Ej: 10" min="1">
-                        </div>
-                
-                
-                        <div class="document-form-group">
-                            <label for="area">Área</label>
-                            <select id="area" name="area">
-                                <option value="">Seleccione un área</option>
-                                @foreach($evaluacionAreas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                
-                        <div class="document-form-group">
-                            <label for="estado">Estado</label>
-                            <select id="estado" name="estado" disabled>
-                                <option value="Disponible" selected>Disponible</option>
-                            </select>
-                            <input type="hidden" name="estado" value="Disponible"> <!-- Valor oculto para enviar -->
-                        </div>
-                        
-                
-                        <div class="document-form-group">
-                            <label for="fecha_creacion">Fecha de Creación</label>
-                            <input type="date" id="fecha_creacion" name="fecha_creacion">
-                        </div>
-                    </div>
-                
-                    <button type="button" class="add-document-btn" onclick="agregarDocumento()">
-                        <i class="fas fa-plus"></i> Añadir Documento
-                    </button>
-
-                   
-                    <p id="mensaje-error" class="text-warning" style="display: none; text-align: center; color: #b30000; margin-top: 10px;">
-                        Ya has agregado un documento para esta área.
-                    </p>
-                    
-                </div>
-                
-
-                <div class="document-cart">
-                    <h5><i class="fas fa-shopping-cart"></i> Documentos para agregar</h5>
-                    <div id="carritoDocumentos" class="cart-items">
-                        <!-- Los items se agregarán dinámicamente aquí -->
-                        <div class="cart-empty">
-                            <i class="fas fa-folder-open"></i>
-                            <p>No hay documentos agregados</p>
-                        </div>
-                    </div>
-                </div>
-                
-
-                <!-- Botón de Crear Carpeta -->
-               <button type="submit" class="btn-submit" onclick="enviarCarrito()">Crear Carpeta</button>
+                <!-- Botón de Guardar Cambios -->
+                <button type="submit" class="btn-submit">Guardar Cambios</button>
             </form>
 
             <!-- Mensajes de éxito o error -->
@@ -594,151 +528,33 @@
 
 @section('scripts')
 <script>
-
-let documentos = [];
-
-function enviarCarrito() {
-    // Convertir el carrito de documentos a JSON solo si tiene documentos
-    if (documentos.length > 0) {
-        document.getElementById('documentos-input').value = JSON.stringify(documentos);
-    } else {
-        document.getElementById('documentos-input').value = ''; // Dejar vacío si no hay documentos
-    }
-}
-
-
-function agregarDocumento() {
-    const numeroHojas = document.getElementById('numero_hojas').value;
-    const area = document.getElementById('area');
-    const estado = document.getElementById('estado').value;
-    const fechaCreacion = document.getElementById('fecha_creacion').value;
-    const mensajeError = document.getElementById('mensaje-error');
-
-    if (!numeroHojas || !area.value || !fechaCreacion) {
-        mensajeError.textContent = 'Por favor, completa todos los campos.';
-        mensajeError.style.display = 'block';
-        return;
-    }
-
-    const areaTexto = area.options[area.selectedIndex].text;
-    const existeDocumento = documentos.some(doc => doc.area === areaTexto);
-    
-    if (existeDocumento) {
-        mensajeError.textContent = 'Ya has agregado un documento para esta área.';
-        mensajeError.style.display = 'block';
-        return;
-    }
-
-    // Ocultar el mensaje de error si se agrega un documento nuevo
-    mensajeError.style.display = 'none';
-
-    const documento = {
-    numeroHojas,
-    area: area.value, // Agregar id_area
-    areaTexto: areaTexto, // Texto del área
-    estado,
-    fechaCreacion
-};
-
-
-    documentos.push(documento);
-    actualizarCarrito();
-    limpiarFormulario();
-}
-
-
-function actualizarCarrito() {
-    const carrito = document.getElementById('carritoDocumentos');
-    
-    if (documentos.length === 0) {
-        carrito.innerHTML = `
-            <div class="cart-empty">
-                <i class="fas fa-folder-open"></i>
-                <p>No hay documentos agregados</p>
-            </div>
-        `;
-        return;
-    }
-
-    carrito.innerHTML = documentos.map((doc, index) => `
-        <div class="cart-item">
-            <div class="cart-item-info">
-                <div class="cart-item-title">${doc.areaTexto}</div> <!-- Usa areaTexto aquí -->
-                <div class="cart-item-details">
-                    ${doc.numeroHojas} hojas | ${doc.areaTexto} | ${doc.estado} | ${doc.fechaCreacion} <!-- Usa areaTexto aquí también -->
-                </div>
-            </div>
-            <button class="remove-item-btn" onclick="eliminarDocumento(${index})">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </div>
-    `).join('');
-}
-
-
-function eliminarDocumento(index) {
-    documentos.splice(index, 1);
-    actualizarCarrito();
-}
-
-function limpiarFormulario() {
-    document.getElementById('numero_hojas').value = '';
-    document.getElementById('area').selectedIndex = 0;
-    document.getElementById('estado').selectedIndex = 0;
-    document.getElementById('fecha_creacion').value = '';
-}
-document.getElementById('id_evaluado').addEventListener('change', function() {
-    var evaluadoId = this.value;
-    var infoDiv = document.getElementById('evaluado-info');
+document.addEventListener('DOMContentLoaded', function() {
+    var evaluadoId = "{{ $carpeta->id_evaluado }}";
     var cajaSelect = document.getElementById('id_caja');
-    
+
     if (evaluadoId) {
-        fetch('/evaluados/' + evaluadoId + '/datos')
+        fetch(`/evaluados/${evaluadoId}/datos`)
             .then(response => response.json())
             .then(data => {
-                // Formatear la fecha de apertura
                 var fechaApertura = new Date(data.fecha_apertura);
                 var mesApertura = fechaApertura.toLocaleDateString('es-ES', { month: 'long' }).toLowerCase();
                 var anioApertura = fechaApertura.getFullYear();
 
-                // Mostrar información del evaluado incluyendo la fecha de apertura
-                infoDiv.innerHTML = `
-                    <p><strong>Nombre:</strong> ${data.primer_nombre} ${data.segundo_nombre} ${data.primer_apellido} ${data.segundo_apellido}</p>
-                    <p><strong>Fecha de Apertura:</strong> ${fechaApertura.toLocaleDateString('es-ES', {
-                        year: 'numeric', month: 'long', day: 'numeric'
-                    }).toLowerCase()}</p>
-                `;
-
-             
-                // Filtrar y mostrar las cajas que coincidan con el mes y año de apertura
+                // Filtrar y mostrar solo las cajas del mes y año del evaluado
                 Array.from(cajaSelect.options).forEach(option => {
-                    if (option.value) { // Ignorar el primer "Seleccione una caja"
-                        var [cajaMes, cajaAnio] = option.text.match(/\w+/g).slice(-2); // Extrae mes y año del texto
-                        cajaMes = cajaMes.toLowerCase(); // Convertir el mes de la caja a minúsculas
+                    if (option.value) {
+                        var [cajaMes, cajaAnio] = option.text.match(/\w+/g).slice(-2);
+                        cajaMes = cajaMes.toLowerCase();
 
-
-
-                        if (cajaMes === mesApertura && parseInt(cajaAnio) === anioApertura) {
-                            option.style.display = ''; // Mostrar opción
-                        } else {
-                            option.style.display = 'none'; // Ocultar opción
-                        }
+                        option.style.display = (cajaMes === mesApertura && parseInt(cajaAnio) === anioApertura) ? '' : 'none';
                     }
                 });
             })
             .catch(error => {
                 console.error('Error al obtener los datos del evaluado:', error);
-                infoDiv.innerHTML = 'Error al cargar los datos del evaluado.';
+                document.getElementById('evaluado-info').innerText = 'Error al cargar los datos del evaluado.';
             });
-    } else {
-        infoDiv.innerHTML = '';
-        debugDiv.innerHTML = '';
-        Array.from(cajaSelect.options).forEach(option => {
-            option.style.display = '';
-        });
     }
 });
-
-
 </script>
 @endsection

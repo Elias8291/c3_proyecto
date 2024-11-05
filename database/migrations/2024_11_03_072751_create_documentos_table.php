@@ -17,7 +17,6 @@ class CreateDocumentosTable extends Migration
             $table->id();  // Llave primaria
             $table->string('numero_hojas');
             $table->date('fecha_creacion');  // Fecha de creación del documento
-            $table->string('motivo_evaluacion');  // Motivo de evaluación
             $table->string('estado');  // Estado del documento
             $table->foreignId('id_evaluado')->constrained('evaluados')->onDelete('cascade');  // Llave foránea con 'evaluados'
             $table->foreignId('id_area')->constrained('areas');  // Llave foránea con 'areas'
