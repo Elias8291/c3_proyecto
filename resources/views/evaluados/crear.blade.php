@@ -307,7 +307,6 @@
     textarea {
         font-size: 20px !important;
     }
-
 </style>
 @endsection
 
@@ -332,7 +331,10 @@
                     <!-- Primer Nombre -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="primer_nombre">Primer Nombre</label>
-                        <input name="primer_nombre" value="{{ old('primer_nombre') }}" class="form-control @error('primer_nombre') form-error @enderror" type="text" required pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$" title="Solo se permite un nombre sin números ni caracteres especiales." maxlength="50">
+                        <input name="primer_nombre" value="{{ old('primer_nombre') }}"
+                            class="form-control @error('primer_nombre') form-error @enderror" type="text" required
+                            pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
+                            title="Solo se permite un nombre sin números ni caracteres especiales." maxlength="50">
                         @error('primer_nombre')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -341,7 +343,11 @@
                     <!-- Segundo Nombre -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="segundo_nombre">Segundo Nombre</label>
-                        <input name="segundo_nombre" value="{{ old('segundo_nombre') }}" class="form-control @error('segundo_nombre') form-error @enderror" type="text" pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$" title="Solo se permite un nombre sin números ni caracteres especiales." maxlength="50" disabled>
+                        <input name="segundo_nombre" value="{{ old('segundo_nombre') }}"
+                            class="form-control @error('segundo_nombre') form-error @enderror" type="text"
+                            pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
+                            title="Solo se permite un nombre sin números ni caracteres especiales." maxlength="50"
+                            disabled>
                         @error('segundo_nombre')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -352,7 +358,10 @@
                     <!-- Primer Apellido -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="primer_apellido">Primer Apellido</label>
-                        <input name="primer_apellido" value="{{ old('primer_apellido') }}" class="form-control @error('primer_apellido') form-error @enderror" type="text" required pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$" title="Solo se permiten letras y espacios." maxlength="50" disabled>
+                        <input name="primer_apellido" value="{{ old('primer_apellido') }}"
+                            class="form-control @error('primer_apellido') form-error @enderror" type="text" required
+                            pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$" title="Solo se permiten letras y espacios."
+                            maxlength="50" disabled>
                         @error('primer_apellido')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -361,7 +370,10 @@
                     <!-- Segundo Apellido -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="segundo_apellido">Segundo Apellido</label>
-                        <input name="segundo_apellido" value="{{ old('segundo_apellido') }}" class="form-control @error('segundo_apellido') form-error @enderror" type="text" pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$" title="Solo se permiten letras y espacios." maxlength="50" disabled>
+                        <input name="segundo_apellido" value="{{ old('segundo_apellido') }}"
+                            class="form-control @error('segundo_apellido') form-error @enderror" type="text"
+                            pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$" title="Solo se permiten letras y espacios."
+                            maxlength="50" disabled>
                         @error('segundo_apellido')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -372,7 +384,9 @@
                     <!-- Fecha de Nacimiento -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento</label>
-                        <input name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}" class="form-control @error('fecha_nacimiento') form-error @enderror" type="date" required id="fecha_nacimiento" disabled>
+                        <input name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
+                            class="form-control @error('fecha_nacimiento') form-error @enderror" type="date" required
+                            id="fecha_nacimiento" disabled>
                         @error('fecha_nacimiento')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -383,11 +397,13 @@
                         <label class="form-label">Género</label>
                         <div>
                             <label class="form-check-inline">
-                                <input type="radio" name="sexo" value="M" class="form-check-input @error('sexo') form-error @enderror" {{ old('sexo')=='M'
+                                <input type="radio" name="sexo" value="M"
+                                    class="form-check-input @error('sexo') form-error @enderror" {{ old('sexo')=='M'
                                     ? 'checked' : '' }} required disabled> Mujer
                             </label>
                             <label class="form-check-inline">
-                                <input type="radio" name="sexo" value="H" class="form-check-input @error('sexo') form-error @enderror" {{ old('sexo')=='H'
+                                <input type="radio" name="sexo" value="H"
+                                    class="form-check-input @error('sexo') form-error @enderror" {{ old('sexo')=='H'
                                     ? 'checked' : '' }} required disabled> Hombre
                             </label>
                         </div>
@@ -401,43 +417,77 @@
                     <!-- Estado de Nacimiento (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="estado_nacimiento">Estado de Nacimiento</label>
-                        <select name="estado_nacimiento" class="form-control @error('estado_nacimiento') form-error @enderror" required disabled>
+                        <select name="estado_nacimiento"
+                            class="form-control @error('estado_nacimiento') form-error @enderror" required disabled>
                             <option value="">Seleccione el Estado</option>
                             <!-- ... opciones de estados ... -->
-                           <option value="AS" {{ old('estado_nacimiento')=='AS' ? 'selected' : '' }}>Aguascalientes (AS)</option>
-                            <option value="BC" {{ old('estado_nacimiento')=='BC' ? 'selected' : '' }}>Baja California (BC)</option>
-                            <option value="BS" {{ old('estado_nacimiento')=='BS' ? 'selected' : '' }}>Baja California Sur (BS)</option>
-                            <option value="CC" {{ old('estado_nacimiento')=='CC' ? 'selected' : '' }}>Campeche (CC)</option>
-                            <option value="CL" {{ old('estado_nacimiento')=='CL' ? 'selected' : '' }}>Coahuila (CL)</option>
-                            <option value="CM" {{ old('estado_nacimiento')=='CM' ? 'selected' : '' }}>Colima (CM)</option>
-                            <option value="CS" {{ old('estado_nacimiento')=='CS' ? 'selected' : '' }}>Chiapas (CS)</option>
-                            <option value="CH" {{ old('estado_nacimiento')=='CH' ? 'selected' : '' }}>Chihuahua (CH)</option>
-                            <option value="DF" {{ old('estado_nacimiento')=='DF' ? 'selected' : '' }}>Ciudad de México (DF)</option>
-                            <option value="DG" {{ old('estado_nacimiento')=='DG' ? 'selected' : '' }}>Durango (DG)</option>
-                            <option value="GT" {{ old('estado_nacimiento')=='GT' ? 'selected' : '' }}>Guanajuato (GT)</option>
-                            <option value="GR" {{ old('estado_nacimiento')=='GR' ? 'selected' : '' }}>Guerrero (GR)</option>
-                            <option value="HG" {{ old('estado_nacimiento')=='HG' ? 'selected' : '' }}>Hidalgo (HG)</option>
-                            <option value="JC" {{ old('estado_nacimiento')=='JC' ? 'selected' : '' }}>Jalisco (JC)</option>
-                            <option value="MC" {{ old('estado_nacimiento')=='MC' ? 'selected' : '' }}>Estado de México (MC)</option>
-                            <option value="MN" {{ old('estado_nacimiento')=='MN' ? 'selected' : '' }}>Michoacán (MN)</option>
-                            <option value="MS" {{ old('estado_nacimiento')=='MS' ? 'selected' : '' }}>Morelos (MS)</option>
-                            <option value="NT" {{ old('estado_nacimiento')=='NT' ? 'selected' : '' }}>Nayarit (NT)</option>
-                            <option value="NL" {{ old('estado_nacimiento')=='NL' ? 'selected' : '' }}>Nuevo León (NL)</option>
-                            <option value="OC" {{ old('estado_nacimiento')=='OC' ? 'selected' : '' }}>Oaxaca (OC)</option>
-                            <option value="PL" {{ old('estado_nacimiento')=='PL' ? 'selected' : '' }}>Puebla (PL)</option>
-                            <option value="QT" {{ old('estado_nacimiento')=='QT' ? 'selected' : '' }}>Querétaro (QT)</option>
-                            <option value="QR" {{ old('estado_nacimiento')=='QR' ? 'selected' : '' }}>Quintana Roo (QR)</option>
-                            <option value="SP" {{ old('estado_nacimiento')=='SP' ? 'selected' : '' }}>San Luis Potosí (SP)</option>
-                            <option value="SL" {{ old('estado_nacimiento')=='SL' ? 'selected' : '' }}>Sinaloa (SL)</option>
-                            <option value="SR" {{ old('estado_nacimiento')=='SR' ? 'selected' : '' }}>Sonora (SR)</option>
-                            <option value="TC" {{ old('estado_nacimiento')=='TC' ? 'selected' : '' }}>Tabasco (TC)</option>
-                            <option value="TS" {{ old('estado_nacimiento')=='TS' ? 'selected' : '' }}>Tamaulipas (TS)</option>
-                            <option value="TL" {{ old('estado_nacimiento')=='TL' ? 'selected' : '' }}>Tlaxcala (TL)</option>
-                            <option value="VZ" {{ old('estado_nacimiento')=='VZ' ? 'selected' : '' }}>Veracruz (VZ)</option>
-                            <option value="YN" {{ old('estado_nacimiento')=='YN' ? 'selected' : '' }}>Yucatán (YN)</option>
-                            <option value="ZS" {{ old('estado_nacimiento')=='ZS' ? 'selected' : '' }}>Zacatecas (ZS)</option>
-                            <option value="NE" {{ old('estado_nacimiento')=='NE' ? 'selected' : '' }}>Nacido en el Extranjero (NE)</option>
-                       
+                            <option value="AS" {{ old('estado_nacimiento')=='AS' ? 'selected' : '' }}>Aguascalientes
+                                (AS)</option>
+                            <option value="BC" {{ old('estado_nacimiento')=='BC' ? 'selected' : '' }}>Baja California
+                                (BC)</option>
+                            <option value="BS" {{ old('estado_nacimiento')=='BS' ? 'selected' : '' }}>Baja California
+                                Sur (BS)</option>
+                            <option value="CC" {{ old('estado_nacimiento')=='CC' ? 'selected' : '' }}>Campeche (CC)
+                            </option>
+                            <option value="CL" {{ old('estado_nacimiento')=='CL' ? 'selected' : '' }}>Coahuila (CL)
+                            </option>
+                            <option value="CM" {{ old('estado_nacimiento')=='CM' ? 'selected' : '' }}>Colima (CM)
+                            </option>
+                            <option value="CS" {{ old('estado_nacimiento')=='CS' ? 'selected' : '' }}>Chiapas (CS)
+                            </option>
+                            <option value="CH" {{ old('estado_nacimiento')=='CH' ? 'selected' : '' }}>Chihuahua (CH)
+                            </option>
+                            <option value="DF" {{ old('estado_nacimiento')=='DF' ? 'selected' : '' }}>Ciudad de México
+                                (DF)</option>
+                            <option value="DG" {{ old('estado_nacimiento')=='DG' ? 'selected' : '' }}>Durango (DG)
+                            </option>
+                            <option value="GT" {{ old('estado_nacimiento')=='GT' ? 'selected' : '' }}>Guanajuato (GT)
+                            </option>
+                            <option value="GR" {{ old('estado_nacimiento')=='GR' ? 'selected' : '' }}>Guerrero (GR)
+                            </option>
+                            <option value="HG" {{ old('estado_nacimiento')=='HG' ? 'selected' : '' }}>Hidalgo (HG)
+                            </option>
+                            <option value="JC" {{ old('estado_nacimiento')=='JC' ? 'selected' : '' }}>Jalisco (JC)
+                            </option>
+                            <option value="MC" {{ old('estado_nacimiento')=='MC' ? 'selected' : '' }}>Estado de México
+                                (MC)</option>
+                            <option value="MN" {{ old('estado_nacimiento')=='MN' ? 'selected' : '' }}>Michoacán (MN)
+                            </option>
+                            <option value="MS" {{ old('estado_nacimiento')=='MS' ? 'selected' : '' }}>Morelos (MS)
+                            </option>
+                            <option value="NT" {{ old('estado_nacimiento')=='NT' ? 'selected' : '' }}>Nayarit (NT)
+                            </option>
+                            <option value="NL" {{ old('estado_nacimiento')=='NL' ? 'selected' : '' }}>Nuevo León (NL)
+                            </option>
+                            <option value="OC" {{ old('estado_nacimiento')=='OC' ? 'selected' : '' }}>Oaxaca (OC)
+                            </option>
+                            <option value="PL" {{ old('estado_nacimiento')=='PL' ? 'selected' : '' }}>Puebla (PL)
+                            </option>
+                            <option value="QT" {{ old('estado_nacimiento')=='QT' ? 'selected' : '' }}>Querétaro (QT)
+                            </option>
+                            <option value="QR" {{ old('estado_nacimiento')=='QR' ? 'selected' : '' }}>Quintana Roo (QR)
+                            </option>
+                            <option value="SP" {{ old('estado_nacimiento')=='SP' ? 'selected' : '' }}>San Luis Potosí
+                                (SP)</option>
+                            <option value="SL" {{ old('estado_nacimiento')=='SL' ? 'selected' : '' }}>Sinaloa (SL)
+                            </option>
+                            <option value="SR" {{ old('estado_nacimiento')=='SR' ? 'selected' : '' }}>Sonora (SR)
+                            </option>
+                            <option value="TC" {{ old('estado_nacimiento')=='TC' ? 'selected' : '' }}>Tabasco (TC)
+                            </option>
+                            <option value="TS" {{ old('estado_nacimiento')=='TS' ? 'selected' : '' }}>Tamaulipas (TS)
+                            </option>
+                            <option value="TL" {{ old('estado_nacimiento')=='TL' ? 'selected' : '' }}>Tlaxcala (TL)
+                            </option>
+                            <option value="VZ" {{ old('estado_nacimiento')=='VZ' ? 'selected' : '' }}>Veracruz (VZ)
+                            </option>
+                            <option value="YN" {{ old('estado_nacimiento')=='YN' ? 'selected' : '' }}>Yucatán (YN)
+                            </option>
+                            <option value="ZS" {{ old('estado_nacimiento')=='ZS' ? 'selected' : '' }}>Zacatecas (ZS)
+                            </option>
+                            <option value="NE" {{ old('estado_nacimiento')=='NE' ? 'selected' : '' }}>Nacido en el
+                                Extranjero (NE)</option>
+
                             <!-- ... continúa con las demás opciones ... -->
                         </select>
                         @error('estado_nacimiento')
@@ -448,7 +498,11 @@
                     <!-- 2 Últimos Dígitos de CURP (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="curp_last2">2 Últimos Dígitos de CURP</label>
-                        <input name="curp_last2" value="{{ old('curp_last2') }}" class="form-control @error('curp_last2') form-error @enderror" type="text" required pattern="^[A-Z0-9]{2}$" title="Ingresa exactamente 2 caracteres alfanuméricos (una letra y un número o un número y una letra)." maxlength="2" disabled>
+                        <input name="curp_last2" value="{{ old('curp_last2') }}"
+                            class="form-control @error('curp_last2') form-error @enderror" type="text" required
+                            pattern="^[A-Z0-9]{2}$"
+                            title="Ingresa exactamente 2 caracteres alfanuméricos (una letra y un número o un número y una letra)."
+                            maxlength="2" disabled>
                         @error('curp_last2')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -457,7 +511,8 @@
                     <!-- CURP (generado automáticamente) -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="CURP">CURP</label>
-                        <input name="CURP" value="{{ old('CURP') }}" class="form-control @error('CURP') form-error @enderror" type="text" disabled>
+                        <input name="CURP" value="{{ old('CURP') }}"
+                            class="form-control @error('CURP') form-error @enderror" type="text" disabled>
                         @error('CURP')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -469,7 +524,9 @@
                     <!-- Fecha de Apertura (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="fecha_apertura">Fecha de Apertura</label>
-                        <input name="fecha_apertura" value="{{ old('fecha_apertura') }}" class="form-control @error('fecha_apertura') form-error @enderror" type="date" required id="fecha_apertura" disabled>
+                        <input name="fecha_apertura" value="{{ old('fecha_apertura') }}"
+                            class="form-control @error('fecha_apertura') form-error @enderror" type="date" required
+                            id="fecha_apertura" disabled>
                         @error('fecha_apertura')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -480,15 +537,28 @@
                         <label class="form-label">Resultado de Evaluación</label>
                         <div>
                             <label class="form-check-inline">
-                                <input type="radio" name="resultado_evaluacion" value="1" class="form-check-input @error('resultado_evaluacion') form-error @enderror" {{
+                                <input type="radio" name="resultado_evaluacion" value="1"
+                                    class="form-check-input @error('resultado_evaluacion') form-error @enderror" {{
                                     old('resultado_evaluacion')=='1' ? 'checked' : '' }} required disabled> Aprobado
                             </label>
                             <label class="form-check-inline">
-                                <input type="radio" name="resultado_evaluacion" value="0" class="form-check-input @error('resultado_evaluacion') form-error @enderror" {{
+                                <input type="radio" name="resultado_evaluacion" value="0"
+                                    class="form-check-input @error('resultado_evaluacion') form-error @enderror" {{
                                     old('resultado_evaluacion')=='0' ? 'checked' : '' }} required disabled> No Aprobado
                             </label>
                         </div>
                         @error('resultado_evaluacion')
+                        <p class="form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="rfc_last3">Últimos 3 Dígitos de RFC</label>
+                        <input name="rfc_last3" value="{{ old('rfc_last3') }}"
+                            class="form-control @error('rfc_last3') form-error @enderror" type="text" required
+                            pattern="^[A-Z0-9]{3}$"
+                            title="Ingresa exactamente 3 caracteres alfanuméricos en mayúsculas (letras y/o números)."
+                            maxlength="3" disabled>
+                        @error('rfc_last3')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
@@ -499,7 +569,8 @@
                     <!-- RFC -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="RFC">RFC</label>
-                        <input name="RFC" value="{{ old('RFC') }}" class="form-control @error('RFC') form-error @enderror" type="text" maxlength="13" disabled>
+                        <input name="RFC" value="{{ old('RFC') }}"
+                            class="form-control @error('RFC') form-error @enderror" type="text" maxlength="13" disabled>
                         @error('RFC')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -508,7 +579,8 @@
                     <!-- SMN -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="SMN">SMN</label>
-                        <input name="SMN" value="{{ old('SMN') }}" class="form-control @error('SMN') form-error @enderror" type="text" maxlength="10" disabled>
+                        <input name="SMN" value="{{ old('SMN') }}"
+                            class="form-control @error('SMN') form-error @enderror" type="text" maxlength="10" disabled>
                         @error('SMN')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -517,7 +589,8 @@
                     <!-- IFE -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="IFE">IFE</label>
-                        <input name="IFE" value="{{ old('IFE') }}" class="form-control @error('IFE') form-error @enderror" type="text" maxlength="20" disabled>
+                        <input name="IFE" value="{{ old('IFE') }}"
+                            class="form-control @error('IFE') form-error @enderror" type="text" maxlength="20" disabled>
                         @error('IFE')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
@@ -554,6 +627,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Referencias a los campos del formulario
+        const rfcInput = document.getElementsByName('RFC')[0];
         const primerNombreInput = document.getElementsByName('primer_nombre')[0];
         const segundoNombreInput = document.getElementsByName('segundo_nombre')[0];
         const primerApellidoInput = document.getElementsByName('primer_apellido')[0];
@@ -567,7 +641,8 @@
         const resultadoEvaluacionInputs = document.getElementsByName('resultado_evaluacion');
         const fechaMaxima = new Date();
     fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 18); // Resta 18 años de la fecha actual
-
+    const rfcLast3Input = document.getElementsByName('rfc_last3')[0];
+    
     // Inicializa flatpickr para el campo de fecha de nacimiento
     flatpickr("#fecha_nacimiento", {
         maxDate: fechaMaxima, // Fecha máxima para que el evaluado sea mayor de 18 años
@@ -621,9 +696,13 @@
                 case 'estado_nacimiento':
                     if (estadoNacimientoSelect.value !== '') {
                         curpLast2Input.disabled = false;
+                        document.getElementsByName('rfc_last3')[0].disabled = false; // Habilita el campo RFC
+                        
                     } else {
                         curpLast2Input.disabled = true;
                         curpLast2Input.value = '';
+                        document.getElementsByName('rfc_last3')[0].disabled = true; // Desactiva el campo RFC
+        document.getElementsByName('rfc_last3')[0].value = ''; // Limpia el campo RFC
                         limpiarCamposPosteriores(['curp_last2']);
                     }
                     break;
@@ -703,7 +782,58 @@
                 }
             });
         }
+        function generarRFC() {
+        const primerApellido = primerApellidoInput.value.trim().toUpperCase();
+        const segundoApellido = (segundoApellidoInput.value || 'X').trim().toUpperCase();
+        const primerNombre = primerNombreInput.value.trim().toUpperCase();
+        const fechaNacimiento = fechaNacimientoInput.value;
+        const rfcLast3 = rfcLast3Input.value.trim().toUpperCase();
 
+        // Validación para asegurar que todos los campos necesarios están llenos
+        if (!primerApellido || !primerNombre || !fechaNacimiento || rfcLast3.length !== 3) {
+            console.warn("Faltan datos para generar el RFC");
+            rfcInput.value = '';
+            return;
+        }
+
+        try {
+            // Letras iniciales del RFC
+            const primeraLetraApellido = primerApellido.charAt(0);
+            const primeraVocalInternaApellido = primerApellido.slice(1).match(/[AEIOU]/)?.[0] || 'X';
+            const primeraLetraSegundoApellido = segundoApellido.charAt(0);
+            const primeraLetraNombre = primerNombre.charAt(0);
+
+            // Fecha de nacimiento en formato AAMMDD
+            const [anio, mes, dia] = fechaNacimiento.split('-');
+            const fechaFormato = anio.slice(2) + mes.padStart(2, '0') + dia.padStart(2, '0');
+
+            // Construcción del RFC
+            const rfcBase = `${primeraLetraApellido}${primeraVocalInternaApellido}${primeraLetraSegundoApellido}${primeraLetraNombre}${fechaFormato}`;
+
+            // Completar el RFC con los últimos 3 dígitos
+            const rfcCompleto = rfcBase + rfcLast3;
+
+            // Asignar el RFC al campo correspondiente
+            rfcInput.value = rfcCompleto;
+            console.log("RFC generado exitosamente:", rfcCompleto);
+        } catch (error) {
+            console.error("Error al generar el RFC:", error);
+            rfcInput.value = '';
+        }
+    }
+    rfcLast3Input.addEventListener('input', function() {
+        this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3); // Formateo en mayúsculas y sin caracteres especiales
+
+        if (this.value.length === 3) {
+            generarRFC();  // Genera el RFC cuando se ingresan 3 caracteres
+        } else {
+            rfcInput.value = ''; // Limpia el RFC si no se cumplen los requisitos
+        }
+    });
+
+    [primerNombreInput, primerApellidoInput, segundoApellidoInput, fechaNacimientoInput].forEach(elemento => {
+        elemento.addEventListener('change', generarRFC);
+    });
         // Evento para el Primer Nombre
         primerNombreInput.addEventListener('input', function() {
             habilitarCampoSiguiente('primer_nombre');
