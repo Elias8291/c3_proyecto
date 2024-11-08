@@ -131,6 +131,7 @@
         position: relative;
     }
 
+
     #miTabla2 thead th::after {
         content: '';
         position: absolute;
@@ -388,6 +389,75 @@
         box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
         outline: none;
     }
+
+    .search-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 12px 20px;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: white;
+        color: #333;
+    }
+
+    .search-input:focus {
+        border-color: var(--primary-burgundy);
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+    }
+
+    .search-input::placeholder {
+        color: #999;
+    }
+
+    .filters-section {
+        margin-bottom: 20px;
+        background: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .year-filter {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .filter-label {
+        color: var(--primary-burgundy);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .year-select {
+        padding: 8px 15px;
+        border: 2px solid #eee;
+        border-radius: 10px;
+        font-size: 14px;
+        min-width: 120px;
+        background: white;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+
+    .year-select:focus {
+        border-color: var(--primary-burgundy);
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+    }
+
 </style>
 
 @section('content')
@@ -405,55 +475,74 @@
                                 <i class="fas fa-plus"></i>
                                 <span>Nuevo Evaluado</span>
                             </a>
-
-
+                        </div>
+                        <div class="search-container">
+                            <input type="text" class="search-input" id="searchInput" placeholder="Buscar evaluado...">
+                            <button class="btn btn-new" onclick="searchEvaluados()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="filters-section">
+                        <div class="year-filter">
+                            <label for="yearSelect" class="filter-label">Filtrar por año:</label>
+                            <select class="year-select" id="yearSelect" onchange="filterEvaluados()">
+                                <option value="">Todos los años</option>
+                                @for ($year = date('Y'); $year >= date('Y') - 10; $year--)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endfor
+                            </select>
+                            
                         </div>
                     </div>
                     <div class="table-container">
-
                         <div class="table-responsive">
-                            <table class="table" id="miTabla2">
+                            <table class="table" id="evaluadosTable">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Completo</th>
-                                        <th>CURP</th>
-                                        <th>RFC</th>
-                                        <th>Fecha de Apertura</th>
-                                        <th>Sexo</th>
-                                        <th>Acciones</th>
+                                        <th class="text-center">ID</th>
+                                        <th class="text-center">Nombre Completo</th>
+                                        <th class="text-center">CURP</th>
+                                        <th class="text-center">RFC</th>
+                                        <th class="text-center">Fecha de Apertura</th>
+                                        <th class="text-center">Sexo</th>
+                                        <th class="text-center">Fecha de Nacimiento</th>
+                                        <th class="text-center">Resultado de Evaluación</th>
+                                        <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="evaluadosTableBody">
                                     @foreach ($evaluados as $evaluado)
                                     <tr>
                                         <td>{{ $evaluado->id }}</td>
-                                        <td>{{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{
-                                            $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
+                                        <td>{{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
                                         <td>{{ $evaluado->CURP }}</td>
                                         <td>{{ $evaluado->RFC }}</td>
                                         <td>{{ $evaluado->fecha_apertura }}</td>
                                         <td>{{ $evaluado->sexo }}</td>
-
+                                        <td>{{ $evaluado->fecha_nacimiento }}</td>
                                         <td>
-
+                                            @if ($evaluado->resultado_evaluacion == 1)
+                                            Aprobó
+                                            @else
+                                            No Aprobó
+                                            @endif
+                                        </td>
+                                        <td>
                                             <div class="action-buttons">
-                                               
-                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}"
-                                                    class="btn btn-edit">
+                                                @if($evaluado->carpeta)
+                                                <i class="fas fa-folder" style="color: var(--primary-burgundy);" title="Carpeta asociada"></i>
+                                                @endif
+                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-delete"
-                                                    onclick="confirmarEliminacion({{ $evaluado->id }})">
+                                                <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $evaluado->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                                <form id="eliminar-form-{{ $evaluado->id }}"
-                                                    action="{{ route('evaluados.destroy', $evaluado->id) }}"
-                                                    method="POST" class="d-none">
+                                                <form id="eliminar-form-{{ $evaluado->id }}" action="{{ route('evaluados.destroy', $evaluado->id) }}" method="POST" class="d-none">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
-
                                             </div>
                                         </td>
                                     </tr>
@@ -473,22 +562,102 @@
 
 <script>
     function confirmarEliminacion(evaluadoId) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Esta acción no se puede deshacer',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#800020',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Sí, eliminar',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Usa evaluadoId en lugar de $evaluadoId
-            document.getElementById('eliminar-form-' + evaluadoId).submit();
-        }
-    });
-}
+        Swal.fire({
+            title: '¿Estás seguro?'
+            , text: 'Esta acción no se puede deshacer'
+            , icon: 'warning'
+            , showCancelButton: true
+            , confirmButtonColor: '#800020'
+            , cancelButtonColor: '#6c757d'
+            , confirmButtonText: 'Sí, eliminar'
+        , }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('eliminar-form-' + evaluadoId).submit();
+            }
+        });
+    }
 
+    function searchEvaluados() {
+        var searchInput = document.getElementById('searchInput').value.toLowerCase();
+        var yearSelect = document.getElementById('yearSelect').value;
+        var table = document.getElementById('evaluadosTable');
+        var rows = table.getElementsByTagName('tr');
+
+        for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            var fullName = row.cells[1].textContent.toLowerCase();
+            var curp = row.cells[2].textContent.toLowerCase();
+            var rfc = row.cells[3].textContent.toLowerCase();
+            var fecha_apertura = row.cells[4].textContent;
+
+            // Extraer el año de la fecha de apertura
+            var yearFromFechaApertura = new Date(fecha_apertura).getFullYear().toString();
+
+            var showRow = false;
+            if (searchInput === '' && yearSelect === '') {
+                showRow = true;
+            } else if (searchInput !== '' && (fullName.includes(searchInput) || curp.includes(searchInput) || rfc.includes(searchInput))) {
+                showRow = true;
+            } else if (yearSelect !== '' && yearFromFechaApertura === yearSelect) {
+                showRow = true;
+            }
+
+            row.style.display = showRow ? 'table-row' : 'none';
+        }
+    }
+
+
+    
+    function filterEvaluados() {
+        var searchInput = document.getElementById('searchInput').value;
+        var yearSelect = document.getElementById('yearSelect').value;
+
+        // Redirigir a la misma página con los parámetros de búsqueda y filtrado
+        var url = new URL(window.location.href);
+        if (searchInput) {
+            url.searchParams.set('search', searchInput);
+        } else {
+            url.searchParams.delete('search');
+        }
+        if (yearSelect) {
+            url.searchParams.set('year', yearSelect);
+        } else {
+            url.searchParams.delete('year');
+        }
+
+        window.location.href = url.toString();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+    var searchInput = this.value.toLowerCase();
+    var yearSelect = document.getElementById('yearSelect').value;
+    var table = document.getElementById('evaluadosTable');
+    var rows = table.getElementsByTagName('tr');
+
+    for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var fullName = row.cells[1].textContent.toLowerCase();
+        var curp = row.cells[2].textContent.toLowerCase();
+        var rfc = row.cells[3].textContent.toLowerCase();
+        var fecha_apertura = row.cells[4].textContent;
+
+        // Extraer el año de la fecha de apertura
+        var yearFromFechaApertura = new Date(fecha_apertura).getFullYear().toString();
+
+        var showRow = false;
+        if (searchInput === '' && yearSelect === '') {
+            showRow = true;
+        } else if (searchInput !== '' && (fullName.includes(searchInput) || curp.includes(searchInput) || rfc.includes(searchInput))) {
+            showRow = true;
+        } else if (yearSelect !== '' && yearFromFechaApertura === yearSelect) {
+            showRow = true;
+        }
+
+        row.style.display = showRow ? 'table-row' : 'none';
+    }
+});
+
+    document.getElementById('yearSelect').addEventListener('change', filterEvaluados);
 </script>
 
 @endsection

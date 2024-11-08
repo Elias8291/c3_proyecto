@@ -7,11 +7,30 @@ use Illuminate\Http\Request;
 
 class CajaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cajas = Caja::paginate(10); // Asegúrate de usar paginate aquí
-        return view('cajas.index', ['cajas' => $cajas]);
+        // Realiza la consulta inicial que incluirá todos los registros
+        $query = Caja::query();
+    
+        // Filtrar por término de búsqueda en toda la base de datos
+        if ($request->has('search') && !empty($request->input('search'))) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('numero_caja', 'LIKE', "%$search%")
+                  ->orWhere('anio', 'LIKE', "%$search%")
+                  ->orWhere('mes', 'LIKE', "%$search%")
+                  ->orWhere('ubicacion', 'LIKE', "%$search%")
+                  ->orWhere('rango_alfabetico', 'LIKE', "%$search%");
+            });
+        }
+    
+        // Paginar los resultados después de aplicar el filtro de búsqueda
+        $cajas = $query->paginate(20);
+    
+        return view('cajas.index', compact('cajas'));
     }
+    
+    
 
     public function create()
     {

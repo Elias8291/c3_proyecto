@@ -306,25 +306,6 @@ body {
 
 .page__heading {
     color: var(--primary-color);
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    font-weight: 600;
-}
-/* Nuevo diseño del encabezado y búsqueda */
-.section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    padding: 1rem 1.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(74, 85, 104, 0.06);
-    border: 1px solid var(--folder-border);
-}
-
-.page__heading {
-    color: var(--primary-color);
     font-size: 1.75rem;
     margin: 0;
     font-weight: 600;
@@ -333,10 +314,33 @@ body {
     gap: 0.75rem;
 }
 
-.page__heading i {
-    color: var(--accent-color);
-    font-size: 1.5rem;
-}
+/* Nuevo diseño del encabezado y búsqueda */
+.section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding: 1rem 1.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(74, 85, 104, 0.06);
+        border: 1px solid #C5BBA4;
+    }
+
+    .page__heading {
+        color: var(--primary-color);
+        font-size: 1.75rem;
+        margin: 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .page__heading i {
+        color: var(--accent-color);
+        font-size: 1.5rem;
+    }
 
 .search-container {
     position: relative;
@@ -379,6 +383,7 @@ body {
     display: none;
 }
 
+
 </style>
 
 @section('content')
@@ -389,6 +394,7 @@ body {
                 <i class="fas fa-archive"></i>
                 Cajas
             </h3>
+            
         </div>
 
         <div class="search-container">
@@ -401,9 +407,10 @@ body {
             <div class="folder-card" data-id="{{ $caja->id }}">
                 <div class="folder-content">
                     <div class="folder-header">
-                        <div class="folder-number">Caja #{{ $caja->numero_caja }}</div>
+                        <div class="folder-number">CAJA {{ $caja->numero_caja }} - {{ $caja->anio }}</div>
                         <div class="folder-period">{{ $caja->mes }} {{ $caja->anio }}</div>
                     </div>
+                    
 
                     <div class="folder-info">
                         <div class="info-item">
@@ -448,19 +455,21 @@ body {
 </div>
 
 <script>
-    document.getElementById('searchInput').addEventListener('keyup', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const folders = document.querySelectorAll('.folder-card');
+  document.getElementById('searchInput').addEventListener('keyup', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const folders = document.querySelectorAll('.folder-card');
 
-        folders.forEach(folder => {
-            const content = folder.textContent.toLowerCase();
-            if (content.includes(searchTerm)) {
-                folder.style.display = '';
-            } else {
-                folder.style.display = 'none';
-            }
-        });
+    folders.forEach(folder => {
+        const content = folder.textContent.toLowerCase();
+        if (content.includes(searchTerm)) {
+            folder.style.display = '';
+        } else {
+            folder.style.display = 'none';
+        }
     });
+});
+
+    
 
     function confirmarEliminacion(cajaId) {
         Swal.fire({

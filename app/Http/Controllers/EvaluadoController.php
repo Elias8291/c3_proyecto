@@ -15,12 +15,35 @@ class EvaluadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        // Cambia 'carpeta' a 'carpetas'
-        $evaluados = Evaluado::with('carpetas')->paginate(100);
-        return view('evaluados.index', compact('evaluados'));
+    public function index(Request $request)
+{
+    $query = Evaluado::with('carpetas');
+
+    // Filtrar por búsqueda de texto
+    if ($request->has('search') && !empty($request->input('search'))) {
+        $search = $request->input('search');
+        $query->where(function ($q) use ($search) {
+            $q->where('primer_nombre', 'LIKE', "%$search%")
+              ->orWhere('segundo_nombre', 'LIKE', "%$search%")
+              ->orWhere('primer_apellido', 'LIKE', "%$search%")
+              ->orWhere('segundo_apellido', 'LIKE', "%$search%")
+              ->orWhere('CURP', 'LIKE', "%$search%")
+              ->orWhere('RFC', 'LIKE', "%$search%");
+        });
     }
+
+    // Filtrar por año de fecha de apertura
+    if ($request->has('year') && !empty($request->input('year'))) {
+        $year = $request->input('year');
+        $query->whereYear('fecha_apertura', $year);
+    }
+
+    // Paginar los resultados
+    $evaluados = $query->paginate(100);
+
+    return view('evaluados.index', compact('evaluados'));
+}
+
     
 
 

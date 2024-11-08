@@ -230,11 +230,13 @@
     .list-group-item button {
         margin-left: 10px;
     }
+
     .disabled-option {
-        color: #6c757d; /* Gris claro */
+        color: #6c757d;
+        /* Gris claro */
     }
 
-    
+
     .document-section {
         background: #ffffff;
         border-radius: 15px;
@@ -388,10 +390,10 @@
     }
 
     .text-warning {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #b30000;
-}
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #b30000;
+    }
 
     /* Animations */
     @keyframes slideIn {
@@ -399,6 +401,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -410,40 +413,174 @@
     }
 
     .text-warning {
-    background-color: #fff3f3;
-    border-left: 4px solid #b30000;
-    padding: 12px 20px;
-    border-radius: 8px;
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 0.95rem;
-    color: #b30000;
-    box-shadow: 0 2px 4px rgba(179, 0, 0, 0.1);
-    animation: fadeInWarning 0.3s ease-out forwards;
-}
-
-.text-warning::before {
-    content: '\f071';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    font-size: 1.1rem;
-}
-
-@keyframes fadeInWarning {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
+        background-color: #fff3f3;
+        border-left: 4px solid #b30000;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 0.95rem;
+        color: #b30000;
+        box-shadow: 0 2px 4px rgba(179, 0, 0, 0.1);
+        animation: fadeInWarning 0.3s ease-out forwards;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-    
+    .text-warning::before {
+        content: '\f071';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        font-size: 1.1rem;
+    }
+
+    @keyframes fadeInWarning {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .toggle-documents-btn {
+        background: linear-gradient(135deg, #800020 0%, #b30000 100%);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 15px rgba(128, 0, 32, 0.2);
+    }
+
+    .toggle-documents-btn i {
+        font-size: 1.4rem;
+    }
+
+    .toggle-documents-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
+        background: linear-gradient(135deg, #990033 0%, #cc0000 100%);
+    }
+
+    .toggle-documents-btn:active {
+        transform: translateY(1px);
+    }
+
+    .toggle-documents-btn.active {
+        background: linear-gradient(135deg, #660019 0%, #990000 100%);
+    }
+
+    #documentSections {
+        animation: slideDown 0.4s ease-out;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .search-section {
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(128, 0, 32, 0.1);
+    }
+
+    .search-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        padding: 12px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 16px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        border-color: #800020;
+        box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        outline: none;
+    }
+
+    .search-btn {
+        background: linear-gradient(135deg, #800020 0%, #b30000 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(128, 0, 32, 0.2);
+    }
+
+    .evaluado-select-container {
+        position: relative;
+    }
+
+    .evaluado-search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    .evaluado-search-results.show {
+        display: block;
+    }
+
+    .evaluado-search-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .evaluado-search-item:hover {
+        background-color: #f7fafc;
+    }
+
+    .evaluado-search-item.disabled {
+        color: #a0aec0;
+        cursor: not-allowed;
+        background-color: #f3f4f6;
+    }
 </style>
 @endsection
 
@@ -466,19 +603,19 @@
 
                 <input type="hidden" name="documentos" id="documentos-input">
 
-                 <div class="form-group mb-4">
+                <div class="form-group mb-4">
                     <label class="form-label" for="id_evaluado">Seleccionar Evaluado</label>
                     <select name="id_evaluado" id="id_evaluado" class="form-control" required>
                         <option value="">Seleccione un evaluado</option>
                         @foreach($evaluados as $evaluado)
-                        <option value="{{ $evaluado->id }}" 
-                            @if($evaluado->carpetas->isNotEmpty()) 
-                                disabled 
-                                class="disabled-option" 
+                        <option value="{{ $evaluado->id }}" @if($evaluado->carpetas->isNotEmpty())
+                            disabled
+                            class="disabled-option"
                             @endif>
-                            {{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}
-                            @if($evaluado->carpetas->isNotEmpty()) 
-                                (Ya tiene carpeta) 
+                            {{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido
+                            }} {{ $evaluado->segundo_apellido }}
+                            @if($evaluado->carpetas->isNotEmpty())
+                            (Ya tiene carpeta)
                             @endif
                         </option>
                         @endforeach
@@ -506,68 +643,70 @@
                     <div class="caja-info" id="caja-info"></div>
                 </div>
 
-
-                <div class="document-section">
-                    <h4><i class="fas fa-file-alt"></i> Agregar Documento</h4>
-                    <div class="document-form-grid">
-                        <div class="document-form-group">
-                            <label for="numero_hojas">Número de Hojas</label>
-                            <input type="number" id="numero_hojas" name="numero_hojas" placeholder="Ej: 10" min="1">
-                        </div>
-                
-                
-                        <div class="document-form-group">
-                            <label for="area">Área</label>
-                            <select id="area" name="area">
-                                <option value="">Seleccione un área</option>
-                                @foreach($evaluacionAreas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                
-                        <div class="document-form-group">
-                            <label for="estado">Estado</label>
-                            <select id="estado" name="estado" disabled>
-                                <option value="Disponible" selected>Disponible</option>
-                            </select>
-                            <input type="hidden" name="estado" value="Disponible"> <!-- Valor oculto para enviar -->
-                        </div>
-                        
-                
-                        <div class="document-form-group">
-                            <label for="fecha_creacion">Fecha de Creación</label>
-                            <input type="date" id="fecha_creacion" name="fecha_creacion">
-                        </div>
-                    </div>
-                
-                    <button type="button" class="add-document-btn" onclick="agregarDocumento()">
-                        <i class="fas fa-plus"></i> Añadir Documento
+                <div class="toggle-documents-section text-center mb-4">
+                    <button type="button" id="toggleDocumentsBtn" class="toggle-documents-btn" onclick="toggleDocumentSections()" style="display: none;">
+                        <i class="fas fa-file-medical"></i>
+                        <span>Agregar Documentos</span>
                     </button>
-
-                   
-                    <p id="mensaje-error" class="text-warning" style="display: none; text-align: center; color: #b30000; margin-top: 10px;">
-                        Ya has agregado un documento para esta área.
-                    </p>
-                    
                 </div>
                 
+                <div id="documentSections" style="display: none;">
+                    <div class="document-section">
+                        <h4><i class="fas fa-file-alt"></i> Agregar Documento</h4>
+                        <div class="document-form-grid">
+                            <div class="document-form-group">
+                                <label for="numero_hojas">Número de Hojas</label>
+                                <input type="number" id="numero_hojas" name="numero_hojas" placeholder="Ej: 10" min="1">
+                            </div>
 
-                <div class="document-cart">
-                    <h5><i class="fas fa-shopping-cart"></i> Documentos para agregar</h5>
-                    <div id="carritoDocumentos" class="cart-items">
-                        <!-- Los items se agregarán dinámicamente aquí -->
-                        <div class="cart-empty">
-                            <i class="fas fa-folder-open"></i>
-                            <p>No hay documentos agregados</p>
+                            <div class="document-form-group">
+                                <label for="area">Área</label>
+                                <select id="area" name="area">
+                                    <option value="">Seleccione un área</option>
+                                    @foreach($evaluacionAreas as $area)
+                                    <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="document-form-group">
+                                <label for="estado">Estado</label>
+                                <select id="estado" name="estado" disabled>
+                                    <option value="Disponible" selected>Disponible</option>
+                                </select>
+                                <input type="hidden" name="estado" value="Disponible">
+                            </div>
+
+                            <div class="document-form-group">
+                                <label for="fecha_creacion">Fecha de Creación</label>
+                                <input type="date" id="fecha_creacion" name="fecha_creacion">
+                            </div>
+                        </div>
+
+                        <button type="button" class="add-document-btn" onclick="agregarDocumento()">
+                            <i class="fas fa-plus"></i> Añadir Documento
+                        </button>
+
+                        <p id="mensaje-error" class="text-warning" style="display: none;"></p>
+                    </div>
+
+                    <div class="document-cart">
+                        <h5><i class="fas fa-shopping-cart"></i> Documentos para agregar</h5>
+                        <div id="carritoDocumentos" class="cart-items">
+                            <div class="cart-empty">
+                                <i class="fas fa-folder-open"></i>
+                                <p>No hay documentos agregados</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+
+
+
+
 
                 <!-- Botón de Crear Carpeta -->
-               <button type="submit" class="btn-submit" onclick="enviarCarrito()">Crear Carpeta</button>
+                <button type="submit" class="btn-submit" onclick="enviarCarrito()">Crear Carpeta</button>
             </form>
 
             <!-- Mensajes de éxito o error -->
@@ -594,8 +733,7 @@
 
 @section('scripts')
 <script>
-
-let documentos = [];
+    let documentos = [];
 
 function enviarCarrito() {
     // Convertir el carrito de documentos a JSON solo si tiene documentos
@@ -620,9 +758,9 @@ function agregarDocumento() {
         return;
     }
 
-    const areaTexto = area.options[area.selectedIndex].text;
-    const existeDocumento = documentos.some(doc => doc.area === areaTexto);
-    
+    // Verificar si ya existe un documento con la misma área (por id)
+    const existeDocumento = documentos.some(doc => doc.area === area.value);
+
     if (existeDocumento) {
         mensajeError.textContent = 'Ya has agregado un documento para esta área.';
         mensajeError.style.display = 'block';
@@ -633,18 +771,18 @@ function agregarDocumento() {
     mensajeError.style.display = 'none';
 
     const documento = {
-    numeroHojas,
-    area: area.value, // Agregar id_area
-    areaTexto: areaTexto, // Texto del área
-    estado,
-    fechaCreacion
-};
-
+        numeroHojas,
+        area: area.value, // id_area
+        areaTexto: area.options[area.selectedIndex].text, // Texto del área
+        estado,
+        fechaCreacion
+    };
 
     documentos.push(documento);
     actualizarCarrito();
     limpiarFormulario();
 }
+
 
 
 function actualizarCarrito() {
@@ -736,6 +874,30 @@ document.getElementById('id_evaluado').addEventListener('change', function() {
         Array.from(cajaSelect.options).forEach(option => {
             option.style.display = '';
         });
+    }
+});
+function toggleDocumentSections() {
+    const sections = document.getElementById('documentSections');
+    const button = document.getElementById('toggleDocumentsBtn');
+    
+    if (sections.style.display === 'none') {
+        sections.style.display = 'block';
+        button.classList.add('active');
+        button.querySelector('span').textContent = 'Ocultar Documentos';
+    } else {
+        sections.style.display = 'none';
+        button.classList.remove('active');
+        button.querySelector('span').textContent = 'Agregar Documentos';
+    }
+}
+document.getElementById('id_caja').addEventListener('change', function() {
+    const toggleDocumentsBtn = document.getElementById('toggleDocumentsBtn');
+    if (this.value) {
+        // Si se seleccionó una caja, muestra el botón
+        toggleDocumentsBtn.style.display = 'inline-block';
+    } else {
+        // Si no hay ninguna caja seleccionada, oculta el botón
+        toggleDocumentsBtn.style.display = 'none';
     }
 });
 
