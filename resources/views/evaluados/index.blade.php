@@ -308,6 +308,7 @@
             transform: translateY(0);
         }
     }
+
     .search-container {
         display: flex;
         align-items: center;
@@ -405,7 +406,7 @@
                                 <span>Nuevo Evaluado</span>
                             </a>
 
-                            
+
                         </div>
                     </div>
                     <div class="table-container">
@@ -433,15 +434,14 @@
                                         <td>{{ $evaluado->RFC }}</td>
                                         <td>{{ $evaluado->fecha_apertura }}</td>
                                         <td>{{ $evaluado->sexo }}</td>
-                                        
+
                                         <td>
-                                            
+
                                             <div class="action-buttons">
-                                                @if($evaluado->carpeta)
-                                                <i class="fas fa-folder" style="color: var(--primary-burgundy);" title="Carpeta asociada"></i>
-                                            @endif
-                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit">
-                                                    <i class="fas fa-edit"></i> 
+                                               
+                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}"
+                                                    class="btn btn-edit">
+                                                    <i class="fas fa-edit"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-delete"
                                                     onclick="confirmarEliminacion({{ $evaluado->id }})">
@@ -472,7 +472,7 @@
 </section>
 
 <script>
-function confirmarEliminacion(evaluadoId) {
+    function confirmarEliminacion(evaluadoId) {
     Swal.fire({
         title: '¿Estás seguro?',
         text: 'Esta acción no se puede deshacer',

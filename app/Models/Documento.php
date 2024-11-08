@@ -24,11 +24,16 @@ class Documento extends Model
     {
         return $this->belongsTo(Carpeta::class, 'id_carpeta');
     }
-    // Documento.php
 
-public function area()
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'id_area');
+    }
+    public function show($id)
 {
-    return $this->belongsTo(Area::class, 'id_area');
+    $caja = Caja::with('carpetas.evaluado', 'carpetas.documentos')->findOrFail($id);
+    return view('cajas.show', compact('caja'));
 }
 
 }

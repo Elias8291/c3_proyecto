@@ -36,10 +36,11 @@ class Evaluado extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     // En el modelo Evaluado.php
-public function carpeta()
-{
-    return $this->hasOne(Carpeta::class, 'id_evaluado', 'id');
-}
+    public function carpetas()
+    {
+        return $this->hasMany(Carpeta::class, 'id_evaluado'); // Clave foránea en la tabla 'carpetas'
+    }
+    
 
     /**
      * Relación con la tabla de documentos.
@@ -51,4 +52,9 @@ public function carpeta()
     {
         return $this->hasMany(Documento::class);
     }
+    public function getNombreCompletoAttribute()
+{
+    return trim($this->primer_nombre . ' ' . $this->segundo_nombre . ' ' . $this->primer_apellido . ' ' . $this->segundo_apellido);
+}
+
 }

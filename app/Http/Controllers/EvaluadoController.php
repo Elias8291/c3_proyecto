@@ -16,11 +16,12 @@ class EvaluadoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-{
-    // Obtener todos los evaluados con su carpeta si existe
-    $evaluados = Evaluado::with('carpeta')->paginate(100); // Cambia '100' según el número deseado de registros por página
-    return view('evaluados.index', compact('evaluados'));
-}
+    {
+        // Cambia 'carpeta' a 'carpetas'
+        $evaluados = Evaluado::with('carpetas')->paginate(100);
+        return view('evaluados.index', compact('evaluados'));
+    }
+    
 
 
 

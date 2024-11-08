@@ -579,7 +579,7 @@
 
 @section('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('cajaForm');
     const inputs = form.querySelectorAll('input, select');
     const rangoAlfabeticoInput = form.rango_alfabetico;

@@ -32,12 +32,15 @@ class CarpetaController extends Controller
             'Perfiles',
             'Programación'
         ])->get();
-
-        $evaluados = Evaluado::all();
+    
+        // Eager load de la relación 'carpetas' para cada Evaluado
+        $evaluados = Evaluado::with('carpetas')->get();
+    
         $cajas = Caja::all();
-
+    
         return view('carpetas.crear', compact('evaluados', 'evaluacionAreas', 'cajas'));
     }
+    
 
     public function destroy($id)
 {
@@ -50,11 +53,12 @@ class CarpetaController extends Controller
 
 public function show($id)
 {
-    $carpeta = Carpeta::with('documentos', 'evaluado')->findOrFail($id);
-    $areas = Area::all(); // Aquí obtienes todas las áreas para usarlas en el formulario
+    $carpeta = Carpeta::with('documentos.area', 'evaluado')->findOrFail($id);
+    $areas = Area::all(); // Para el formulario de agregar documento
 
     return view('carpetas.show', compact('carpeta', 'areas'));
 }
+
 
     public function store(Request $request)
     {

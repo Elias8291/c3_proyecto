@@ -24,4 +24,5 @@ class Caja extends Model
     {
         return $this->hasMany(Carpeta::class, 'id_caja');
     }
+    
 }

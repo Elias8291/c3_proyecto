@@ -19,10 +19,10 @@ class CajaController extends Controller
     }
     public function show($id)
     {
-        $caja = Caja::with('carpetas.evaluado')->findOrFail($id);
+        $caja = Caja::with('carpetas.evaluado', 'carpetas.documentos')->findOrFail($id);
         return view('cajas.show', compact('caja'));
     }
-
+    
     // En el controlador correspondiente
     public function getCajasDisponibles($evaluadoId, Request $request)
     {
