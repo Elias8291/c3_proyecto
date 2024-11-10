@@ -458,6 +458,12 @@
         outline: none;
     }
 
+    .swal-title-large {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #d9534f;
+}
+
 </style>
 
 @section('content')
@@ -492,21 +498,34 @@
                                     <option value="{{ $year }}">{{ $year }}</option>
                                 @endfor
                             </select>
+                          
+                                <div class="year-filter">
+                                    <label for="perPageSelect" class="filter-label">Mostrar:</label>
+                                    <select class="year-select" id="perPageSelect" onchange="updatePerPage()">
+                                        <option value="5" {{ request('perPage') == 5 ? 'selected' : '' }}>5</option>
+                                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
+                                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
+                                        <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100</option>
+                                    </select>
+                                    
+                                    <span>evaluados por página</span>
+                                </div>
+                         
                             
                         </div>
+                        
                     </div>
+                    
                     <div class="table-container">
                         <div class="table-responsive">
                             <table class="table" id="evaluadosTable">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ID</th>
                                         <th class="text-center">Nombre Completo</th>
                                         <th class="text-center">CURP</th>
                                         <th class="text-center">RFC</th>
-                                        <th class="text-center">Fecha de Apertura</th>
-                                        <th class="text-center">Sexo</th>
-                                        <th class="text-center">Fecha de Nacimiento</th>
+                                        <th class="text-center">Fecha de Evaluación</th>
                                         <th class="text-center">Resultado de Evaluación</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
@@ -514,14 +533,11 @@
                                 <tbody id="evaluadosTableBody">
                                     @foreach ($evaluados as $evaluado)
                                     <tr>
-                                        <td>{{ $evaluado->id }}</td>
-                                        <td>{{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
+                                        <td class="text-center">{{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
                                         <td>{{ $evaluado->CURP }}</td>
                                         <td>{{ $evaluado->RFC }}</td>
-                                        <td>{{ $evaluado->fecha_apertura }}</td>
-                                        <td>{{ $evaluado->sexo }}</td>
-                                        <td>{{ $evaluado->fecha_nacimiento }}</td>
-                                        <td>
+                                        <td class="text-center">{{ $evaluado->fecha_apertura }}</td>
+                                        <td class="text-center">
                                             @if ($evaluado->resultado_evaluacion == 1)
                                             Aprobó
                                             @else
@@ -532,14 +548,15 @@
                                             <div class="action-buttons">
                                                 @if($evaluado->carpeta)
                                                 <i class="fas fa-folder" style="color: var(--primary-burgundy);" title="Carpeta asociada"></i>
-                                                @endif
-                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $evaluado->id }})">
+                                            @endif
+                                            <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit" title="Editar Evaluado">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            
+                                                <button type="button" class="btn btn-delete" title="Borrar Evaluado" onclick="confirmarEliminacion({{ $evaluado->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                                <form id="eliminar-form-{{ $evaluado->id }}" action="{{ route('evaluados.destroy', $evaluado->id) }}" method="POST" class="d-none">
+                                                <form id="eliminar-form-{{ $evaluado->id }}"  title="Borrar Evaluado"action="{{ route('evaluados.destroy', $evaluado->id) }}" method="POST" class="d-none">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
@@ -561,21 +578,45 @@
 </section>
 
 <script>
-    function confirmarEliminacion(evaluadoId) {
-        Swal.fire({
-            title: '¿Estás seguro?'
-            , text: 'Esta acción no se puede deshacer'
-            , icon: 'warning'
-            , showCancelButton: true
-            , confirmButtonColor: '#800020'
-            , cancelButtonColor: '#6c757d'
-            , confirmButtonText: 'Sí, eliminar'
-        , }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('eliminar-form-' + evaluadoId).submit();
-            }
-        });
-    }
+  function confirmarEliminacion(evaluadoId) {
+    Swal.fire({
+        title: '<strong>¡ADVERTENCIA!</strong>'
+        , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
+        , icon: 'error'
+        , showCancelButton: true
+        , confirmButtonColor: '#d9534f'
+        , cancelButtonColor: '#6c757d'
+        , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
+        , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+        , customClass: {
+            popup: 'animated shake'
+            , title: 'swal-title-large'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostrar la segunda confirmación
+            Swal.fire({
+                title: '<strong>¿Estás completamente seguro?</strong>'
+                , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
+                , icon: 'warning'
+                , showCancelButton: true
+                , confirmButtonColor: '#d9534f'
+                , cancelButtonColor: '#6c757d'
+                , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
+                , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+                , customClass: {
+                    popup: 'animated shake'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('eliminar-form-' + evaluadoId).submit();
+                }
+            });
+        }
+    });
+}
+
+
 
     function searchEvaluados() {
         var searchInput = document.getElementById('searchInput').value.toLowerCase();
@@ -658,6 +699,31 @@
 });
 
     document.getElementById('yearSelect').addEventListener('change', filterEvaluados);
+    document.addEventListener('DOMContentLoaded', function () {
+    var table = document.getElementById('evaluadosTable');
+    var rows = table.getElementsByTagName('tr');
+
+    for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var fechaCell = row.cells[4]; // La columna de la fecha de apertura
+        var fechaApertura = new Date(fechaCell.textContent);
+
+        if (!isNaN(fechaApertura)) {
+            var options = { day: 'numeric', month: 'long', year: 'numeric' };
+            fechaCell.textContent = fechaApertura.toLocaleDateString('es-ES', options);
+        }
+    }
+});
+
+function updatePerPage() {
+        var perPage = document.getElementById('perPageSelect').value;
+
+        // Redirigir a la misma página con el parámetro de cantidad por página
+        var url = new URL(window.location.href);
+        url.searchParams.set('perPage', perPage);
+        window.location.href = url.toString();
+    }
+
 </script>
 
 @endsection

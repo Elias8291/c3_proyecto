@@ -8,28 +8,12 @@ use Illuminate\Http\Request;
 class CajaController extends Controller
 {
     public function index(Request $request)
-    {
-        // Realiza la consulta inicial que incluirá todos los registros
-        $query = Caja::query();
-    
-        // Filtrar por término de búsqueda en toda la base de datos
-        if ($request->has('search') && !empty($request->input('search'))) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('numero_caja', 'LIKE', "%$search%")
-                  ->orWhere('anio', 'LIKE', "%$search%")
-                  ->orWhere('mes', 'LIKE', "%$search%")
-                  ->orWhere('ubicacion', 'LIKE', "%$search%")
-                  ->orWhere('rango_alfabetico', 'LIKE', "%$search%");
-            });
-        }
-    
-        // Paginar los resultados después de aplicar el filtro de búsqueda
-        $cajas = $query->paginate(20);
-    
-        return view('cajas.index', compact('cajas'));
-    }
-    
+{
+    $perPage = $request->input('per_page', 10); // Valor predeterminado de 10
+    $cajas = Caja::paginate($perPage);
+
+    return view('cajas.index', compact('cajas', 'perPage'));
+}
     
 
     public function create()
@@ -50,8 +34,9 @@ class CajaController extends Controller
 
         // Filtrar las cajas que coincidan con el año y mes de apertura
         $cajas = Caja::where('anio', $anioApertura)
-            ->where('mes', $mesApertura)
-            ->get();
+        ->where('mes', $mesApertura)
+        ->select('id', 'numero_caja', 'mes', 'anio', 'ubicacion', 'rango_alfabetico')
+        ->get();
 
         return response()->json($cajas);
     }

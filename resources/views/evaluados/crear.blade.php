@@ -327,11 +327,14 @@
             <form action="{{ route('evaluados.store') }}" method="POST">
                 @csrf
 
-                <p class="text-muted" style="font-size: 0.9em; color: #800020; font-weight: bold;">Los campos marcados con <span style="color: #e53e3e;">*</span> son obligatorios.</p>
+                <p class="text-muted" style="font-size: 0.9em; color: #800020; font-weight: bold;">Los campos marcados
+                    con <span style="color: #e53e3e;">*</span> son obligatorios.</p>
                 <div class="form-row">
+                    
                     <!-- Primer Nombre -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="primer_nombre">Primer Nombre <span style="color: #e53e3e;">*</span></label>
+                        <label class="form-label" for="primer_nombre">Primer Nombre <span
+                                style="color: #e53e3e;">*</span></label>
                         <input name="primer_nombre" value="{{ old('primer_nombre') }}"
                             class="form-control @error('primer_nombre') form-error @enderror" type="text" required
                             pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1]+$"
@@ -358,7 +361,8 @@
                 <div class="form-row">
                     <!-- Primer Apellido -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="primer_apellido">Primer Apellido <span style="color: #e53e3e;">*</span></label> </label>
+                        <label class="form-label" for="primer_apellido">Primer Apellido <span
+                                style="color: #e53e3e;">*</span></label> </label>
                         <input name="primer_apellido" value="{{ old('primer_apellido') }}"
                             class="form-control @error('primer_apellido') form-error @enderror" type="text" required
                             pattern="^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$" title="Solo se permiten letras y espacios."
@@ -384,7 +388,8 @@
                 <div class="form-row">
                     <!-- Fecha de Nacimiento -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento <span style="color: #e53e3e;">*</span></label></label>
+                        <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento <span
+                                style="color: #e53e3e;">*</span></label></label>
                         <input name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"
                             class="form-control @error('fecha_nacimiento') form-error @enderror" type="date" required
                             id="fecha_nacimiento" disabled>
@@ -411,13 +416,12 @@
                         @error('sexo')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
-                    </div>
-                </div>
 
-                <div class="form-row">
-                    <!-- Estado de Nacimiento (Deshabilitado Inicialmente) -->
+                    </div>
+
                     <div class="form-group mb-4">
-                        <label class="form-label" for="estado_nacimiento">Estado de Nacimiento <span style="color: #e53e3e;">*</span></label></label>
+                        <label class="form-label" for="estado_nacimiento">Estado de Nacimiento <span
+                                style="color: #e53e3e;">*</span></label></label>
                         <select name="estado_nacimiento"
                             class="form-control @error('estado_nacimiento') form-error @enderror" required disabled>
                             <option value="">Seleccione el Estado</option>
@@ -496,9 +500,15 @@
                         @enderror
                     </div>
 
+                </div>
+
+                <div class="form-row">
+                    <!-- Estado de Nacimiento (Deshabilitado Inicialmente) -->
+
                     <!-- 2 Últimos Dígitos de CURP (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="curp_last2">2 Últimos Dígitos de CURP <span style="color: #e53e3e;">*</span></label> </label>
+                        <label class="form-label" for="curp_last2">2 Últimos Dígitos de CURP <span
+                                style="color: #e53e3e;">*</span></label> </label>
                         <input name="curp_last2" value="{{ old('curp_last2') }}"
                             class="form-control @error('curp_last2') form-error @enderror" type="text" required
                             pattern="^[A-Z0-9]{2}$"
@@ -526,7 +536,8 @@
                 <div class="form-row">
 
                     <div class="form-group mb-4">
-                        <label class="form-label" for="rfc_last3">Últimos 3 Dígitos de RFC <span style="color: #e53e3e;">*</span></label></label>
+                        <label class="form-label" for="rfc_last3">Últimos 3 Dígitos de RFC <span
+                                style="color: #e53e3e;">*</span></label></label>
                         <input name="rfc_last3" value="{{ old('rfc_last3') }}"
                             class="form-control @error('rfc_last3') form-error @enderror" type="text" required
                             pattern="^[A-Z0-9]{3}$"
@@ -553,7 +564,8 @@
 
                     <!-- Fecha de Apertura (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label" for="fecha_apertura">Fecha de Apertura <span style="color: #e53e3e;">*</span></label></label>
+                        <label class="form-label" for="fecha_apertura">Fecha de Evaluación <span
+                                style="color: #e53e3e;">*</span></label></label>
                         <input name="fecha_apertura" value="{{ old('fecha_apertura') }}"
                             class="form-control @error('fecha_apertura') form-error @enderror" type="date" required
                             id="fecha_apertura" disabled>
@@ -564,7 +576,8 @@
 
                     <!-- Resultado de Evaluación (Deshabilitado Inicialmente) -->
                     <div class="form-group mb-4">
-                        <label class="form-label">Resultado de Evaluación <span style="color: #e53e3e;">*</span></label></label>
+                        <label class="form-label">Resultado de Evaluación <span
+                                style="color: #e53e3e;">*</span></label></label>
                         <div>
                             <label class="form-check-inline">
                                 <input type="radio" name="resultado_evaluacion" value="1"
@@ -622,311 +635,311 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Referencias a los campos del formulario
-        const rfcInput = document.getElementsByName('RFC')[0];
-        const primerNombreInput = document.getElementsByName('primer_nombre')[0];
-        const segundoNombreInput = document.getElementsByName('segundo_nombre')[0];
-        const primerApellidoInput = document.getElementsByName('primer_apellido')[0];
-        const segundoApellidoInput = document.getElementsByName('segundo_apellido')[0];
-        const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
-        const estadoNacimientoSelect = document.getElementsByName('estado_nacimiento')[0];
-        const curpLast2Input = document.getElementsByName('curp_last2')[0];
-        const fechaAperturaInput = document.getElementById('fecha_apertura');
-        const sexoInputs = document.getElementsByName('sexo');
-        const curpInput = document.getElementsByName('CURP')[0];
-        const resultadoEvaluacionInputs = document.getElementsByName('resultado_evaluacion');
-        const fechaMaxima = new Date();
+    // Referencias a los campos del formulario
+    const rfcInput = document.getElementsByName('RFC')[0];
+    const primerNombreInput = document.getElementsByName('primer_nombre')[0];
+    const segundoNombreInput = document.getElementsByName('segundo_nombre')[0];
+    const primerApellidoInput = document.getElementsByName('primer_apellido')[0];
+    const segundoApellidoInput = document.getElementsByName('segundo_apellido')[0];
+    const fechaNacimientoInput = document.getElementById('fecha_nacimiento');
+    const estadoNacimientoSelect = document.getElementsByName('estado_nacimiento')[0];
+    const curpLast2Input = document.getElementsByName('curp_last2')[0];
+    const fechaAperturaInput = document.getElementById('fecha_apertura');
+    const sexoInputs = document.getElementsByName('sexo');
+    const curpInput = document.getElementsByName('CURP')[0];
+    const resultadoEvaluacionInputs = document.getElementsByName('resultado_evaluacion');
+    const fechaMaxima = new Date();
     fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 18); // Resta 18 años de la fecha actual
     const rfcLast3Input = document.getElementsByName('rfc_last3')[0];
-    
+
     // Inicializa flatpickr para el campo de fecha de nacimiento
     flatpickr("#fecha_nacimiento", {
-        maxDate: fechaMaxima, // Fecha máxima para que el evaluado sea mayor de 18 años
-        dateFormat: "Y-m-d",
-        locale: "es" // Esto asegura que el calendario esté en español
+    maxDate: fechaMaxima, // Fecha máxima para que el evaluado sea mayor de 18 años
+    dateFormat: "Y-m-d",
+    locale: "es" // Esto asegura que el calendario esté en español
     });
 
     @if(session('showCreateFolderModal'))
-            showModal();
-        @endif
+    showModal();
+    @endif
 
-        // Función para habilitar el siguiente campo en la secuencia
-        function habilitarCampoSiguiente(campoActual) {
-            switch (campoActual) {
-                case 'primer_nombre':
-                    if (primerNombreInput.value.trim() !== '' && primerNombreInput.checkValidity()) {
-                        primerApellidoInput.disabled = false;
-                        segundoNombreInput.disabled = false;
-                        segundoApellidoInput.disabled = false;
-                    } else {
-                        primerApellidoInput.disabled = true;
-                        segundoNombreInput.disabled = true;
-                        segundoApellidoInput.disabled = true;
-                        primerApellidoInput.value = '';
-                        segundoNombreInput.value = '';
-                        segundoApellidoInput.value = '';
-                        limpiarCamposPosteriores(['primer_apellido']);
-                    }
-                    break;
-                case 'primer_apellido':
-                    if (primerApellidoInput.value.trim() !== '' && primerApellidoInput.checkValidity()) {
-                        fechaNacimientoInput.disabled = false;
-                    } else {
-                        fechaNacimientoInput.disabled = true;
-                        fechaNacimientoInput.value = '';
-                        limpiarCamposPosteriores(['fecha_nacimiento']);
-                    }
-                    break;
-                case 'fecha_nacimiento':
-                    if (fechaNacimientoInput.value.trim() !== '' && fechaNacimientoInput.checkValidity()) {
-                        estadoNacimientoSelect.disabled = false;
-                        // Habilitar Género (sexo)
-                        Array.from(sexoInputs).forEach(radio => {
-                            radio.disabled = false;
-                        });
-                    } else {
-                        estadoNacimientoSelect.disabled = true;
-                        estadoNacimientoSelect.value = '';
-                        Array.from(sexoInputs).forEach(radio => {
-                            radio.disabled = true;
-                            radio.checked = false;
-                        });
-                        limpiarCamposPosteriores(['estado_nacimiento']);
-                    }
-                    break;
-                case 'estado_nacimiento':
-                    if (estadoNacimientoSelect.value !== '') {
-                        curpLast2Input.disabled = false;
-                        document.getElementsByName('rfc_last3')[0].disabled = false; // Habilita el campo RFC
-                        
-                    } else {
-                        curpLast2Input.disabled = true;
-                        curpLast2Input.value = '';
-                        document.getElementsByName('rfc_last3')[0].disabled = true; // Desactiva el campo RFC
-        document.getElementsByName('rfc_last3')[0].value = ''; // Limpia el campo RFC
-                        limpiarCamposPosteriores(['curp_last2']);
-                    }
-                    break;
-                case 'curp_last2':
-                    const regex = /^[A-Z0-9]{2}$/;
-                    if (curpLast2Input.value.length === 2 && regex.test(curpLast2Input.value)) {
-                        curpLast2Input.classList.remove('form-error');
-                        curpLast2Input.setCustomValidity('');
-                        habilitarCampoSiguiente('curp_last2');
-                    } else if (curpLast2Input.value.length === 2) {
-                        curpLast2Input.classList.add('form-error');
-                        curpLast2Input.setCustomValidity('Formato incorrecto. Usa una letra y un número o un número y una letra.');
-                    } else {
-                        curpLast2Input.classList.remove('form-error');
-                        curpLast2Input.setCustomValidity('');
-                        fechaAperturaInput.disabled = true;
-                        fechaAperturaInput.value = '';
-                        Array.from(resultadoEvaluacionInputs).forEach(radio => {
-                            radio.disabled = true;
-                            radio.checked = false;
-                        });
-                    }
-                    // Generar CURP si el formato es correcto
-                    if (curpLast2Input.value.length === 2 && regex.test(curpLast2Input.value)) {
-                        generarCURP();
-                    } else {
-                        curpInput.value = '';
-                    }
-                    break;
-                case 'fecha_apertura':
-                    if (fechaAperturaInput.value.trim() !== '' && fechaAperturaInput.checkValidity()) {
-                        // Habilitar Resultado de Evaluación
-                        Array.from(resultadoEvaluacionInputs).forEach(radio => {
-                            radio.disabled = false;
-                        });
-                    } else {
-                        Array.from(resultadoEvaluacionInputs).forEach(radio => {
-                            radio.disabled = true;
-                            radio.checked = false;
-                        });
-                    }
-                    break;
-            }
-        }
-        document.querySelector('form').addEventListener('submit', function() {
-        curpInput.disabled = false;  // Habilitar el campo CURP al enviar el formulario
+    // Función para habilitar el siguiente campo en la secuencia
+    function habilitarCampoSiguiente(campoActual) {
+    switch (campoActual) {
+    case 'primer_nombre':
+    if (primerNombreInput.value.trim() !== '' && primerNombreInput.checkValidity()) {
+    primerApellidoInput.disabled = false;
+    segundoNombreInput.disabled = false;
+    segundoApellidoInput.disabled = false;
+    } else {
+    primerApellidoInput.disabled = true;
+    segundoNombreInput.disabled = true;
+    segundoApellidoInput.disabled = true;
+    primerApellidoInput.value = '';
+    segundoNombreInput.value = '';
+    segundoApellidoInput.value = '';
+    limpiarCamposPosteriores(['primer_apellido']);
+    }
+    break;
+    case 'primer_apellido':
+    if (primerApellidoInput.value.trim() !== '' && primerApellidoInput.checkValidity()) {
+    fechaNacimientoInput.disabled = false;
+    } else {
+    fechaNacimientoInput.disabled = true;
+    fechaNacimientoInput.value = '';
+    limpiarCamposPosteriores(['fecha_nacimiento']);
+    }
+    break;
+    case 'fecha_nacimiento':
+    if (fechaNacimientoInput.value.trim() !== '' && fechaNacimientoInput.checkValidity()) {
+    estadoNacimientoSelect.disabled = false;
+    // Habilitar Género (sexo)
+    Array.from(sexoInputs).forEach(radio => {
+    radio.disabled = false;
+    });
+    } else {
+    estadoNacimientoSelect.disabled = true;
+    estadoNacimientoSelect.value = '';
+    Array.from(sexoInputs).forEach(radio => {
+    radio.disabled = true;
+    radio.checked = false;
+    });
+    limpiarCamposPosteriores(['estado_nacimiento']);
+    }
+    break;
+    case 'estado_nacimiento':
+    if (estadoNacimientoSelect.value !== '') {
+    curpLast2Input.disabled = false;
+    document.getElementsByName('rfc_last3')[0].disabled = false; // Habilita el campo RFC
+
+    } else {
+    curpLast2Input.disabled = true;
+    curpLast2Input.value = '';
+    document.getElementsByName('rfc_last3')[0].disabled = true; // Desactiva el campo RFC
+    document.getElementsByName('rfc_last3')[0].value = ''; // Limpia el campo RFC
+    limpiarCamposPosteriores(['curp_last2']);
+    }
+    break;
+    case 'curp_last2':
+    const regex = /^[A-Z0-9]{2}$/;
+    if (curpLast2Input.value.length === 2 && regex.test(curpLast2Input.value)) {
+    curpLast2Input.classList.remove('form-error');
+    curpLast2Input.setCustomValidity('');
+    habilitarCampoSiguiente('curp_last2');
+    } else if (curpLast2Input.value.length === 2) {
+    curpLast2Input.classList.add('form-error');
+    curpLast2Input.setCustomValidity('Formato incorrecto. Usa una letra y un número o un número y una letra.');
+    } else {
+    curpLast2Input.classList.remove('form-error');
+    curpLast2Input.setCustomValidity('');
+    fechaAperturaInput.disabled = true;
+    fechaAperturaInput.value = '';
+    Array.from(resultadoEvaluacionInputs).forEach(radio => {
+    radio.disabled = true;
+    radio.checked = false;
+    });
+    }
+    // Generar CURP si el formato es correcto
+    if (curpLast2Input.value.length === 2 && regex.test(curpLast2Input.value)) {
+    generarCURP();
+    } else {
+    curpInput.value = '';
+    }
+    break;
+    case 'fecha_apertura':
+    if (fechaAperturaInput.value.trim() !== '' && fechaAperturaInput.checkValidity()) {
+    // Habilitar Resultado de Evaluación
+    Array.from(resultadoEvaluacionInputs).forEach(radio => {
+    radio.disabled = false;
+    });
+    } else {
+    Array.from(resultadoEvaluacionInputs).forEach(radio => {
+    radio.disabled = true;
+    radio.checked = false;
+    });
+    }
+    break;
+    }
+    }
+    document.querySelector('form').addEventListener('submit', function() {
+    curpInput.disabled = false; // Habilitar el campo CURP al enviar el formulario
     });
 
-        // Función para limpiar y deshabilitar campos posteriores
-        function limpiarCamposPosteriores(campos) {
-            campos.forEach(campo => {
-                switch (campo) {
-                    case 'primer_apellido':
-                        primerApellidoInput.value = '';
-                        limpiarCamposPosteriores(['fecha_nacimiento']);
-                        break;
-                    case 'fecha_nacimiento':
-                        fechaNacimientoInput.value = '';
-                        estadoNacimientoSelect.value = '';
-                        Array.from(sexoInputs).forEach(radio => {
-                            radio.checked = false;
-                        });
-                        limpiarCamposPosteriores(['estado_nacimiento']);
-                        break;
-                    case 'estado_nacimiento':
-                        estadoNacimientoSelect.value = '';
-                        curpLast2Input.value = '';
-                        limpiarCamposPosteriores(['curp_last2']);
-                        break;
-                    case 'curp_last2':
-                        curpLast2Input.value = '';
-                        limpiarCamposPosteriores(['fecha_apertura']);
-                        break;
-                    case 'fecha_apertura':
-                        fechaAperturaInput.value = '';
-                        Array.from(resultadoEvaluacionInputs).forEach(radio => {
-                            radio.checked = false;
-                        });
-                        break;
-                }
-            });
-        }
-        function generarRFC() {
-        const primerApellido = primerApellidoInput.value.trim().toUpperCase();
-        const segundoApellido = (segundoApellidoInput.value || 'X').trim().toUpperCase();
-        const primerNombre = primerNombreInput.value.trim().toUpperCase();
-        const fechaNacimiento = fechaNacimientoInput.value;
-        const rfcLast3 = rfcLast3Input.value.trim().toUpperCase();
+    // Función para limpiar y deshabilitar campos posteriores
+    function limpiarCamposPosteriores(campos) {
+    campos.forEach(campo => {
+    switch (campo) {
+    case 'primer_apellido':
+    primerApellidoInput.value = '';
+    limpiarCamposPosteriores(['fecha_nacimiento']);
+    break;
+    case 'fecha_nacimiento':
+    fechaNacimientoInput.value = '';
+    estadoNacimientoSelect.value = '';
+    Array.from(sexoInputs).forEach(radio => {
+    radio.checked = false;
+    });
+    limpiarCamposPosteriores(['estado_nacimiento']);
+    break;
+    case 'estado_nacimiento':
+    estadoNacimientoSelect.value = '';
+    curpLast2Input.value = '';
+    limpiarCamposPosteriores(['curp_last2']);
+    break;
+    case 'curp_last2':
+    curpLast2Input.value = '';
+    limpiarCamposPosteriores(['fecha_apertura']);
+    break;
+    case 'fecha_apertura':
+    fechaAperturaInput.value = '';
+    Array.from(resultadoEvaluacionInputs).forEach(radio => {
+    radio.checked = false;
+    });
+    break;
+    }
+    });
+    }
+    function generarRFC() {
+    const primerApellido = primerApellidoInput.value.trim().toUpperCase();
+    const segundoApellido = (segundoApellidoInput.value || 'X').trim().toUpperCase();
+    const primerNombre = primerNombreInput.value.trim().toUpperCase();
+    const fechaNacimiento = fechaNacimientoInput.value;
+    const rfcLast3 = rfcLast3Input.value.trim().toUpperCase();
 
-        // Validación para asegurar que todos los campos necesarios están llenos
-        if (!primerApellido || !primerNombre || !fechaNacimiento || rfcLast3.length !== 3) {
-            console.warn("Faltan datos para generar el RFC");
-            rfcInput.value = '';
-            return;
-        }
+    // Validación para asegurar que todos los campos necesarios están llenos
+    if (!primerApellido || !primerNombre || !fechaNacimiento || rfcLast3.length !== 3) {
+    console.warn("Faltan datos para generar el RFC");
+    rfcInput.value = '';
+    return;
+    }
 
-        try {
-            // Letras iniciales del RFC
-            const primeraLetraApellido = primerApellido.charAt(0);
-            const primeraVocalInternaApellido = primerApellido.slice(1).match(/[AEIOU]/)?.[0] || 'X';
-            const primeraLetraSegundoApellido = segundoApellido.charAt(0);
-            const primeraLetraNombre = primerNombre.charAt(0);
+    try {
+    // Letras iniciales del RFC
+    const primeraLetraApellido = primerApellido.charAt(0);
+    const primeraVocalInternaApellido = primerApellido.slice(1).match(/[AEIOU]/)?.[0] || 'X';
+    const primeraLetraSegundoApellido = segundoApellido.charAt(0);
+    const primeraLetraNombre = primerNombre.charAt(0);
 
-            // Fecha de nacimiento en formato AAMMDD
-            const [anio, mes, dia] = fechaNacimiento.split('-');
-            const fechaFormato = anio.slice(2) + mes.padStart(2, '0') + dia.padStart(2, '0');
+    // Fecha de nacimiento en formato AAMMDD
+    const [anio, mes, dia] = fechaNacimiento.split('-');
+    const fechaFormato = anio.slice(2) + mes.padStart(2, '0') + dia.padStart(2, '0');
 
-            // Construcción del RFC
-            const rfcBase = `${primeraLetraApellido}${primeraVocalInternaApellido}${primeraLetraSegundoApellido}${primeraLetraNombre}${fechaFormato}`;
+    // Construcción del RFC
+    const rfcBase = `${primeraLetraApellido}${primeraVocalInternaApellido}${primeraLetraSegundoApellido}${primeraLetraNombre}${fechaFormato}`;
 
-            // Completar el RFC con los últimos 3 dígitos
-            const rfcCompleto = rfcBase + rfcLast3;
+    // Completar el RFC con los últimos 3 dígitos
+    const rfcCompleto = rfcBase + rfcLast3;
 
-            // Asignar el RFC al campo correspondiente
-            rfcInput.value = rfcCompleto;
-            console.log("RFC generado exitosamente:", rfcCompleto);
-        } catch (error) {
-            console.error("Error al generar el RFC:", error);
-            rfcInput.value = '';
-        }
+    // Asignar el RFC al campo correspondiente
+    rfcInput.value = rfcCompleto;
+    console.log("RFC generado exitosamente:", rfcCompleto);
+    } catch (error) {
+    console.error("Error al generar el RFC:", error);
+    rfcInput.value = '';
+    }
     }
     rfcLast3Input.addEventListener('input', function() {
-        this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3); // Formateo en mayúsculas y sin caracteres especiales
+    this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3); // Formateo en mayúsculas y sin caracteres especiales
 
-        if (this.value.length === 3) {
-            generarRFC();  // Genera el RFC cuando se ingresan 3 caracteres
-        } else {
-            rfcInput.value = ''; // Limpia el RFC si no se cumplen los requisitos
-        }
+    if (this.value.length === 3) {
+    generarRFC(); // Genera el RFC cuando se ingresan 3 caracteres
+    } else {
+    rfcInput.value = ''; // Limpia el RFC si no se cumplen los requisitos
+    }
     });
 
     [primerNombreInput, primerApellidoInput, segundoApellidoInput, fechaNacimientoInput].forEach(elemento => {
-        elemento.addEventListener('change', generarRFC);
+    elemento.addEventListener('change', generarRFC);
     });
-        // Evento para el Primer Nombre
-        primerNombreInput.addEventListener('input', function() {
-            habilitarCampoSiguiente('primer_nombre');
-        });
+    // Evento para el Primer Nombre
+    primerNombreInput.addEventListener('input', function() {
+    habilitarCampoSiguiente('primer_nombre');
+    });
 
-        // Evento para el Primer Apellido
-        primerApellidoInput.addEventListener('input', function() {
-            habilitarCampoSiguiente('primer_apellido');
-        });
+    // Evento para el Primer Apellido
+    primerApellidoInput.addEventListener('input', function() {
+    habilitarCampoSiguiente('primer_apellido');
+    });
 
-        // Evento para la Fecha de Nacimiento
-        fechaNacimientoInput.addEventListener('input', function() {
-            habilitarCampoSiguiente('fecha_nacimiento');
-        });
+    // Evento para la Fecha de Nacimiento
+    fechaNacimientoInput.addEventListener('input', function() {
+    habilitarCampoSiguiente('fecha_nacimiento');
+    });
 
-        // Evento para el Estado de Nacimiento
-        estadoNacimientoSelect.addEventListener('change', function() {
-            habilitarCampoSiguiente('estado_nacimiento');
-        });
+    // Evento para el Estado de Nacimiento
+    estadoNacimientoSelect.addEventListener('change', function() {
+    habilitarCampoSiguiente('estado_nacimiento');
+    });
 
-        // Evento para los Botones de Radio de Género (sexo)
-        sexoInputs.forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                generarCURP();
-            });
-        });
+    // Evento para los Botones de Radio de Género (sexo)
+    sexoInputs.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+    generarCURP();
+    });
+    });
 
-        // Evento para los 2 Últimos Dígitos de CURP
-       // Evento para los 2 Últimos Dígitos de CURP
-curpLast2Input.addEventListener('input', function() {
+    // Evento para los 2 Últimos Dígitos de CURP
+    // Evento para los 2 Últimos Dígitos de CURP
+    curpLast2Input.addEventListener('input', function() {
     // Convertir a mayúsculas y eliminar caracteres no permitidos
     curpLast2Input.value = curpLast2Input.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 2);
 
     // Validar el formato
     const regex = /^[A-Z0-9]{2}$/;
     if (curpLast2Input.value.length === 2 && regex.test(curpLast2Input.value)) {
-        curpLast2Input.classList.remove('form-error');
-        curpLast2Input.setCustomValidity('');
-        habilitarCampoSiguiente('curp_last2');
-        
-        // Generar la CURP una vez que el formato es correcto
-        generarCURP();
+    curpLast2Input.classList.remove('form-error');
+    curpLast2Input.setCustomValidity('');
+    habilitarCampoSiguiente('curp_last2');
+
+    // Generar la CURP una vez que el formato es correcto
+    generarCURP();
     } else {
-        curpLast2Input.classList.add('form-error');
-        curpLast2Input.setCustomValidity('Formato incorrecto. Usa una letra y un número o un número y una letra.');
-        curpInput.value = ''; // Limpiar el campo CURP si el formato es incorrecto
+    curpLast2Input.classList.add('form-error');
+    curpLast2Input.setCustomValidity('Formato incorrecto. Usa una letra y un número o un número y una letra.');
+    curpInput.value = ''; // Limpiar el campo CURP si el formato es incorrecto
     }
-});
+    });
 
 
-        // Evento para la Fecha de Apertura
-        fechaAperturaInput.addEventListener('input', function() {
-            habilitarCampoSiguiente('fecha_apertura');
-            generarCURP();
-        });
+    // Evento para la Fecha de Apertura
+    fechaAperturaInput.addEventListener('input', function() {
+    habilitarCampoSiguiente('fecha_apertura');
+    generarCURP();
+    });
 
-        // Evento para Resultado de Evaluación (opcional, si se necesita lógica adicional)
-        resultadoEvaluacionInputs.forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                // Lógica adicional si es necesaria
-            });
-        });
+    // Evento para Resultado de Evaluación (opcional, si se necesita lógica adicional)
+    resultadoEvaluacionInputs.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+    // Lógica adicional si es necesaria
+    });
+    });
 
-  // Reemplaza el evento listener actual del curp_last2Input con este:
-curpLast2Input.addEventListener('input', function() {
+    // Reemplaza el evento listener actual del curp_last2Input con este:
+    curpLast2Input.addEventListener('input', function() {
     // Convertir a mayúsculas y eliminar caracteres no permitidos
     this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 2);
 
     if (this.value.length === 2) {
-        const regex = /^[A-Z0-9]{2}$/;
-        if (regex.test(this.value)) {
-            this.classList.remove('form-error');
-            this.setCustomValidity('');
-            fechaAperturaInput.disabled = false;  // Habilitar fecha de apertura
-            generarCURP();  // Generar CURP cuando el formato es correcto
-        } else {
-            this.classList.add('form-error');
-            this.setCustomValidity('Formato incorrecto. Usa una letra y un número o un número y una letra.');
-            fechaAperturaInput.disabled = true;
-            curpInput.value = '';
-        }
+    const regex = /^[A-Z0-9]{2}$/;
+    if (regex.test(this.value)) {
+    this.classList.remove('form-error');
+    this.setCustomValidity('');
+    fechaAperturaInput.disabled = false; // Habilitar fecha de apertura
+    generarCURP(); // Generar CURP cuando el formato es correcto
     } else {
-        fechaAperturaInput.disabled = true;
-        curpInput.value = '';
+    this.classList.add('form-error');
+    this.setCustomValidity('Formato incorrecto. Usa una letra y un número o un número y una letra.');
+    fechaAperturaInput.disabled = true;
+    curpInput.value = '';
     }
-});
+    } else {
+    fechaAperturaInput.disabled = true;
+    curpInput.value = '';
+    }
+    });
 
-// Modifica la función generarCURP para incluir validaciones más robustas:
-function generarCURP() {
+    // Modifica la función generarCURP para incluir validaciones más robustas:
+    function generarCURP() {
     // Validar que todos los campos requeridos estén presentes
     const primerApellido = primerApellidoInput.value.trim().toUpperCase();
     const segundoApellido = (segundoApellidoInput.value || 'X').trim().toUpperCase();
@@ -937,87 +950,88 @@ function generarCURP() {
     const curpLast2 = curpLast2Input.value.trim().toUpperCase();
 
     if (!primerApellido || !primerNombre || !fechaNacimiento || !sexo || !estadoNacimiento || curpLast2.length !== 2) {
-        console.warn("Faltan datos requeridos para generar la CURP");
-        curpInput.value = '';
-        return;
+    console.warn("Faltan datos requeridos para generar la CURP");
+    curpInput.value = '';
+    return;
     }
 
     try {
-        // Extracción de letras iniciales
-        const primeraLetraApellido = primerApellido.charAt(0);
-        const primeraVocalInternaApellido = primerApellido.slice(1).match(/[AEIOU]/)?.[0] || 'X';
-        const primeraLetraSegundoApellido = segundoApellido.charAt(0);
-        const primeraLetraNombre = primerNombre.charAt(0);
+    // Extracción de letras iniciales
+    const primeraLetraApellido = primerApellido.charAt(0);
+    const primeraVocalInternaApellido = primerApellido.slice(1).match(/[AEIOU]/)?.[0] || 'X';
+    const primeraLetraSegundoApellido = segundoApellido.charAt(0);
+    const primeraLetraNombre = primerNombre.charAt(0);
 
-        // Fecha de nacimiento en formato AAMMDD
-        const [anio, mes, dia] = fechaNacimiento.split('-');
-        const fechaFormato = anio.slice(2) + (mes.padStart(2, '0')) + (dia.padStart(2, '0'));
+    // Fecha de nacimiento en formato AAMMDD
+    const [anio, mes, dia] = fechaNacimiento.split('-');
+    const fechaFormato = anio.slice(2) + (mes.padStart(2, '0')) + (dia.padStart(2, '0'));
 
-        // Consonantes internas
-        const consonanteInternaApellido = primerApellido.slice(1).match(/[BCDFGHJKLMNÑPQRSTVWXYZ]/)?.[0] || 'X';
-        const consonanteInternaSegundoApellido = segundoApellido.slice(1).match(/[BCDFGHJKLMNÑPQRSTVWXYZ]/)?.[0] || 'X';
-        const consonanteInternaNombre = primerNombre.slice(1).match(/[BCDFGHJKLMNÑPQRSTVWXYZ]/)?.[0] || 'X';
+    // Consonantes internas
+    const consonanteInternaApellido = primerApellido.slice(1).match(/[BCDFGHJKLMNÑPQRSTVWXYZ]/)?.[0] || 'X';
+    const consonanteInternaSegundoApellido = segundoApellido.slice(1).match(/[BCDFGHJKLMNÑPQRSTVWXYZ]/)?.[0] || 'X';
+    const consonanteInternaNombre = primerNombre.slice(1).match(/[BCDFGHJKLMNÑPQRSTVWXYZ]/)?.[0] || 'X';
 
-        // Construcción de la CURP
-        const curpBase = `${primeraLetraApellido}${primeraVocalInternaApellido}${primeraLetraSegundoApellido}${primeraLetraNombre}${fechaFormato}${sexo}${estadoNacimiento}${consonanteInternaApellido}${consonanteInternaSegundoApellido}${consonanteInternaNombre}`;
-        
-        // Agregar los últimos 2 dígitos
-        const curpCompleta = curpBase + curpLast2;
+    // Construcción de la CURP
+    const curpBase = `${primeraLetraApellido}${primeraVocalInternaApellido}${primeraLetraSegundoApellido}${primeraLetraNombre}${fechaFormato}${sexo}${estadoNacimiento}${consonanteInternaApellido}${consonanteInternaSegundoApellido}${consonanteInternaNombre}`;
 
-        // Asignar el valor
-        curpInput.value = curpCompleta;
-        console.log("CURP generada exitosamente:", curpCompleta);
+    // Agregar los últimos 2 dígitos
+    const curpCompleta = curpBase + curpLast2;
+
+    // Asignar el valor
+    curpInput.value = curpCompleta;
+    console.log("CURP generada exitosamente:", curpCompleta);
     } catch (error) {
-        console.error("Error al generar la CURP:", error);
-        curpInput.value = '';
+    console.error("Error al generar la CURP:", error);
+    curpInput.value = '';
     }
-}
+    }
 
-// Asegúrate de que todos los campos relevantes llamen a generarCURP cuando cambian
-[primerNombreInput, segundoNombreInput, primerApellidoInput, segundoApellidoInput, 
- fechaNacimientoInput, estadoNacimientoSelect].forEach(elemento => {
+    // Asegúrate de que todos los campos relevantes llamen a generarCURP cuando cambian
+    [primerNombreInput, segundoNombreInput, primerApellidoInput, segundoApellidoInput,
+    fechaNacimientoInput, estadoNacimientoSelect].forEach(elemento => {
     elemento.addEventListener('change', generarCURP);
-});
+    });
 
-// Para los radio buttons de sexo
-sexoInputs.forEach(radio => {
+    // Para los radio buttons de sexo
+    sexoInputs.forEach(radio => {
     radio.addEventListener('change', generarCURP);
-});
+    });
 
 
-        // Inicialización: Habilitar el Primer Nombre
-        primerNombreInput.disabled = false;
+    // Inicialización: Habilitar el Primer Nombre
+    primerNombreInput.disabled = false;
 
-        // Función para permitir solo letras y restringir múltiples palabras
-        function soloUnaPalabra(event) {
-            const regex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]*$/;
-            const value = event.target.value;
+    // Función para permitir solo letras y restringir múltiples palabras
+    function soloUnaPalabra(event) {
+    const regex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1]*$/;
+    const value = event.target.value;
 
-            // Evitar que se ingrese un espacio o caracteres especiales
-            if (event.key === ' ' || !regex.test(event.key)) {
-                event.preventDefault();
-            }
+    // Evitar que se ingrese un espacio o caracteres especiales
+    if (event.key === ' ' || !regex.test(event.key)) {
+    event.preventDefault();
+    }
 
-            // Evitar agregar más caracteres si ya se ingresó una palabra
-            if (value.includes(' ')) {
-                event.preventDefault();
-            }
-        }
-        
+    // Evitar agregar más caracteres si ya se ingresó una palabra
+    if (value.includes(' ')) {
+    event.preventDefault();
+    }
+    }
 
-        primerNombreInput.addEventListener('keypress', soloUnaPalabra);
-        segundoNombreInput.addEventListener('keypress', soloUnaPalabra);
-        primerApellidoInput.addEventListener('keypress', soloUnaPalabra);
-        segundoApellidoInput.addEventListener('keypress', soloUnaPalabra);
+
+    primerNombreInput.addEventListener('keypress', soloUnaPalabra);
+    segundoNombreInput.addEventListener('keypress', soloUnaPalabra);
+    primerApellidoInput.addEventListener('keypress', soloUnaPalabra);
+    segundoApellidoInput.addEventListener('keypress', soloUnaPalabra);
 
     });
 
     function showModal() {
-        document.getElementById("successModal").style.display = "block";
+    document.getElementById("successModal").style.display = "block";
     }
 
     function closeModal() {
-        document.getElementById("successModal").style.display = "none";
+    document.getElementById("successModal").style.display = "none";
     }
+
 </script>
 @endsection

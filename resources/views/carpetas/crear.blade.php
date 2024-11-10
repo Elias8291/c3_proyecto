@@ -484,7 +484,14 @@
     #documentSections {
         animation: slideDown 0.4s ease-out;
     }
-
+ /* Tamaño de Fuente para Inputs y Selects */
+ input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+        font-size: 20px !important;
+    }
+   
     @keyframes slideDown {
         from {
             opacity: 0;
@@ -580,6 +587,13 @@
         color: #a0aec0;
         cursor: not-allowed;
         background-color: #f3f4f6;
+    }
+
+    input[type="form-label"],
+    input[type="document-form-group"],
+    select,
+    textarea {
+        font-size: 17px !important;
     }
 </style>
 @endsection
@@ -834,27 +848,28 @@ document.getElementById('id_evaluado').addEventListener('change', function() {
         fetch('/evaluados/' + evaluadoId + '/datos')
             .then(response => response.json())
             .then(data => {
+                // Obtener la inicial del primer apellido
+                var inicialPrimerApellido = data.primer_apellido ? data.primer_apellido.charAt(0).toUpperCase() + '.' : 'No disponible';
+
                 // Formatear la fecha de apertura
                 var fechaApertura = new Date(data.fecha_apertura);
                 var mesApertura = fechaApertura.toLocaleDateString('es-ES', { month: 'long' }).toLowerCase();
                 var anioApertura = fechaApertura.getFullYear();
 
-                // Mostrar información del evaluado incluyendo la fecha de apertura
+                // Mostrar información del evaluado incluyendo la fecha de apertura y la inicial
                 infoDiv.innerHTML = `
                     <p><strong>Nombre:</strong> ${data.primer_nombre} ${data.segundo_nombre} ${data.primer_apellido} ${data.segundo_apellido}</p>
                     <p><strong>Fecha de Apertura:</strong> ${fechaApertura.toLocaleDateString('es-ES', {
                         year: 'numeric', month: 'long', day: 'numeric'
                     }).toLowerCase()}</p>
+                    <p><strong>Inicial del Primer Apellido:</strong> ${inicialPrimerApellido}</p>
                 `;
 
-             
                 // Filtrar y mostrar las cajas que coincidan con el mes y año de apertura
                 Array.from(cajaSelect.options).forEach(option => {
                     if (option.value) { // Ignorar el primer "Seleccione una caja"
                         var [cajaMes, cajaAnio] = option.text.match(/\w+/g).slice(-2); // Extrae mes y año del texto
                         cajaMes = cajaMes.toLowerCase(); // Convertir el mes de la caja a minúsculas
-
-
 
                         if (cajaMes === mesApertura && parseInt(cajaAnio) === anioApertura) {
                             option.style.display = ''; // Mostrar opción
@@ -870,12 +885,12 @@ document.getElementById('id_evaluado').addEventListener('change', function() {
             });
     } else {
         infoDiv.innerHTML = '';
-        debugDiv.innerHTML = '';
         Array.from(cajaSelect.options).forEach(option => {
             option.style.display = '';
         });
     }
 });
+
 function toggleDocumentSections() {
     const sections = document.getElementById('documentSections');
     const button = document.getElementById('toggleDocumentsBtn');

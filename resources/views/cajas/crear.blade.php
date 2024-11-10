@@ -4,7 +4,7 @@
 
 @section('css')
 <style>
-    .side-menu {
+      .side-menu {
         padding: 0;
         margin: 0;
     }
@@ -409,44 +409,161 @@
     }
 
     .form-preview {
-        background: #f4e4bc;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-top: 2rem;
-        position: relative;
-    }
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin: 2rem auto;
+    position: relative;
+    max-width: 850px;
+    box-shadow: 
+        0 10px 25px -5px rgba(128, 0, 32, 0.1),
+        0 5px 10px -5px rgba(0, 0, 0, 0.04);
+}
 
-    .form-preview::before {
-        content: 'Vista Previa';
-        position: absolute;
-        top: -0.75rem;
-        left: 1rem;
-        background: #800020;
-        color: white;
-        padding: 0.25rem 1rem;
-        border-radius: 15px;
-        font-size: 0.875rem;
-    }
+.form-preview::before {
+    content: '✨ Vista Previa de la Caja';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #800020, #b30000);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 10px rgba(128, 0, 32, 0.2);
+}
 
+.preview-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.preview-item {
+    flex: 1 1 200px;
+    max-width: 250px;
+    min-width: 200px;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(128, 0, 32, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.preview-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, #800020, #b30000);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.preview-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 4px 12px rgba(128, 0, 32, 0.08),
+        0 2px 4px rgba(128, 0, 32, 0.04);
+}
+
+.preview-item:hover::before {
+    opacity: 1;
+}
+
+.preview-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    background: rgba(128, 0, 32, 0.1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 0.75rem;
+}
+
+.preview-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.preview-value {
+    font-size: 1.1rem;
+    color: #800020;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+/* Iconos específicos para cada campo */
+.preview-item[data-type="numero"] .preview-icon::before { content: '📦'; }
+.preview-item[data-type="mes"] .preview-icon::before { content: '📅'; }
+.preview-item[data-type="anio"] .preview-icon::before { content: '📆'; }
+.preview-item[data-type="ubicacion"] .preview-icon::before { content: '📍'; }
+.preview-item[data-type="carpetas"] .preview-icon::before { content: '📁'; }
+
+/* Animación para valores actualizados */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: #b30000; }
+    100% { transform: scale(1); }
+}
+
+.preview-value.updated {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Diseño responsivo mejorado */
+@media (max-width: 768px) {
     .preview-content {
-        display: grid;
-        gap: 1rem;
-        margin-top: 0.5rem;
+        gap: 0.75rem;
     }
-
+    
     .preview-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(255, 255, 255, 0.5);
-        padding: 0.5rem;
-        border-radius: 6px;
+        flex: 1 1 150px;
+        min-width: 150px;
+        padding: 0.75rem;
     }
+    
+    .preview-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1.25rem;
+    }
+    
+    .preview-value {
+        font-size: 1rem;
+    }
+}
 
-    .preview-label {
-        font-weight: 600;
-        min-width: 120px;
-    }
+/* Efecto de destello en el borde */
+@keyframes borderGlow {
+    0% { border-color: rgba(128, 0, 32, 0.1); }
+    50% { border-color: rgba(128, 0, 32, 0.3); }
+    100% { border-color: rgba(128, 0, 32, 0.1); }
+}
+
+.form-preview:hover {
+    animation: borderGlow 2s infinite;
+}
 </style>
 @endsection
 
@@ -481,12 +598,15 @@
                         <input name="numero_caja" id="numero_caja" value="{{ old('numero_caja') }}"
                             class="form-control @error('numero_caja') form-error @enderror" type="number" min="1"
                             required>
+
                         <small class="text-danger" id="numeroCajaError" style="display: none;">Este número de caja ya
                             existe para el año seleccionado.</small>
                         @error('numero_caja')
                         <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    
 
 
                     <div class="form-group mb-4">
@@ -544,31 +664,39 @@
                     @enderror
                 </div>
 
-                <!-- Vista Previa -->
+
+
                 <div class="form-preview">
                     <div class="preview-content">
-                        <div class="preview-item">
-                            <span class="preview-label">Número de Caja:</span>
+                        <div class="preview-item" data-type="numero">
+                            <div class="preview-icon"></div>
+                            <span class="preview-label">Número de Caja</span>
                             <span id="previewNumeroCaja">-</span>
                         </div>
-                        <div class="preview-item">
-                            <span class="preview-label">Mes:</span>
+                        <div class="preview-item" data-type="mes">
+                            <div class="preview-icon"></div>
+                            <span class="preview-label">Mes</span>
                             <span id="previewMes">-</span>
                         </div>
-                        <div class="preview-item">
-                            <span class="preview-label">Año:</span>
+                        <div class="preview-item" data-type="anio">
+                            <div class="preview-icon"></div>
+                            <span class="preview-label">Año</span>
                             <span id="previewAnio">-</span>
                         </div>
-                        <div class="preview-item">
-                            <span class="preview-label">Ubicación:</span>
+                        <div class="preview-item" data-type="ubicacion">
+                            <div class="preview-icon"></div>
+                            <span class="preview-label">Ubicación</span>
                             <span id="previewUbicacion">-</span>
                         </div>
-                        <div class="preview-item">
-                            <span class="preview-label">Cantidad Máxima de Carpetas:</span>
+                        <div class="preview-item" data-type="carpetas">
+                            <div class="preview-icon"></div>
+                            <span class="preview-label">Máx. Carpetas</span>
                             <span id="previewMaximoCarpetas">-</span>
                         </div>
                     </div>
                 </div>
+                
+
 
                 <button type="submit" class="btn-submit">Crear Caja</button>
             </form>
@@ -590,13 +718,12 @@
     const maximoCarpetasInput = document.querySelector('input[name="maximo_carpetas"]'); // Asegurarse de seleccionar el campo de cantidad máxima
 
     function updatePreview() {
-        document.getElementById('previewNumeroCaja').textContent = form.numero_caja.value || '-';
-        document.getElementById('previewMes').textContent = form.mes.value || '-';
-        document.getElementById('previewAnio').textContent = form.anio.value || '-';
-        document.getElementById('previewUbicacion').textContent = form.ubicacion.value || '-';
-        document.getElementById('previewRangoAlfabetico').textContent = form.rango_alfabetico.value || '-';
-        document.getElementById('previewMaximoCarpetas').textContent = form.maximo_carpetas.value || '-'; // Actualización correcta de la cantidad máxima
-    }
+    document.getElementById('previewNumeroCaja').textContent = form.numero_caja.value || '-';
+    document.getElementById('previewMes').textContent = form.mes.value || '-';
+    document.getElementById('previewAnio').textContent = form.anio.value || '-';
+    document.getElementById('previewUbicacion').textContent = form.ubicacion.value || '-';
+    document.getElementById('previewMaximoCarpetas').textContent = form.maximo_carpetas.value || '-';
+}
 
     // Función para manejar el input en rango alfabético
     rangoAlfabeticoInput.addEventListener('input', function() {
