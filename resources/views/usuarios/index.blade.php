@@ -43,21 +43,20 @@
         background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
     }
 
-    /* Encabezado mejorado */
     .section-header {
-        margin-bottom: 2.5rem;
-        position: relative;
-        padding: 20px 0;
+        margin-bottom: 3rem;
+        padding: 30px 0;
+        border-bottom: 1px solid #eee;
     }
 
     .page__heading {
-        color: var(--primary-burgundy);
-        font-weight: 700;
-        font-size: 2rem;
-        margin: 0;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin: 0 0 1.8rem;
         position: relative;
         display: inline-block;
-        padding-bottom: 10px;
+        padding-bottom: 1rem;
     }
 
     .page__heading::after {
@@ -66,9 +65,9 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 4px;
+        height: 6px;
         background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
-        border-radius: 2px;
+        border-radius: 3px;
     }
 
     /* Contenedor de acciones superior */
@@ -78,7 +77,7 @@
         align-items: center;
         margin-bottom: 25px;
         padding: 15px;
-        background: linear-gradient(to right, #fff, var(--pastel-pink));
+
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
@@ -400,17 +399,18 @@
     .btn-new span {
         color: white;
     }
+
 </style>
 
 @section('content')
 <section class="section">
-    <div class="section-header">
-        <h3 class="page__heading">Gestión de Usuarios</h3>
+    <div class="d-flex align-items-cente">
+        <h3 class="page__heading">Usuarios</h3>
     </div>
-    <div class="section-body">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
+    <div class="section-body" >
+        <div class="row"  >
+            <div class="col-lg-12" >
+                <div class="card" >
                     <div class="actions-container">
                         <div class="d-flex align-items-center">
                             <a class="btn btn-new" href="{{ route('usuarios.create') }}">
@@ -447,18 +447,14 @@
                                         <td>{{ $usuario->area->nombre_area ?? 'N/A' }}</td>
                                         <td>
                                             <div class="action-buttons">
-                                                <a href="{{ route('usuarios.edit', $usuario->id) }}"
-                                                    class="btn btn-edit">
+                                                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-delete"
-                                                    onclick="confirmarEliminacion({{ $usuario->id }})">
+                                                <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $usuario->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </div>
-                                            <form id="eliminar-form-{{ $usuario->id }}"
-                                                action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST"
-                                                class="d-none">
+                                            <form id="eliminar-form-{{ $usuario->id }}" action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="d-none">
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
@@ -483,17 +479,17 @@
 <script>
     new DataTable('#miTabla2', {
         lengthMenu: [
-            [5, 10, 15, 25, 50],
             [5, 10, 15, 25, 50]
-        ],
-        language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
-            search: "_INPUT_",
-            searchPlaceholder: "Buscar usuario...",
-            lengthMenu: "Mostrar _MENU_ registros"
-        },
-        pageLength: 10,
-        drawCallback: function() {
+            , [5, 10, 15, 25, 50]
+        ]
+        , language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            , search: "_INPUT_"
+            , searchPlaceholder: "Buscar usuario..."
+            , lengthMenu: "Mostrar _MENU_ registros"
+        }
+        , pageLength: 10
+        , drawCallback: function() {
             document.querySelectorAll('.paginate_button').forEach(button => {
                 button.classList.add('page-item');
                 const link = button.querySelector('a');
@@ -502,32 +498,43 @@
         }
     });
 
-    function confirmarEliminacion(usuarioId) {
+    function confirmarEliminacion(evaluadoId) {
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: "Esta acción no se puede deshacer",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#800020',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar',
-            borderRadius: '10px'
+            title: '<strong>¡ADVERTENCIA!</strong>'
+            , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
+            , icon: 'error'
+            , showCancelButton: true
+            , confirmButtonColor: '#d9534f'
+            , cancelButtonColor: '#6c757d'
+            , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
+            , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+            , customClass: {
+                popup: 'animated shake'
+                , title: 'swal-title-large'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('eliminar-form-' + usuarioId).submit();
+                // Mostrar la segunda confirmación
                 Swal.fire({
-                    title: '¡Eliminado!',
-                    text: 'El usuario ha sido eliminado correctamente.',
-                    icon: 'success',
-                    timer: 3000,
-                    showConfirmButton: false,
-                    customClass: {
-                        popup: 'rounded-lg'
+                    title: '<strong>¿Estás completamente seguro?</strong>'
+                    , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
+                    , icon: 'warning'
+                    , showCancelButton: true
+                    , confirmButtonColor: '#d9534f'
+                    , cancelButtonColor: '#6c757d'
+                    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
+                    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+                    , customClass: {
+                        popup: 'animated shake'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('eliminar-form-' + evaluadoId).submit();
                     }
                 });
             }
         });
     }
+
 </script>
 @endsection

@@ -51,13 +51,13 @@
     }
 
     .page__heading {
-        color: var(--primary-burgundy);
-        font-weight: 700;
-        font-size: 2rem;
-        margin: 0;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin: 0 0 1.8rem;
         position: relative;
         display: inline-block;
-        padding-bottom: 10px;
+        padding-bottom: 1rem;
     }
 
     .page__heading::after {
@@ -66,9 +66,9 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 4px;
+        height: 6px;
         background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
-        border-radius: 2px;
+        border-radius: 3px;
     }
 
     /* Contenedor de acciones superior */
@@ -78,7 +78,6 @@
         align-items: center;
         margin-bottom: 25px;
         padding: 15px;
-        background: linear-gradient(to right, #fff, var(--pastel-pink));
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
@@ -314,7 +313,6 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        background: white;
         padding: 15px;
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -459,22 +457,21 @@
     }
 
     .swal-title-large {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #d9534f;
-}
-
+        font-size: 2rem;
+        font-weight: bold;
+        color: #d9534f;
+    }
 </style>
 
 @section('content')
 <section class="section">
-    <div class="section-header">
+    <div class="d-flex align-items-center">
         <h3 class="page__heading">Evaluados</h3>
     </div>
     <div class="section-body">
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card" style="background: #ffffff">
                     <div class="actions-container">
                         <div class="d-flex align-items-center">
                             <a class="btn btn-new" href="{{ route('evaluados.create') }}">
@@ -482,7 +479,7 @@
                                 <span>Nuevo Evaluado</span>
                             </a>
                         </div>
-                        <div class="search-container">
+                        <div class="search-container" style="background: transparent">
                             <input type="text" class="search-input" id="searchInput" placeholder="Buscar evaluado...">
                             <button class="btn btn-new" onclick="searchEvaluados()">
                                 <i class="fas fa-search"></i>
@@ -495,28 +492,28 @@
                             <select class="year-select" id="yearSelect" onchange="filterEvaluados()">
                                 <option value="">Todos los años</option>
                                 @for ($year = date('Y'); $year >= date('Y') - 10; $year--)
-                                    <option value="{{ $year }}">{{ $year }}</option>
+                                <option value="{{ $year }}">{{ $year }}</option>
                                 @endfor
                             </select>
-                          
-                                <div class="year-filter">
-                                    <label for="perPageSelect" class="filter-label">Mostrar:</label>
-                                    <select class="year-select" id="perPageSelect" onchange="updatePerPage()">
-                                        <option value="5" {{ request('perPage') == 5 ? 'selected' : '' }}>5</option>
-                                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
-                                        <option value="25" {{ request('perPage') == 25 ? 'selected' : '' }}>25</option>
-                                        <option value="50" {{ request('perPage') == 50 ? 'selected' : '' }}>50</option>
-                                        <option value="100" {{ request('perPage') == 100 ? 'selected' : '' }}>100</option>
-                                    </select>
-                                    
-                                    <span>evaluados por página</span>
-                                </div>
-                         
-                            
+
+                            <div class="year-filter">
+                                <label for="perPageSelect" class="filter-label">Mostrar:</label>
+                                <select class="year-select" id="perPageSelect" onchange="updatePerPage()">
+                                    <option value="5" {{ request('perPage')==5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ request('perPage')==10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ request('perPage')==25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ request('perPage')==50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ request('perPage')==100 ? 'selected' : '' }}>100</option>
+                                </select>
+
+                                <span>evaluados por página</span>
+                            </div>
+
+
                         </div>
-                        
+
                     </div>
-                    
+
                     <div class="table-container">
                         <div class="table-responsive">
                             <table class="table" id="evaluadosTable">
@@ -533,7 +530,9 @@
                                 <tbody id="evaluadosTableBody">
                                     @foreach ($evaluados as $evaluado)
                                     <tr>
-                                        <td class="text-center">{{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}</td>
+                                        <td class="text-center">{{ $evaluado->primer_nombre }} {{
+                                            $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{
+                                            $evaluado->segundo_apellido }}</td>
                                         <td>{{ $evaluado->CURP }}</td>
                                         <td>{{ $evaluado->RFC }}</td>
                                         <td class="text-center">{{ $evaluado->fecha_apertura }}</td>
@@ -547,16 +546,21 @@
                                         <td>
                                             <div class="action-buttons">
                                                 @if($evaluado->carpeta)
-                                                <i class="fas fa-folder" style="color: var(--primary-burgundy);" title="Carpeta asociada"></i>
-                                            @endif
-                                            <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit" title="Editar Evaluado">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            
-                                                <button type="button" class="btn btn-delete" title="Borrar Evaluado" onclick="confirmarEliminacion({{ $evaluado->id }})">
+                                                <i class="fas fa-folder" style="color: var(--primary-burgundy);"
+                                                    title="Carpeta asociada"></i>
+                                                @endif
+                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}"
+                                                    class="btn btn-edit" title="Editar Evaluado">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+
+                                                <button type="button" class="btn btn-delete" title="Borrar Evaluado"
+                                                    onclick="confirmarEliminacion({{ $evaluado->id }})">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
-                                                <form id="eliminar-form-{{ $evaluado->id }}"  title="Borrar Evaluado"action="{{ route('evaluados.destroy', $evaluado->id) }}" method="POST" class="d-none">
+                                                <form id="eliminar-form-{{ $evaluado->id }}" title="Borrar Evaluado"
+                                                    action="{{ route('evaluados.destroy', $evaluado->id) }}"
+                                                    method="POST" class="d-none">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form>
@@ -578,43 +582,44 @@
 </section>
 
 <script>
-  function confirmarEliminacion(evaluadoId) {
+    function confirmarEliminacion(evaluadoId) {
     Swal.fire({
-        title: '<strong>¡ADVERTENCIA!</strong>'
-        , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
-        , icon: 'error'
-        , showCancelButton: true
-        , confirmButtonColor: '#d9534f'
-        , cancelButtonColor: '#6c757d'
-        , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
-        , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
-        , customClass: {
-            popup: 'animated shake'
-            , title: 'swal-title-large'
-        }
+    title: '<strong>¡ADVERTENCIA!</strong>'
+    , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
+    , icon: 'error'
+    , showCancelButton: true
+    , confirmButtonColor: '#d9534f'
+    , cancelButtonColor: '#6c757d'
+    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
+    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+    , customClass: {
+    popup: 'animated shake'
+    , title: 'swal-title-large'
+    }
     }).then((result) => {
-        if (result.isConfirmed) {
-            // Mostrar la segunda confirmación
-            Swal.fire({
-                title: '<strong>¿Estás completamente seguro?</strong>'
-                , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
-                , icon: 'warning'
-                , showCancelButton: true
-                , confirmButtonColor: '#d9534f'
-                , cancelButtonColor: '#6c757d'
-                , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
-                , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
-                , customClass: {
-                    popup: 'animated shake'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('eliminar-form-' + evaluadoId).submit();
-                }
-            });
-        }
+    if (result.isConfirmed) {
+    // Mostrar la segunda confirmación
+    Swal.fire({
+    title: '<strong>¿Estás completamente seguro?</strong>'
+    , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
+    , icon: 'warning'
+    , showCancelButton: true
+    , confirmButtonColor: '#d9534f'
+    , cancelButtonColor: '#6c757d'
+    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
+    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+    , customClass: {
+    popup: 'animated shake'
+    }
+    }).then((result) => {
+    if (result.isConfirmed) {
+    document.getElementById('eliminar-form-' + evaluadoId).submit();
+    }
     });
-}
+    }
+    });
+    }
+
 
 
 

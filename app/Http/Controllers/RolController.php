@@ -14,10 +14,10 @@ class RolController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:ver-rol|crear-rol|editar-rol|eliminar-rol', ['only' => ['index']]);
-         $this->middleware('permission:crear-rol', ['only' => ['create','store']]);
-         $this->middleware('permission:editar-rol', ['only' => ['edit','update']]);
-         $this->middleware('permission:eliminar-rol', ['only' => ['destroy']]);
+        $this->middleware('permission:ver-rol|crear-rol|editar-rol|eliminar-rol', ['only' => ['index']]);
+        $this->middleware('permission:crear-rol', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-rol', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:eliminar-rol', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -25,11 +25,11 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {        
-         //Con paginación
-         $roles = Role::paginate(5);
-         return view('roles.index',compact('roles'));
-         //al usar esta paginacion, recordar poner en el el index.blade.php este codigo  {!! $roles->links() !!} 
+    {
+        //Con paginación
+        $roles = Role::paginate(5);
+        return view('roles.index', compact('roles'));
+        //al usar esta paginacion, recordar poner en el el index.blade.php este codigo  {!! $roles->links() !!} 
     }
 
     /**
@@ -40,7 +40,7 @@ class RolController extends Controller
     public function create()
     {
         $permission = Permission::get();
-        return view('roles.crear',compact('permission'));
+        return view('roles.crear', compact('permission'));
     }
 
     /**
@@ -49,25 +49,25 @@ class RolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-   public function store(Request $request)
-{
-    $this->validate($request, [
-        'name' => 'required|unique:roles,name',
-        'description' => 'required|string|max:255',
-        'permission' => 'required|array',
-        'status' => 'required|in:activo,inactivo',
-    ]);
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|unique:roles,name',
+            'description' => 'required|string|max:255',
+            'permission' => 'required|array',
+            'status' => 'required|in:activo,inactivo',
+        ]);
 
-    $role = Role::create([
-        'name' => $request->input('name'),
-        'description' => $request->input('description'),
-        'status' => $request->input('status'),
-    ]);
+        $role = Role::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status'),
+        ]);
 
-    $role->syncPermissions($request->input('permission'));
+        $role->syncPermissions($request->input('permission'));
 
-    return redirect()->route('roles.index')->with('success', 'Rol creado exitosamente.');
-}
+        return redirect()->route('roles.index')->with('success', 'Rol creado exitosamente.');
+    }
 
 
     /**
@@ -92,13 +92,14 @@ class RolController extends Controller
         $role = Role::find($id);  // Encuentra el rol por ID
         $permission = Permission::get();  // Obtiene todos los permisos
         $rolePermissions = DB::table("role_has_permissions")
-                             ->where("role_id", $id)
-                             ->pluck('permission_id') // Obtiene los permisos del rol
-                             ->toArray();  // Convierte los permisos a un array simple
-    
-        return view('roles.editar', compact('role', 'permission', 'rolePermissions'));  // Envia los datos a la vista
+            ->where("role_id", $id)
+            ->pluck('permission_id')
+            ->toArray();
+
+            return view('roles.editar', compact('role', 'permission', 'rolePermissions'));
+
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -108,28 +109,28 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-{
-    $this->validate($request, [
-        'name' => 'required|unique:roles,name,' . $id,  // Ignora la validación única para el rol actual
-        'description' => 'required|string|max:255',
-        'permission' => 'required|array',
-        'status' => 'required|in:activo,inactivo',
-    ]);
+    {
+        $this->validate($request, [
+            'name' => 'required|unique:roles,name,' . $id,  // Ignora la validación única para el rol actual
+            'description' => 'required|string|max:255',
+            'permission' => 'required|array',
+            'status' => 'required|in:activo,inactivo',
+        ]);
 
-    // Buscar el rol por su ID
-    $role = Role::find($id);
+        // Buscar el rol por su ID
+        $role = Role::find($id);
 
-    // Actualizar los datos del rol
-    $role->name = $request->input('name');
-    $role->description = $request->input('description'); // Agregar la descripción
-    $role->status = $request->input('status');           // Agregar el estado
-    $role->save();
+        // Actualizar los datos del rol
+        $role->name = $request->input('name');
+        $role->description = $request->input('description'); // Agregar la descripción
+        $role->status = $request->input('status');           // Agregar el estado
+        $role->save();
 
-    // Sincronizar los permisos
-    $role->syncPermissions($request->input('permission'));
+        // Sincronizar los permisos
+        $role->syncPermissions($request->input('permission'));
 
-    return redirect()->route('roles.index')->with('success', 'Rol actualizado exitosamente.');
-}
+        return redirect()->route('roles.index')->with('success', 'Rol actualizado exitosamente.');
+    }
 
 
     /**
@@ -146,5 +147,4 @@ class RolController extends Controller
         }
         return redirect()->route('roles.index');
     }
-    
 }

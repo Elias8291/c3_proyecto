@@ -261,8 +261,8 @@
     }
 </style>
 
-<main class="profile-page">
-    <div class="page-container">
+<main class="profile-page" style="background: transparent">
+    <div class="page-container" >
         <div class="text-left mb-4">
             <a href="{{ route('carpetas.index') }}" class="btn-back">
                 <i class="fas fa-arrow-left"></i> Regresar

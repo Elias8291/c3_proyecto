@@ -1,359 +1,434 @@
 @extends('layouts.app')
-<link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 
 <style>
-   /* Variables para el esquema de colores */
-:root {
-    --primary-burgundy: #800020;
-    --secondary-navy: #1f2937;
-    --accent-gold: #d4b483;
-    --accent-cream: #f5ebe0;
-    --neutral-gray: #f3f4f6;
-    --deep-blue: #334155;
-    --soft-white: #ffffff;
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    
-    /* Gradientes suaves para las tarjetas */
-    --card-1: linear-gradient(145deg, #800020 0%, #9a1b3c 100%);
-    --card-2: linear-gradient(145deg, #1f2937 0%, #374151 100%);
-    --card-3: linear-gradient(145deg, #334155 0%, #475569 100%);
-    --card-4: linear-gradient(145deg, #292524 0%, #44403c 100%);
-}
+    :root {
+        --primary: #800020;          /* Guinda base */
+        --primary-light: #9a1134;    /* Guinda claro */
+        --primary-dark: #590018;     /* Guinda oscuro */
+        --gold: #050505;             /* Dorado para acentos */
+        --white: #070707;            /* Blanco puro */
+        --light-gray: #030303;       /* Gris claro para fondos secundarios */
+        --gray: #cccccc;             /* Gris medio para bordes y sombras */
+        --background: #020202;       /* Fondo ligeramente rosado */
+        --text-primary: #1b1a1a;     /* Blanco para texto sobre guinda */
+        --text-secondary: #0e0d0d;   /* Gris muy claro para textos secundarios */
+        --success: #28a745;          /* Verde para indicadores positivos */
+        --danger: #dc3545;           /* Rojo para indicadores negativos */
+    }
 
-.section {
-    padding: 2rem;
-    background: var(--neutral-gray);
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(128, 0, 32, 0.03) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(31, 41, 55, 0.03) 0%, transparent 20%);
-    min-height: 100vh;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-.section-header {
-    margin-bottom: 3rem;
-    position: relative;
-    text-align: center;
-}
+    body {
+        background-color: var(--background);
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-primary);
+        min-height: 100vh;
+    }
 
-.page__heading {
-    color: var(--secondary-navy);
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    position: relative;
-    display: inline-block;
-}
+    .dashboard-container {
+        padding: 2.5rem;
+        max-width: 1500px;
+        margin: 0 auto;
+        background: linear-gradient(180deg, rgba(128,0,32,0.03) 0%, rgba(255,255,255,0) 100%);
+        min-height: calc(100vh - 4rem);
+    }
 
-.page__heading::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: var(--accent-gold);
-}
+    /* Header mejorado */
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        border-radius: 30px;
+        padding: 3.5rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px -20px rgba(89,0,24,0.4);
+    }
 
-.card-container {
-    background: var(--soft-white);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-    margin-bottom: 2rem;
-}
+    .dashboard-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,0.1) 0%,
+            rgba(255,255,255,0.1) 10%,
+            transparent 10%,
+            transparent 20%
+        );
+        animation: shine 20s linear infinite;
+    }
 
-.card-custom {
-    border-radius: 12px;
-    border: none;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    height: 100%;
-    min-height: 160px;
-    position: relative;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
+    @keyframes shine {
+        0% {
+            transform: translateX(-50%) translateY(-50%) rotate(0deg);
+        }
+        100% {
+            transform: translateX(-50%) translateY(-50%) rotate(360deg);
+        }
+    }
 
-/* Estilos de tarjetas específicos */
-.card-custom.bg-primary { background: var(--card-1); }
-.card-custom.bg-danger { background: var(--card-2); }
-.card-custom.bg-success { background: var(--card-3); }
-.card-custom.bg-info { background: var(--card-4); }
+    .dashboard-header h2 {
+        color: var(--white);
+        font-size: 2.75rem;
+        font-weight: 800;
+        margin-bottom: 1.25rem;
+        position: relative;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        letter-spacing: -1px;
+    }
 
-.card-custom:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-}
+    .dashboard-header p {
+        color: rgba(3, 3, 3, 0.95);
+        font-size: 1.2rem;
+        max-width: 600px;
+        line-height: 1.8;
+        position: relative;
+        font-weight: 300;
+    }
 
-.card-custom .card-body {
-    padding: 1.5rem;
-    position: relative;
-    z-index: 2;
-}
+    /* Grid mejorado */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
 
-.card-custom .card-title {
-    color: var(--soft-white);
-    font-size: 1rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-}
+    .stat-card {
+        background: var(--primary); /* Guinda */
+        border-radius: 24px;
+        padding: 2.5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--gray); /* Gris medio para borde */
+        box-shadow: 
+            0 10px 30px -15px rgba(89,0,24,0.3),
+            0 1px 4px rgba(89,0,24,0.2);
+        color: var(--white); /* Texto blanco */
+    }
 
-.card-custom .card-title i {
-    font-size: 1.2rem;
-    opacity: 0.9;
-}
-
-.card-custom h2 {
-    color: var(--soft-white);
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0.5rem 0 1rem;
-}
-
-.card-custom a.text-white {
-    color: var(--soft-white);
-    font-size: 0.875rem;
-    text-decoration: none;
-    opacity: 0.9;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.card-custom a.text-white:hover {
-    opacity: 1;
-    gap: 0.75rem;
-}
-
-/* Decoración de tarjetas moderna */
-.card-custom::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    transform: translate(30%, -30%);
-}
-
-.card-custom::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-    border-radius: 50%;
-    transform: translate(-30%, 30%);
-}
-
-/* Sección de bienvenida modernizada */
-.welcome-section {
-    background: var(--soft-white);
-    border-radius: 16px;
-    padding: 3rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    max-width: 800px;
-    margin: 3rem auto;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.welcome-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(to right, 
-        var(--primary-burgundy),
-        var(--accent-gold),
-        var(--secondary-navy)
-    );
-}
-
-.welcome-title {
-    color: var(--text-primary);
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    line-height: 1.3;
-}
-
-.welcome-message {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-}
-
-/* Animaciones refinadas */
-@keyframes fadeInUp {
-    from {
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            135deg,
+            rgba(128,0,32,0.05) 0%,
+            transparent 50%,
+            rgba(128,0,32,0.05) 100%
+        );
         opacity: 0;
-        transform: translateY(20px);
+        transition: opacity 0.4s ease;
     }
-    to {
+
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 
+            0 20px 40px -20px rgba(89,0,24,0.5),
+            0 1px 8px rgba(89,0,24,0.3);
+    }
+
+    .stat-card:hover::after {
         opacity: 1;
-        transform: translateY(0);
     }
-}
 
-.row > div {
-    animation: fadeInUp 0.5s ease-out forwards;
-    animation-delay: calc(var(--animation-order) * 0.1s);
-}
+    .stat-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        position: relative;
+    }
 
-/* Mejoras responsivas */
-@media (max-width: 768px) {
-    .section {
-        padding: 1.5rem;
-    }
-    
-    .card-container {
-        padding: 1.5rem;
-    }
-    
-    .welcome-section {
-        padding: 2rem;
-        margin: 2rem auto;
-    }
-    
-    .welcome-title {
+    .stat-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 1.75rem;
+        margin-right: 1.5rem;
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+        color: var(--white);
+        box-shadow: 
+            0 15px 25px -12px rgba(89,0,24,0.4),
+            0 0 10px rgba(89,0,24,0.2);
+        position: relative;
+        overflow: hidden;
     }
-    
+
+    .stat-icon::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover .stat-icon::after {
+        opacity: 1;
+    }
+
+    .stat-info h3 {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--gold) 0%, var(--gold) 100%); /* Dorado para destacar */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.75rem;
+        letter-spacing: -1px;
+    }
+
+    .stat-info p {
+        color: var(--light-gray); /* Texto secundario gris claro */
+        font-size: 1.1rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .stat-footer {
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--gray); /* Gris medio para separador */
+        position: relative;
+    }
+
+    .stat-trend {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0.75rem 1.25rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        color: var(--white); /* Texto blanco */
+    }
+
+    .stat-trend.up {
+        color: var(--success);
+        background: rgba(40,167,69,0.1); /* Verde suave */
+    }
+
+    .stat-trend.down {
+        color: var(--danger);
+        background: rgba(220,53,69,0.1); /* Rojo suave */
+    }
+
+    .stat-trend i {
+        margin-right: 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .stat-card:hover .stat-trend {
+        transform: scale(1.05);
+    }
+
+    /* Botones y enlaces */
+    .btn-primary {
+        background-color: var(--gold);
+        color: var(--primary);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        cursor: pointer;
+    }
+
     .page__heading {
-        font-size: 1.75rem;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin: 0 0 1.8rem;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 1rem;
     }
-}
 
-@media (max-width: 576px) {
-    .section {
-        padding: 1rem;
+    .page__heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
+        border-radius: 3px;
     }
-    
-    .card-container {
-        padding: 1rem;
-    }
-    
-    .card-custom .card-body {
-        padding: 1.25rem;
-    }
-    
-    .welcome-section {
-        padding: 1.5rem;
-    }
-}
 
-/* Estilos para destacar información importante */
-.highlight-text {
-    color: var(--primary-burgundy);
-    font-weight: 500;
-}
+    .btn-primary:hover {
+        background-color: var(--primary);
+        color: var(--gold);
+        border: 1px solid var(--gold);
+    }
 
-.stat-trend {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: #10b981;
-    margin-top: 0.5rem;
-}
+    /* Enlaces */
+    a {
+        color: var(--gold);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
 
-.stat-trend.negative {
-    color: #ef4444;
-}
+    a:hover {
+        color: var(--primary-light);
+    }
+
+    /* Añadir más estilos según sea necesario */
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1.5rem;
+        }
+
+        .dashboard-header {
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        .dashboard-header h2 {
+            font-size: 2rem;
+        }
+
+        .dashboard-header p {
+            font-size: 1rem;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            padding: 2rem;
+        }
+
+        .stat-info h3 {
+            font-size: 2.5rem;
+        }
+    }
 </style>
 
 @section('content')
 @can('ver-dashboard')
-
-<section class="section">
-    <div class="section-header">
+<div class="dashboard-container">
+    <div class="d-flex align-items-cente">
         <h3 class="page__heading">Dashboard</h3>
     </div>
-    <div class="section-body">
-        <div class="row">
-            <!-- Usuarios -->
-            <div class="col-md-3 col-xl-3">
-                <div class="card card-custom bg-primary text-white shadow">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fa fa-users"></i> Usuarios</h5>
-                        @php
+
+    <div class="stats-grid" >
+        <!-- Tarjeta de Usuarios -->
+        <div class="stat-card" style="background: #f0f0f0">
+            <div class="stat-header">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    @php
                         $cant_usuarios = \App\Models\User::count();
-                        @endphp
-                        <h2 class="text-right">
-                            <span>{{$cant_usuarios}}</span>
-                        </h2>
-                        <p class="mb-0 text-right"><a href="/usuarios" class="text-white">Ver más</a></p>
-                    </div>
+                    @endphp
+                    <h3>{{ number_format($cant_usuarios) }}</h3>
+                    <p>Usuarios Registrados</p>
                 </div>
             </div>
-            <!-- Evaluados -->
-            <div class="col-md-3 col-xl-3">
-                <div class="card card-custom bg-danger text-white shadow">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fa fa-user-lock"></i> Evaluados</h5>
-                        @php
-                        $cant_evaluados = \App\Models\Evaluado::count();
-                        @endphp
-                        <h2 class="text-right">
-                            <span>{{$cant_evaluados}}</span>
-                        </h2>
-                        <p class="mb-0 text-right"><a href="/evaluados" class="text-white">Ver más</a></p>
-                    </div>
-                </div>
-            </div>
-            <!-- Roles -->
-            <div class="col-md-3 col-xl-3">
-                <div class="card card-custom bg-success text-white shadow">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fa fa-user-tag"></i> Roles</h5>
-                        @php
-                        $cant_roles = \Spatie\Permission\Models\Role::count();
-                        @endphp
-                        <h2 class="text-right">
-                            <span>{{$cant_roles}}</span>
-                        </h2>
-                        <p class="mb-0 text-right"><a href="/roles" class="text-white">Ver más</a></p>
-                    </div>
-                </div>
-            </div>
-            <!-- Logs -->
-            <div class="col-md-3 col-xl-3">
-                <div class="card card-custom bg-info text-white shadow">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-clipboard-list"></i> Logs</h5>
-                        @php
-                        $cant_logs = \App\Models\Log::count();
-                        @endphp
-                        <h2 class="text-right">
-                            <span>{{ $cant_logs }}</span>
-                        </h2>
-                        <p class="mb-0 text-right"><a href="/logs" class="text-white">Ver más</a></p>
-                    </div>
-                </div>
-            </div>
+        
         </div>
+
+        <div class="stat-card" style="background: #f0f0f0">
+            <div class="stat-header">
+                <div class="stat-icon">
+                    <i class="fas fa-user-shield"></i>
+
+                </div>
+                <div class="stat-info">
+                    @php
+                    $cant_roles = \Spatie\Permission\Models\Role::count();
+                    @endphp
+                    <h3>{{ number_format($cant_roles) }}</h3>
+                    <p>Roles Registrados</p>
+                </div>
+            </div>
+        
+        </div>
+
+        <!-- Tarjeta de Evaluados -->
+        <div class="stat-card" style="background: #f0f0f0">
+            <div class="stat-header" >
+                <div class="stat-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="stat-info">
+                    @php
+                        $cant_evaluados = \App\Models\Evaluado::count();
+                    @endphp
+                    <h3>{{ number_format($cant_evaluados) }}</h3>
+                    <p>Evaluados Totales</p>
+                </div>
+            </div>
+        
+        </div>
+
+        <div class="stat-card" style="background: #f0f0f0">
+            <div class="stat-header" >
+                <div class="stat-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="stat-info">
+                    @php
+                        $cant_carpetas = \App\Models\Carpeta::count();
+                    @endphp
+                    <h3>{{ number_format($cant_carpetas) }}</h3>
+                    <p>Carpetas Totales</p>
+                </div>
+            </div>
+          
+        </div>
+
+        <div class="stat-card" style="background: #f0f0f0">
+            <div class="stat-header" >
+                <div class="stat-icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-info">
+                    @php
+                        $cant_cajas = \App\Models\Caja::count();
+                    @endphp
+                    <h3>{{ number_format($cant_cajas) }}</h3>
+                    <p>Cajas Totales</p>
+                </div>
+            </div>
+          
+        </div>
+        <!-- Puedes añadir más tarjetas aquí siguiendo el mismo esquema -->
     </div>
-</section>
+
+   
+</div>
 @else
-<div class="welcome-section">
-    <h1 class="welcome-title">Bienvenido al Sistema de Gestión de Alumnos</h1>
-    <p class="welcome-message">Comienza explorando nuestras funcionalidades y descubre cómo podemos mejorar tu experiencia de gestión académica.</p>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Bienvenido al Sistema</h2>
+        <p>Para acceder al panel de administración, por favor contacta con tu administrador para obtener los permisos necesarios.</p>
+    </div>
 </div>
 @endcan
 @endsection

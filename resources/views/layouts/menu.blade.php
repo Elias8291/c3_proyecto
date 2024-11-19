@@ -156,7 +156,7 @@
     }
 </style>
 
-<ul class="side-menu">
+<ul class="side-menu" style="background: transparent">
     <li style="height: 20px; background-color: transparent;"></li>
     
     @can('ver-dashboard')

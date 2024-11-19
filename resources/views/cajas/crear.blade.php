@@ -568,8 +568,8 @@
 @endsection
 
 @section('content')
-<main class="profile-page">
-    <section class="page-background">
+<main class="profile-page" >
+    <section class="page-background"  style="background: transparent">
         <div class="container">
             <div class="text-left mb-4">
                 <a href="{{ route('cajas.index') }}" class="btn-back">

@@ -200,32 +200,6 @@
         color: #b30000;
     }
 
-    .page-background {
-        background-color: #dbd6d7;
-        background-image:
-            linear-gradient(45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
-            linear-gradient(-45deg, rgba(0, 48, 73, 0.03) 25%, transparent 25%, transparent 75%, rgba(0, 48, 73, 0.03) 75%),
-            radial-gradient(circle at 50% 50%, rgba(0, 48, 73, 0.02) 0%, rgba(0, 48, 73, 0.02) 50%, transparent 50.1%);
-        background-size: 60px 60px, 60px 60px, 120px 120px;
-        background-position: 0 0, 30px 30px, 0 0;
-        position: relative;
-        padding: 60px 0;
-        min-height: 100vh;
-    }
-
-    .page-background::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background:
-            radial-gradient(circle at 15% 15%, rgba(0, 48, 73, 0.08) 0%, transparent 50%),
-            radial-gradient(circle at 85% 85%, rgba(0, 48, 73, 0.08) 0%, transparent 50%);
-        pointer-events: none;
-        z-index: -1;
-    }
 
     .form-label {
         font-weight: 600;
@@ -248,7 +222,7 @@
 
 @section('content')
 <main class="profile-page">
-    <section class="page-background">
+    <section class="page-background" style="background: transparent">
         <div class="container">
             <div class="text-left mb-4">
                 <a href="javascript:history.back()" class="btn-back">

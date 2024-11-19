@@ -36,7 +36,7 @@
 .page__heading {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: back;
     margin-bottom: 0;
     position: relative;
     padding-bottom: 1rem;
@@ -472,31 +472,38 @@
     }
 
     .page__heading {
-        color: #8B1F41;
-        /* Guinda */
-        font-size: 1.75rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin: 0;
-        padding-bottom: 10px;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin: 0 0 1.8rem;
         position: relative;
+        display: inline-block;
+        padding-bottom: 1rem;
     }
 
     .page__heading::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 4px;
-        background: linear-gradient(90deg, #D4A5A5, #8B1F41);
-        /* Gradiente de rosa a guinda */
-        border-radius: 2px;
-        margin-top: 5px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-    }
+    content: '';
+    display: block;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #F5F3E7, #800020); /* Color guinda */
+    border-radius: 2px;
+    margin-top: 5px;
+}
+
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 1rem 1.5rem;
+    background: rgb(2, 2, 2);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(25, 58, 116, 0.06);
+    border: 1px solid var(--folder-border);
+}
+
 
     .main-container {
         padding: 2.5rem;
@@ -553,6 +560,58 @@
         z-index: 0;
     }
 
+
+    .controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(74, 85, 104, 0.06);
+    border: 1px solid var(--folder-border);
+}
+
+/* Enhanced search container */
+.search-container {
+    flex-grow: 1;
+    max-width: 500px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.875rem 1.25rem 0.875rem 3rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background-color: #F8FAFC;
+    color: #1A202C;
+}
+
+.search-input:focus {
+    background-color: white;
+    border-color: #800020;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+}
+
+.search-input::placeholder {
+    color: #A0AEC0;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #800020;
+    font-size: 1.1rem;
+}
+
     /* Tamaño de Fuente para Inputs y Selects */
     input[type="text"],
     select,
@@ -562,20 +621,32 @@
 </style>
 
 @section('content')
-<div class="main-container">
+<div class="main-container" style="background: transparent">
     <section class="section">
-        <div class="section-header">
-            <h3 class="page__heading">
-                <i class="fas fa-folder"></i>
-                Gestión de Carpetas
-            </h3>
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Buscar carpetas...">
-            </div>
+       <div class="d-flex align-items-center">
+            <h3 class="page__heading">Carpetas</h3>
         </div>
 
-        <div class="folders-list">
+
+
+        <div class="controls-container">
+            <div class="d-flex align-items-center">
+                <a class="btn btn-new" href="{{ route('carpetas.create') }}" 
+                   style="background: #800020; color: white; font-weight: bold; text-decoration: none;">
+                    <i class="fas fa-plus"></i>
+                    <span>Nueva Carpeta</span>
+                </a>
+            </div>
+            <div class="search-section">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar cajas...">
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="folders-list" style="background: rgb(223, 221, 221)">
             @foreach($carpetas as $carpeta)
             <div class="folder-item" data-search-content>
                 <i class="fas fa-folder folder-icon"></i>
@@ -641,6 +712,7 @@
 </div>
 
 <script>
+    
     document.getElementById('searchInput').addEventListener('keyup', function(e) {
         const searchTerm = e.target.value.toLowerCase();
         document.querySelectorAll('.folder-item').forEach(folder => {
@@ -649,19 +721,40 @@
         });
     });
 
-    function confirmarEliminacion(carpetaId) {
+    function confirmarEliminacion(evaluadoId) {
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#8B1F41',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+            title: '<strong>¡ADVERTENCIA!</strong>'
+            , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
+            , icon: 'error'
+            , showCancelButton: true
+            , confirmButtonColor: '#d9534f'
+            , cancelButtonColor: '#6c757d'
+            , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
+            , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+            , customClass: {
+                popup: 'animated shake'
+                , title: 'swal-title-large'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('eliminar-form-' + carpetaId).submit();
+                // Mostrar la segunda confirmación
+                Swal.fire({
+                    title: '<strong>¿Estás completamente seguro?</strong>'
+                    , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
+                    , icon: 'warning'
+                    , showCancelButton: true
+                    , confirmButtonColor: '#d9534f'
+                    , cancelButtonColor: '#6c757d'
+                    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
+                    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+                    , customClass: {
+                        popup: 'animated shake'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('eliminar-form-' + evaluadoId).submit();
+                    }
+                });
             }
         });
     }

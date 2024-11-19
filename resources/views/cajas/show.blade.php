@@ -180,8 +180,8 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-<div class="custom-container">
-    <div class="main-card">
+<div class="custom-container" style="background: transparent">
+    <div class="main-card" >
         <div class="card-header">
             <h1 class="card-title">
                 <i class="bi bi-archive"></i>

@@ -225,7 +225,7 @@
 
 @section('content')
 <main class="profile-page">
-    <section class="page-background">
+    <section class="page-background" style="background: transparent">
         <div class="container">
             <div class="text-left mb-4">
                 <a href="{{ route('roles.index') }}" class="btn-back">
@@ -271,8 +271,8 @@
                             @foreach($permission as $permiso)
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="permission[]"
-                                    value="{{ $permiso->id }}" id="permiso_{{ $permiso->id }}" {{ in_array($permiso->id,
-                                $rolePermissions) ? 'checked' : '' }}>
+                                value="{{ $permiso->id }}" id="permiso_{{ $permiso->id }}" {{ in_array($permiso->id, $rolePermissions) ? 'checked' : '' }}>
+                            
                                 <label class="form-check-label" for="permiso_{{ $permiso->id }}">
                                     {{ $permiso->name }}
                                 </label>

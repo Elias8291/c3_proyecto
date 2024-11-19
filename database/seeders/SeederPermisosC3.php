@@ -15,36 +15,33 @@ class SeederPermisosC3 extends Seeder
     public function run()
     {
         $permisos = [
-            // Permisos relacionados con la gestión de documentos
-            'ver-documentos',
-            'crear-documentos',
-            'editar-documentos',
-            'eliminar-documentos',
-
-            // Permisos relacionados con evaluaciones
-            'ver-evaluaciones',
-            'crear-evaluaciones',
-            'editar-evaluaciones',
-            'eliminar-evaluaciones',
-
-            // Permisos relacionados con áreas específicas
-            'ver-archivo',
-            'gestionar-archivo',
-            'ver-direccion-general',
-            'gestionar-direccion-general',
-            'ver-secretariado-ejecutivo',
-            'gestionar-secretariado-ejecutivo',
-
-            // Otros permisos administrativos generales
+            'ver-dashboard',
+            'ver-inicio',
             'ver-usuarios',
-            'crear-usuarios',
             'editar-usuarios',
             'eliminar-usuarios',
-            'asignar-roles',
+            'crear-usuario',
+            'ver-roles',
+            'editar-rol',
+            'eliminar-rol',
+            'crear-rol',
+            'ver-evaluados',
+            'editar-evaluado',
+            'eliminar-evaluado',
+            'crear-evaluado',
+            'ver-carpetas',
+            'ver-contenido-carpetas',
+            'editar-carpeta',
+            'eliminar-carpeta',
+            'crear-carpeta',
+            'ver-cajas',
+            'crear-caja',
+            'editar-caja',
+            'eliminar-caja',
         ];
 
         foreach ($permisos as $permiso) {
-            Permission::create(['name' => $permiso]);
+            Permission::firstOrCreate(['name' => $permiso]);
         }
     }
 }

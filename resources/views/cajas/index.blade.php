@@ -18,12 +18,19 @@ body {
 
 .main-container {
     padding: 2rem;
-    background: linear-gradient(135deg, rgb(243, 241, 241) 0%, rgb(216, 202, 202) 100%); /* Colores de fondo en RGB */
+    background: linear-gradient(135deg, var(--guinda-suave-1) 0%, var(--guinda-suave-2) 100%); /* Gradiente de Guinda Suave */
     min-height: 100vh;
     position: relative;
     overflow: hidden;
+    border-radius: 12px; /* Añade bordes redondeados para una apariencia más suave */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidad */
+    transition: background 0.5s ease, box-shadow 0.3s ease;
 }
 
+.main-container:hover {
+    background: linear-gradient(135deg, var(--guinda-suave-2) 0%, var(--guinda-suave-1) 100%); /* Invertir colores al pasar el cursor */
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada al hacer hover */
+}
 
 
 .main-container::before,
@@ -261,58 +268,100 @@ body {
     color: white;
     transform: translateY(-2px);
 }
+/* Container for search and per-page selector */
+.controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(74, 85, 104, 0.06);
+    border: 1px solid var(--folder-border);
+}
 
+/* Enhanced search container */
 .search-container {
+    flex-grow: 1;
+    max-width: 500px;
     position: relative;
-    max-width: 400px;
 }
 
 .search-input {
     width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
-    border: 2px solid var(--folder-border);
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s;
+    padding: 0.875rem 1.25rem 0.875rem 3rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background-color: #F8FAFC;
+    color: #1A202C;
 }
 
 .search-input:focus {
-    border-color: var(--primary-color);
+    background-color: white;
+    border-color: #800020;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
 }
 
-.new-folder-btn {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.search-input::placeholder {
+    color: #A0AEC0;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #800020;
+    font-size: 1.1rem;
+}
+
+/* Per page selector styling */
+.per-page-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.per-page-container label {
+    font-size: 0.95rem;
+    color: #4A5568;
+    font-weight: 500;
+}
+
+.per-page-select {
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border: 2px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #1A202C;
+    background-color: #F8FAFC;
     cursor: pointer;
-    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23800020' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em;
 }
 
-.new-folder-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+.per-page-select:focus {
+    outline: none;
+    border-color: #800020;
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
 }
 
-.page__heading {
-    color: var(--primary-color);
-    font-size: 1.75rem;
-    margin: 0;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+.per-page-select:hover {
+    border-color: #800020;
+}
+
+.results-text {
+    color: #718096;
+    font-size: 0.95rem;
 }
 
 /* Nuevo diseño del encabezado y búsqueda */
@@ -329,18 +378,24 @@ body {
     }
 
     .page__heading {
-        color: var(--primary-color);
-        font-size: 1.75rem;
-        margin: 0;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin: 0 0 1.8rem;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 1rem;
     }
 
-    .page__heading i {
-        color: var(--accent-color);
-        font-size: 1.5rem;
+    .page__heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
+        border-radius: 3px;
     }
 /* Container for search and per-page selector */
 .controls-container {
@@ -437,14 +492,7 @@ body {
     font-size: 0.95rem;
 }
 
-.page__heading {
-    color: #800020; /* Color guinda */
-    font-weight: 700;
-    font-size: 2rem;
-    margin: 0;
-    padding-bottom: 10px;
-    display: inline-block;
-}
+
 
 
 .page__heading::after {
@@ -472,24 +520,35 @@ body {
 
 
 
+
 </style>
 
 @section('content')
-<div class="main-container">
+<div class="main-container" >
     <section class="section">
-        <div class="section-header">
-            <h3 class="page__heading">
-                <i class="fas "></i>
-                Cajas
-            </h3>
-            
+        <div class="d-flex align-items-center">
+            <h3 class="page__heading">Cajas</h3>
         </div>
 
+        <div class="controls-container">
+
+            
+            <div class="d-flex align-items-center">
+                <a class="btn btn-new" href="{{ route('cajas.create') }}" 
+                   style="background: #800020; color: white; font-weight: bold; text-decoration: none;">
+                    <i class="fas fa-plus"></i>
+                    <span>Nueva Caja</span>
+                </a>
+            </div>
+            
+        
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <input type="text" id="searchInput" class="search-input" placeholder="Buscar cajas...">
             
         </div>
+        
+
        
         <form method="GET" action="{{ route('cajas.index') }}" class="mb-3">
             <label for="perPage">Mostrar:</label>
@@ -501,8 +560,9 @@ body {
                 <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
             </select> resultados por página
         </form>
+    </div>
 
-        <div class="cajas-grid">
+        <div class="cajas-grid" style="background: #E2E8F0">
             @foreach ($cajas as $caja)
             <div class="folder-card" data-id="{{ $caja->id }}">
                 <div class="folder-content">
@@ -572,33 +632,39 @@ body {
 
     
 
-    function confirmarEliminacion(cajaId) {
+    function confirmarEliminacion(evaluadoId) {
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#800020',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
+            title: '<strong>¡ADVERTENCIA!</strong>'
+            , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
+            , icon: 'error'
+            , showCancelButton: true
+            , confirmButtonColor: '#d9534f'
+            , cancelButtonColor: '#6c757d'
+            , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
+            , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+            , customClass: {
+                popup: 'animated shake'
+                , title: 'swal-title-large'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/cajas/${cajaId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                // Mostrar la segunda confirmación
+                Swal.fire({
+                    title: '<strong>¿Estás completamente seguro?</strong>'
+                    , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
+                    , icon: 'warning'
+                    , showCancelButton: true
+                    , confirmButtonColor: '#d9534f'
+                    , cancelButtonColor: '#6c757d'
+                    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
+                    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+                    , customClass: {
+                        popup: 'animated shake'
                     }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        document.querySelector(`.folder-card[data-id="${cajaId}"]`).remove();
-                        Swal.fire('Eliminado', 'La caja ha sido eliminada.', 'success');
-                    } else {
-                        Swal.fire('Error', 'No se pudo eliminar la caja. Intenta de nuevo.', 'error');
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('eliminar-form-' + evaluadoId).submit();
                     }
-                })
-                .catch(() => {
-                    Swal.fire('Error', 'Ocurrió un error al eliminar la caja.', 'error');
                 });
             }
         });

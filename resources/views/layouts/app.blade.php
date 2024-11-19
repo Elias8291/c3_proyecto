@@ -9,15 +9,15 @@
     <!-- Bootstrap 4.1.1 -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
-    
+
     <link href="{{ asset('assets/css/@fortawesome/fontawesome-free/css/all.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('assets/css/iziToast.min.css') }}">
     <link href="{{ asset('assets/css/sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Añade esto en tu archivo layouts/app.blade.php dentro del <head> -->
-        <link href="{{ asset('assets/css/@fortawesome/fontawesome-free/css/all.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/@fortawesome/fontawesome-free/css/all.css') }}" rel="stylesheet" type="text/css">
 
-  
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -75,7 +75,7 @@
             background-color: #060222;
         }
 
-        
+
         @media (max-width: 992px) {
             .navbar-expand-lg .navbar-nav .nav-link {
                 padding-right: 0.8rem;
@@ -86,7 +86,7 @@
                 background: linear-gradient(to right, #910232, #8f000c);
             }
         }
-        
+
     </style>
 
 
@@ -103,10 +103,11 @@
             <div class="main-sidebar main-sidebar-postion" style="background-color:  #f4f4f9">
                 @include('layouts.sidebar')
             </div>
-            <!-- Main Content -->
-            <div class="main-content" style="background-color:  #dbd6d7">
+            <div class="main-content" style="background: radial-gradient(circle at top left, #5c001e 10%, #8b0000 40%, #a52a2a 70%, #c04040 100%);">
                 @yield('content')
             </div>
+
+
             <footer class="main-footer">
                 @include('layouts.footer')
             </footer>
@@ -140,11 +141,13 @@
 @yield('scripts')
 <script>
     import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.css";
-import { Spanish } from "flatpickr/dist/l10n/es.js";
-flatpickr.localize(Spanish);
+    import "flatpickr/dist/flatpickr.css";
+    import {
+        Spanish
+    } from "flatpickr/dist/l10n/es.js";
+    flatpickr.localize(Spanish);
 
-  $(document).ready(function() {
+    $(document).ready(function() {
         $('#changePasswordForm').on('submit', function(event) {
             event.preventDefault(); // Prevent form from submitting normally
 
@@ -165,18 +168,18 @@ flatpickr.localize(Spanish);
 
             // Submit the form via AJAX
             $.ajax({
-                url: $('#changePasswordForm').attr('action'),
-                type: 'POST',
-                data: $('#changePasswordForm').serialize(),
-                success: function(response) {
+                url: $('#changePasswordForm').attr('action')
+                , type: 'POST'
+                , data: $('#changePasswordForm').serialize()
+                , success: function(response) {
                     $('#successAlert').removeClass('d-none');
                     setTimeout(function() {
                         $('#changePasswordModal').modal('hide');
                         $('#successAlert').addClass('d-none');
                         $('#changePasswordForm')[0].reset();
                     }, 2000);
-                },
-                error: function(response) {
+                }
+                , error: function(response) {
                     if (response.responseJSON && response.responseJSON.errors) {
                         var errors = response.responseJSON.errors;
                         for (var error in errors) {
@@ -188,6 +191,7 @@ flatpickr.localize(Spanish);
             });
         });
     });
+
 </script>
 
 </html>

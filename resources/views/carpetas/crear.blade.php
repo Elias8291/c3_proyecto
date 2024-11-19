@@ -484,14 +484,15 @@
     #documentSections {
         animation: slideDown 0.4s ease-out;
     }
- /* Tamaño de Fuente para Inputs y Selects */
- input[type="text"],
+
+    /* Tamaño de Fuente para Inputs y Selects */
+    input[type="text"],
     input[type="date"],
     select,
     textarea {
         font-size: 20px !important;
     }
-   
+
     @keyframes slideDown {
         from {
             opacity: 0;
@@ -503,6 +504,7 @@
             transform: translateY(0);
         }
     }
+
     .search-section {
         background: #ffffff;
         border-radius: 15px;
@@ -595,12 +597,171 @@
     textarea {
         font-size: 17px !important;
     }
+
+
+    /* Estilos mejorados para los elementos del carrito de documentos */
+
+/* Estilo para cada ítem del carrito */
+.cart-item {
+    background: #f8fafc; /* Fondo ligeramente gris */
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Efecto hover para los ítems del carrito */
+.cart-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de la información del documento */
+.cart-item-info {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+/* Título del documento en el carrito */
+.cart-item-title {
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+/* Detalles del documento en el carrito */
+.cart-item-details {
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+/* Botón para eliminar un documento del carrito */
+.remove-item-btn {
+    background: #fee2e2; /* Fondo rojo claro */
+    color: #991b1b; /* Texto rojo oscuro */
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efecto hover para el botón de eliminar */
+.remove-item-btn:hover {
+    background: #fecaca; /* Fondo rojo más intenso al pasar el cursor */
+    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+}
+
+/* Icono dentro del botón de eliminar */
+.remove-item-btn i {
+    font-size: 1rem;
+}
+
+/* Estilo para el contenedor vacío del carrito */
+.cart-empty {
+    text-align: center;
+    padding: 30px 0;
+    color: #718096;
+    font-style: italic;
+}
+
+/* Icono dentro del contenedor vacío */
+.cart-empty i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #a0aec0; /* Gris medio para el icono */
+}
+
+/* Animación para añadir ítems al carrito */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aplicar animación a cada ítem del carrito al ser agregado */
+.cart-item {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Estilos mejorados para el título de la sección de documentos */
+.document-cart h5 {
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    color: #800020;
+    margin-bottom: 20px;
+    gap: 10px; /* Espacio entre el icono y el texto */
+}
+
+.document-cart h5 i {
+    font-size: 1.5rem;
+    color: var(--gold); /* Utiliza el color dorado definido */
+}
+
+/* Ajustes para la lista de ítems del carrito */
+.cart-items {
+    max-height: 300px; /* Altura máxima para scroll */
+    overflow-y: auto;
+    padding-right: 10px; /* Espacio para el scrollbar */
+}
+
+/* Scrollbar personalizado para la lista de ítems del carrito */
+.cart-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart-items::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+.cart-items::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* Responsividad para dispositivos móviles */
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart-item-info {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .remove-item-btn {
+        align-self: flex-end;
+    }
+}
+
 </style>
 @endsection
 
 @section('content')
 <main class="profile-page">
-    <section class="page-background">
+    <section class="page-background" style="background: transparent">
         <div class="container">
             <div class="text-left mb-4">
                 <a href="{{ route('carpetas.index') }}" class="btn-back">
@@ -658,12 +819,13 @@
                 </div>
 
                 <div class="toggle-documents-section text-center mb-4">
-                    <button type="button" id="toggleDocumentsBtn" class="toggle-documents-btn" onclick="toggleDocumentSections()" style="display: none;">
+                    <button type="button" id="toggleDocumentsBtn" class="toggle-documents-btn"
+                        onclick="toggleDocumentSections()" style="display: none;">
                         <i class="fas fa-file-medical"></i>
                         <span>Agregar Documentos</span>
                     </button>
                 </div>
-                
+
                 <div id="documentSections" style="display: none;">
                     <div class="document-section">
                         <h4><i class="fas fa-file-alt"></i> Agregar Documento</h4>
@@ -698,21 +860,24 @@
                         </div>
 
                         <button type="button" class="add-document-btn" onclick="agregarDocumento()">
-                            <i class="fas fa-plus"></i> Añadir Documento
+                            <i class="fas fa-cart-plus"></i> Añadir Documento
                         </button>
+
 
                         <p id="mensaje-error" class="text-warning" style="display: none;"></p>
                     </div>
 
                     <div class="document-cart">
-                        <h5><i class="fas fa-shopping-cart"></i> Documentos para agregar</h5>
+                        <h5><i class="fas fa-clipboard-list"></i> Documentos para agregar</h5>
+                        <!-- Icono actualizado -->
                         <div id="carritoDocumentos" class="cart-items">
                             <div class="cart-empty">
-                                <i class="fas fa-folder-open"></i>
+                                <i class="fas fa-inbox"></i> <!-- Icono actualizado -->
                                 <p>No hay documentos agregados</p>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 

@@ -51,13 +51,13 @@
     }
 
     .page__heading {
-        color: var(--primary-burgundy);
-        font-weight: 700;
-        font-size: 2rem;
-        margin: 0;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin: 0 0 1.8rem;
         position: relative;
         display: inline-block;
-        padding-bottom: 10px;
+        padding-bottom: 1rem;
     }
 
     .page__heading::after {
@@ -66,11 +66,10 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 4px;
+        height: 6px;
         background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
-        border-radius: 2px;
+        border-radius: 3px;
     }
-
     /* Contenedor de acciones superior */
     .actions-container {
         display: flex;
@@ -78,7 +77,6 @@
         align-items: center;
         margin-bottom: 25px;
         padding: 15px;
-        background: linear-gradient(to right, #fff, var(--pastel-pink));
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
@@ -446,8 +444,8 @@ body::after {
 @section('content')
 <div class="main-container">
     <section class="section">
-        <div class="section-header">
-            <h3 class="page__heading">Gestión de Roles</h3>
+        <div class="d-flex align-items-center">
+            <h3 class="page__heading">Roles</h3>
         </div>
         <div class="section-body">
             <div class="card">
@@ -509,18 +507,40 @@ body::after {
         }
     });
 
-    function confirmarEliminacion(roleId) {
+    function confirmarEliminacion(evaluadoId) {
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#800020',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
+            title: '<strong>¡ADVERTENCIA!</strong>'
+            , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
+            , icon: 'error'
+            , showCancelButton: true
+            , confirmButtonColor: '#d9534f'
+            , cancelButtonColor: '#6c757d'
+            , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
+            , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+            , customClass: {
+                popup: 'animated shake'
+                , title: 'swal-title-large'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('eliminar-form-' + roleId).submit();
+                // Mostrar la segunda confirmación
+                Swal.fire({
+                    title: '<strong>¿Estás completamente seguro?</strong>'
+                    , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
+                    , icon: 'warning'
+                    , showCancelButton: true
+                    , confirmButtonColor: '#d9534f'
+                    , cancelButtonColor: '#6c757d'
+                    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
+                    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
+                    , customClass: {
+                        popup: 'animated shake'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('eliminar-form-' + evaluadoId).submit();
+                    }
+                });
             }
         });
     }
