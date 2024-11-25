@@ -15,106 +15,127 @@ class SeederRolesC3 extends Seeder
      */
     public function run()
     {
-        // Definir los permisos para cada rol
+        // Definir los permisos y descripciones para cada rol
         $rolesPermissions = [
-            'Admin' => [
-                'ver-dashboard',
-                'ver-inicio',
-                'ver-usuarios',
-                'editar-usuarios',
-                'eliminar-usuarios',
-                'crear-usuario',
-                'ver-roles',
-                'editar-rol',
-                'eliminar-rol',
-                'crear-rol',
-                'ver-evaluados',
-                'editar-evaluado',
-                'eliminar-evaluado',
-                'crear-evaluado',
-                'ver-carpetas',
-                'ver-contenido-carpetas',
-                'editar-carpeta',
-                'eliminar-carpeta',
-                'crear-carpeta',
-                'ver-cajas',
-                'crear-caja',
-                'editar-caja',
-                'eliminar-caja',
+            [
+                'name' => 'Admin',
+                'description' => 'Administrador del sistema con todos los permisos.',
+                'permissions' => [
+                    'ver-dashboard',
+                    'ver-inicio',
+                    'ver-usuarios',
+                    'editar-usuarios',
+                    'eliminar-usuarios',
+                    'crear-usuario',
+                    'ver-roles',
+                    'editar-rol',
+                    'eliminar-rol',
+                    'crear-rol',
+                    'ver-evaluados',
+                    'editar-evaluado',
+                    'eliminar-evaluado',
+                    'crear-evaluado',
+                    'ver-carpetas',
+                    'ver-contenido-carpetas',
+                    'editar-carpeta',
+                    'eliminar-carpeta',
+                    'crear-carpeta',
+                    'ver-cajas',
+                    'crear-caja',
+                    'editar-caja',
+                    'eliminar-caja',
+                ],
             ],
-            'Archivo' => [
-                'ver-dashboard',
-                'ver-inicio',
-                'ver-evaluados',
-                'editar-evaluado',
-                'crear-evaluado',
-                'ver-carpetas',
-                'ver-contenido-carpetas',
-                'editar-carpeta',
-                'crear-carpeta',
-                'ver-cajas',
-                'crear-caja',
-                'editar-caja',
-                // No incluye permisos relacionados con usuarios y roles
+            [
+                'name' => 'Archivo',
+                'description' => 'Usuario encargado de gestionar archivos y documentos.',
+                'permissions' => [
+                    'ver-dashboard',
+                    'ver-inicio',
+                    'ver-evaluados',
+                    'editar-evaluado',
+                    'crear-evaluado',
+                    'ver-carpetas',
+                    'ver-contenido-carpetas',
+                    'editar-carpeta',
+                    'crear-carpeta',
+                    'ver-cajas',
+                    'crear-caja',
+                    'editar-caja',
+                ],
             ],
-            'Secretariado Ejecutivo' => [
-                'ver-dashboard',
-                'ver-inicio',
-                'ver-evaluados',
-                'editar-evaluado',
-                'crear-evaluado',
-                'ver-carpetas',
-                'ver-contenido-carpetas',
-                'editar-carpeta',
-                'crear-carpeta',
-                'ver-cajas',
-                'crear-caja',
-                'editar-caja',
-                // Puedes agregar o quitar permisos según tus necesidades
+            [
+                'name' => 'Secretariado Ejecutivo',
+                'description' => 'Secretariado encargado de coordinar actividades ejecutivas.',
+                'permissions' => [
+                    'ver-dashboard',
+                    'ver-inicio',
+                    'ver-evaluados',
+                    'editar-evaluado',
+                    'crear-evaluado',
+                    'ver-carpetas',
+                    'ver-contenido-carpetas',
+                    'editar-carpeta',
+                    'crear-carpeta',
+                    'ver-cajas',
+                    'crear-caja',
+                    'editar-caja',
+                ],
             ],
-            'Dirección General' => [
-                'ver-dashboard',
-                'ver-inicio',
-                'ver-evaluados',
-                'editar-evaluado',
-                'crear-evaluado',
-                'ver-carpetas',
-                'ver-contenido-carpetas',
-                'editar-carpeta',
-                'crear-carpeta',
-                'ver-cajas',
-                'crear-caja',
-                'editar-caja',
-                'eliminar-caja', // Permiso adicional según necesidad
-                // Puedes agregar o quitar permisos según tus necesidades
+            [
+                'name' => 'Dirección General',
+                'description' => 'Dirección general con permisos avanzados de gestión.',
+                'permissions' => [
+                    'ver-dashboard',
+                    'ver-inicio',
+                    'ver-evaluados',
+                    'editar-evaluado',
+                    'crear-evaluado',
+                    'ver-carpetas',
+                    'ver-contenido-carpetas',
+                    'editar-carpeta',
+                    'crear-carpeta',
+                    'ver-cajas',
+                    'crear-caja',
+                    'editar-caja',
+                    'eliminar-caja',
+                ],
             ],
-            'Evaluador' => [
-                'ver-dashboard',
-                'ver-inicio',
-                'ver-evaluados',
-                'editar-evaluado',
-                'crear-evaluado',
-                'ver-carpetas',
-                'ver-contenido-carpetas',
-                'editar-carpeta',
-                'crear-carpeta',
-                'ver-cajas',
-                'crear-caja',
-                'editar-caja',
-                // No incluye permisos relacionados con usuarios, roles ni permisos de eliminación
+            [
+                'name' => 'Evaluador',
+                'description' => 'Evaluador con permisos limitados a procesos de evaluación.',
+                'permissions' => [
+                    'ver-dashboard',
+                    'ver-inicio',
+                    'ver-evaluados',
+                    'editar-evaluado',
+                    'crear-evaluado',
+                    'ver-carpetas',
+                    'ver-contenido-carpetas',
+                    'editar-carpeta',
+                    'crear-carpeta',
+                    'ver-cajas',
+                    'crear-caja',
+                    'editar-caja',
+                ],
             ],
         ];
 
-        // Crear roles y asignar permisos
-        foreach ($rolesPermissions as $roleName => $permissions) {
-            // Crear o obtener el rol
-            $role = Role::firstOrCreate(['name' => $roleName]);
+        // Crear roles, descripciones y asignar permisos
+        foreach ($rolesPermissions as $roleData) {
+            // Crear o encontrar el rol
+            $role = Role::firstOrCreate(
+                ['name' => $roleData['name']],
+                ['description' => $roleData['description']] // Asignar descripción
+            );
 
-            // Obtener los permisos que existen en la base de datos
-            $existingPermissions = Permission::whereIn('name', $permissions)->get();
+            foreach ($roleData['permissions'] as $permissionName) {
+                // Crear o encontrar cada permiso
+                $permission = Permission::firstOrCreate(['name' => $permissionName]);
 
-            // Asignar permisos al rol
-            $role->syncPermissions($existingPermissions);
+                // Asignar el permiso al rol
+                $role->givePermissionTo($permission);
+            }
         }
 
         // Limpiar la caché de permisos después de las asignaciones

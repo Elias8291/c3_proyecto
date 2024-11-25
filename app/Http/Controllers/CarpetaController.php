@@ -11,6 +11,15 @@ use Illuminate\Http\Request;
 
 class CarpetaController extends Controller
 {
+
+    public function __construct()
+    {
+        // Middleware para verificar permisos
+        $this->middleware('can:ver-carpetas')->only(['index', 'show']);
+        $this->middleware('can:crear-carpeta')->only(['create', 'store']);
+        $this->middleware('can:editar-carpeta')->only(['edit', 'update']);
+        $this->middleware('can:eliminar-carpeta')->only(['destroy']);
+    }
     public function index()
     {
         $carpetas = Carpeta::with(['evaluado', 'caja'])->get();

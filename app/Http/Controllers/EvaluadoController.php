@@ -15,6 +15,13 @@ class EvaluadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('can:ver-evaluados')->only(['index', 'show']);
+        $this->middleware('can:crear-evaluado')->only(['create', 'store']);
+        $this->middleware('can:editar-evaluado')->only(['edit', 'update']);
+        $this->middleware('can:eliminar-evaluado')->only(['destroy']);
+    }
     public function index(Request $request)
     {
         $query = Evaluado::with('carpetas');

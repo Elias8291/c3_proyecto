@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cajas/todas', function () {
         return response()->json(Caja::all());
     });
+    Route::get('/roles/{id}/edit', [RolController::class, 'edit'])->name('roles.edit');
+
 
 });
 // En routes/web.php

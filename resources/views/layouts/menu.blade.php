@@ -1,4 +1,4 @@
-@if(auth()->user()->canAny(['ver-rol', 'ver-usuario', 'ver-log']))
+
 <style>
     :root {
         --primary-color: #000000;
@@ -158,7 +158,7 @@
 
 <ul class="side-menu" style="background: transparent">
     <li style="height: 20px; background-color: transparent;"></li>
-    
+
     @can('ver-dashboard')
     <li class="side-menu-item" style="--item-index: 1">
         <a href="/home" class="side-menu-link {{ Request::is('home*') ? 'active' : '' }}">
@@ -168,7 +168,7 @@
     </li>
     @endcan
     
-    @can('ver-usuario')
+    @can('ver-usuarios')
     <li class="side-menu-item" style="--item-index: 2">
         <a href="/usuarios" class="side-menu-link {{ Request::is('usuarios*') ? 'active' : '' }}">
             <i class="fas fa-users side-menu-icon"></i>
@@ -177,7 +177,7 @@
     </li>
     @endcan
     
-    @can('ver-rol')
+    @can('ver-roles')
     <li class="side-menu-item" style="--item-index: 3">
         <a href="/roles" class="side-menu-link {{ Request::is('roles*') ? 'active' : '' }}">
             <i class="fas fa-user-shield side-menu-icon"></i>
@@ -186,27 +186,40 @@
     </li>
     @endcan
     
+    @can('ver-evaluados')
     <li class="side-menu-item" style="--item-index: 4">
         <a href="/evaluados" class="side-menu-link {{ Request::is('evaluados*') ? 'active' : '' }}">
             <i class="fas fa-clipboard-check side-menu-icon"></i>
             <span class="side-menu-text">Evaluados</span>
         </a>
     </li>
+    @endcan
 
+    @can('ver-carpetas')
     <li class="side-menu-item" style="--item-index: 5">
-        <a href="/carpetas" class="side-menu-link">
+        <a href="/carpetas" class="side-menu-link {{ Request::is('carpetas*') ? 'active' : '' }}">
             <i class="fas fa-folder side-menu-icon"></i>
             <span class="side-menu-text">Carpetas</span>
         </a>
     </li>
+    @endcan
     
-    <li class="side-menu-item" style="--item-index: 5">
-        <a href="/cajas" class="side-menu-link">
+    @can('ver-cajas')
+    <li class="side-menu-item" style="--item-index: 6">
+        <a href="/cajas" class="side-menu-link {{ Request::is('cajas*') ? 'active' : '' }}">
             <i class="fas fa-box side-menu-icon"></i>
             <span class="side-menu-text">Cajas</span>
         </a>
     </li>
-    
-    
+    @endcan
+
+    @can('ver-logs')
+    <li class="side-menu-item" style="--item-index: 7">
+        <a href="/logs" class="side-menu-link {{ Request::is('logs*') ? 'active' : '' }}">
+            <i class="fas fa-history side-menu-icon"></i>
+            <span class="side-menu-text">Logs</span>
+        </a>
+    </li>
+    @endcan
 </ul>
-@endif
+

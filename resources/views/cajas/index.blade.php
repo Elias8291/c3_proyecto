@@ -533,14 +533,15 @@ body {
         <div class="controls-container">
 
             
+        @can('crear-caja')
             <div class="d-flex align-items-center">
-                <a class="btn btn-new" href="{{ route('cajas.create') }}" 
+                <a class="btn btn-new" href="{{ route('cajas.create') }}"
                    style="background: #800020; color: white; font-weight: bold; text-decoration: none;">
                     <i class="fas fa-plus"></i>
                     <span>Nueva Caja</span>
                 </a>
             </div>
-            
+            @endcan
         
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
@@ -589,15 +590,30 @@ body {
                     </div>
 
                     <div class="folder-actions">
+                        <!-- Botón "Ver detalles" protegido con permiso -->
+                        @can('ver-cajas')
                         <a href="{{ route('cajas.show', $caja->id) }}" class="btn-action" title="Ver documentos de la caja">
                             <i class="fas fa-eye"></i>
                         </a>
+                        @endcan
+
+                        <!-- Botón "Editar" protegido con permiso -->
+                        @can('editar-caja')
                         <a href="{{ route('cajas.edit', $caja->id) }}" class="btn-action" title="Editar detalles de la caja">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button type="button" class="btn-action" title="Eliminar la caja" onclick="confirmarEliminacion({{ $caja->id }})">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        @endcan
+
+                        <!-- Botón "Eliminar" protegido con permiso -->
+                        @can('eliminar-caja')
+                        <form id="eliminar-form-{{ $caja->id }}" action="{{ route('cajas.destroy', $caja->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn-action" title="Eliminar la caja" onclick="confirmarEliminacion({{ $caja->id }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                        @endcan
                     </div>
                     
                 </div>

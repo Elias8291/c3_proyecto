@@ -95,11 +95,10 @@ class RolController extends Controller
             ->where("role_id", $id)
             ->pluck('permission_id')
             ->toArray();
-
-            return view('roles.editar', compact('role', 'permission', 'rolePermissions'));
-
+    
+        return view('roles.editar', compact('role', 'permission', 'rolePermissions'));
     }
-
+    
 
     /**
      * Update the specified resource in storage.

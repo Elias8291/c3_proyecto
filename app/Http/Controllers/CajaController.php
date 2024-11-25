@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class CajaController extends Controller
 {
+    public function __construct()
+    {
+        // Middleware para verificar permisos
+        $this->middleware('can:ver-cajas')->only(['index', 'show']);
+        $this->middleware('can:crear-caja')->only(['create', 'store']);
+        $this->middleware('can:editar-caja')->only(['edit', 'update']);
+        $this->middleware('can:eliminar-caja')->only(['destroy']);
+    }
+    
     public function index(Request $request)
 {
     $perPage = $request->input('per_page', 10); // Valor predeterminado de 10
@@ -86,4 +95,3 @@ class CajaController extends Controller
         return redirect()->route('cajas.index')->with('success', 'Caja actualizada correctamente.');
     }
 }
-

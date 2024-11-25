@@ -270,8 +270,10 @@
                         <div class="form-control" style="height: auto; padding: 10px;">
                             @foreach($permission as $permiso)
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="permission[]"
-                                value="{{ $permiso->id }}" id="permiso_{{ $permiso->id }}" {{ in_array($permiso->id, $rolePermissions) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="permission[]"
+    value="{{ $permiso->id }}" id="permiso_{{ $permiso->id }}" 
+    {{ in_array($permiso->id, $rolePermissions) ? 'checked' : '' }}>
+
                             
                                 <label class="form-check-label" for="permiso_{{ $permiso->id }}">
                                     {{ $permiso->name }}
