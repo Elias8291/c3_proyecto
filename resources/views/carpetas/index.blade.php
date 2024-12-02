@@ -317,16 +317,17 @@
     opacity: 1;
 }
 
-.folder-icon {
+/* Asegúrate de que el selector sea más específico si es necesario */
+div.folder-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 40px !important;  /* Asegúrate de forzar el tamaño con !important */
+    height: 40px !important;  /* Asegúrate de forzar el tamaño con !important */
     border-radius: 50%;
-    background: linear-gradient(135deg, #800020, #4a0404);
+    background: linear-gradient(135deg, #f0eced, #044a44);
     color: white;
-    font-size: 2rem;
+    font-size: 1.5rem !important;  /* Asegúrate de forzar el tamaño de la fuente con !important */
     box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.4s ease;
 }
@@ -436,19 +437,7 @@
     opacity: 1;
 }
 
-.folder-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #800020, #4a0404);
-    color: white;
-    font-size: 2rem;
-    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.4s ease;
-}
+
 
 .folder-icon:hover {
     transform: scale(1.2);
@@ -705,6 +694,242 @@ input[type="text"],
 select,
 textarea {
     font-size: 20px !important;
+}
+:root {
+    /* Enhanced color palette */
+    --primary-color: #8B1F41;
+    --secondary-color: #D4A5A5;
+    --background-color: #FAF6F6;
+    --text-primary: #2D2424;
+    --text-secondary: #6B5656;
+    --gradient-primary: linear-gradient(135deg, #8B1F41, #4A0404);
+    --gradient-hover: linear-gradient(135deg, #4A0404, #8B1F41);
+}
+
+.folders-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.folder-item {
+    background: white;
+    border-radius: 25px;
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 2px solid transparent;
+    box-shadow: 0 10px 25px rgba(139, 31, 65, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.folder-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.folder-item:hover {
+    transform: translateY(-10px);
+    border-color: var(--secondary-color);
+    box-shadow: 0 15px 35px rgba(139, 31, 65, 0.15);
+}
+
+.folder-item:hover::before {
+    opacity: 1;
+}
+
+
+.folder-item:hover .folder-icon {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.folder-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.folder-title {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: color 0.3s ease;
+}
+
+.folder-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.info-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.folder-item:hover .info-group {
+    opacity: 1;
+}
+
+.info-group i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.folder-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--background-color);
+    color: var(--primary-color);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.btn-action:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+    border-color: var(--secondary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .folders-list {
+        grid-template-columns: 1fr;
+    }
+
+    .folder-item {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .folder-actions {
+        flex-direction: row;
+        margin-top: 1rem;
+    }
+}
+.main-container {
+    background: linear-gradient(135deg, #ffffff, #faf0f0);
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(139, 31, 65, 0.08);
+}
+
+.folders-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.folder-item {
+    background: white;
+    border-radius: 20px;
+    padding: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 2px solid transparent;
+    box-shadow: 
+        0 10px 25px rgba(139, 31, 65, 0.06),
+        0 4px 6px rgba(139, 31, 65, 0.04);
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+}
+
+.folder-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: #D4A5A5;
+    box-shadow: 
+        0 20px 40px rgba(139, 31, 65, 0.12),
+        0 6px 10px rgba(139, 31, 65, 0.08);
+}
+
+.folder-icon {
+    background: linear-gradient(145deg, #8B1F41, #4A0404);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(139, 31, 65, 0.2);
+    transition: all 0.3s ease;
+}
+
+.folder-item:hover .folder-icon {
+    transform: rotate(10deg) scale(1.1);
+    box-shadow: 0 12px 25px rgba(139, 31, 65, 0.3);
+}
+
+.folder-title {
+    font-weight: 700;
+    color: #8B1F41;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease;
+}
+
+.folder-info {
+    color: #6B5656;
+    font-size: 0.95rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.folder-actions .btn-action {
+    background: rgba(139, 31, 65, 0.05);
+    color: #8B1F41;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.folder-actions .btn-action:hover {
+    background: #8B1F41;
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+}
+
+@media (max-width: 768px) {
+    .folders-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .folder-item {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
 }
 </style>
 

@@ -41,32 +41,47 @@ class CarpetaController extends Controller
             'Perfiles',
             'Programación'
         ])->get();
-    
+
         // Eager load de la relación 'carpetas' para cada Evaluado
         $evaluados = Evaluado::with('carpetas')->get();
-    
+
         $cajas = Caja::all();
-    
+
         return view('carpetas.crear', compact('evaluados', 'evaluacionAreas', 'cajas'));
+    }
+
+
+    public function destroy($id)
+    {
+        // Busca el documento por su ID
+        $documento = Documento::findOrFail($id);
+    
+        try {
+            // Elimina el documento de la base de datos
+            $documento->delete();
+    
+            // Redirige a la vista de la carpeta asociada, pasando el ID de la carpeta
+            return redirect()->route('carpetas.show', ['carpeta' => $documento->carpeta_id])
+                             ->with('success', 'Documento eliminado correctamente.');
+        } catch (\Exception $e) {
+            // Si ocurre algún error, redirige a la vista de la carpeta con el error
+            return redirect()->route('carpetas.show', ['carpeta' => $documento->carpeta_id])
+                             ->with('error', 'Hubo un error al eliminar el documento: ' . $e->getMessage());
+        }
     }
     
 
-    public function destroy($id)
-{
-    $carpeta = Carpeta::findOrFail($id);
-    $carpeta->delete();
-
-    return redirect()->route('carpetas.index')->with('success', 'Carpeta eliminada correctamente.');
-}
 
 
-public function show($id)
-{
-    $carpeta = Carpeta::with('documentos.area', 'evaluado')->findOrFail($id);
-    $areas = Area::all(); // Para el formulario de agregar documento
+    public function show($id)
+    {
+        $carpeta = Carpeta::with('documentos.area', 'evaluado')->findOrFail($id);
+        $areas = Area::all(); // Para el formulario de agregar documento
 
-    return view('carpetas.show', compact('carpeta', 'areas'));
-}
+        return view('carpetas.show', compact('carpeta', 'areas'));
+    }
+
+
 
 
     public function store(Request $request)
@@ -104,30 +119,29 @@ public function show($id)
 
 
     public function edit($id)
-{
-    $carpeta = Carpeta::with('documentos', 'evaluado', 'caja')->findOrFail($id);
-    $evaluados = Evaluado::all();
-    $cajas = Caja::all();
-    $areas = Area::all();
+    {
+        $carpeta = Carpeta::with('documentos', 'evaluado', 'caja')->findOrFail($id);
+        $evaluados = Evaluado::all();
+        $cajas = Caja::all();
+        $areas = Area::all();
 
-    return view('carpetas.editar', compact('carpeta', 'evaluados', 'cajas', 'areas'));
-}
+        return view('carpetas.editar', compact('carpeta', 'evaluados', 'cajas', 'areas'));
+    }
 
-public function update(Request $request, $id)
-{
-    $carpeta = Carpeta::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $carpeta = Carpeta::findOrFail($id);
 
-    $request->validate([
-        'id_evaluado' => 'required|exists:evaluados,id',
-        'id_caja' => 'required|exists:cajas,id',
-    ]);
+        $request->validate([
+            'id_evaluado' => 'required|exists:evaluados,id',
+            'id_caja' => 'required|exists:cajas,id',
+        ]);
 
-    $carpeta->update([
-        'id_evaluado' => $request->id_evaluado,
-        'id_caja' => $request->id_caja,
-    ]);
+        $carpeta->update([
+            'id_evaluado' => $request->id_evaluado,
+            'id_caja' => $request->id_caja,
+        ]);
 
-    return redirect()->route('carpetas.show', $id)->with('success', 'Carpeta actualizada exitosamente.');
-}
-
+        return redirect()->route('carpetas.show', $id)->with('success', 'Carpeta actualizada exitosamente.');
+    }
 }

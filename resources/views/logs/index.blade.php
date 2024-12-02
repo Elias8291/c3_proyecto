@@ -1,341 +1,409 @@
 @extends('layouts.app')
 
 <style>
-    #miTabla2 {
-        font-family: 'Open Sans', sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    }
+    :root {
+      --primary-burgundy: #800020;
+      --light-burgundy: #98304b;
+      --pastel-pink: #ffd6e0;
+      --pastel-blue: #d6e5ff;
+      --pastel-purple: #e5d6ff;
+      --hover-pink: #ffecf1;
+      --gradient-start: #800020;
+      --gradient-end: #b31b41;
+  }
 
-    #miTabla2 thead {
-        background-color: #483eff;
-        color: #fff;
-    }
+  /* Estilos generales y contenedor principal */
+  body {
+      background: linear-gradient(135deg, #f8f9fa, #fff5f7);
+      min-height: 100vh;
+  }
 
-    #miTabla2 thead th {
-        padding: 15px;
-        text-align: left;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
+  .section {
+      padding: 2rem;
+  }
 
-    #miTabla2 tbody tr {
-        border-bottom: 1px solid #ddd;
-        transition: background-color 0.3s ease;
-    }
+  .card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+  }
 
-    #miTabla2 tbody tr:hover {
-        background-color: #f5f5f5;
-    }
+  .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+  }
 
-    #miTabla2 tbody td {
-        padding: 12px 15px;
-    }
+  .section-header {
+      margin-bottom: 3rem;
+      padding: 30px 0;
+      border-bottom: 1px solid #eee;
+  }
 
-    #miTabla2 tbody td .custom-badge {
-        background-color: #483eff;
-        color: #fff;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
+  .page__heading {
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin: 0 0 1.8rem;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 1rem;
+  }
 
-    #miTabla2 tbody td .btn {
-        padding: 6px 12px;
-        font-size: 14px;
-        border-radius: 4px;
-        transition: background-color 0.3s ease;
-    }
+  .page__heading::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
+      border-radius: 3px;
+  }
 
-    #miTabla2 tbody td .btn-warning {
-        background-color: #ffc107;
-        color: #212529;
-    }
+  /* Contenedor de acciones superior */
+  .actions-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 15px;
 
-    #miTabla2 tbody td .btn-warning:hover {
-        background-color: #e0a800;
-    }
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
 
-    #miTabla2 tbody td .btn-danger {
-        background-color: #dc3545;
-        color: #fff;
-    }
+  /* Estilos mejorados de la tabla */
+  .table-container {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      margin: 20px 0;
+      animation: fadeIn 0.5s ease-out;
+  }
 
+  #miTabla2 {
+      font-family: 'Open Sans', sans-serif;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      margin: 0;
+  }
 
-    #miTabla2 tbody td .btn-danger:hover {
-        background-color: #c82333;
-    }
+  #miTabla2 thead {
+      background: linear-gradient(135deg, var(--primary-burgundy), var(--light-burgundy));
+      position: relative;
+  }
 
-    /* Estilos para el menú de selección de registros */
-    .dataTables_length {
-        position: relative;
-        display: inline-block;
-        margin-bottom: 20px;
-    }
+  #miTabla2 thead::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #fff, transparent);
+  }
 
-    .dataTables_length label {
-        font-size: 16px;
-        font-weight: bold;
-        color: #555;
-    }
+  #miTabla2 thead th {
+      padding: 18px 15px;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: white;
+      font-size: 0.85rem;
+      position: relative;
+  }
 
-    .dataTables_length select {
-        padding: 10px 40px 10px 20px;
-        border: none;
-        border-radius: 25px;
-        background-color: #f2f2f2;
-        font-size: 16px;
-        width: 120px;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 15px center;
-        background-size: 20px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+  #miTabla2 thead th::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 25%;
+      height: 50%;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.1);
+  }
 
-    .dataTables_length select:focus {
-        outline: none;
-        background-color: #fff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
+  #miTabla2 tbody tr {
+      transition: all 0.3s ease;
+  }
 
-    .dataTables_length select:hover {
-        background-color: #e6e6e6;
-    }
+  #miTabla2 tbody tr:nth-child(even) {
+      background-color: rgba(var(--pastel-pink), 0.05);
+  }
 
-    .dataTables_length::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        right: 30px;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid #999;
-        pointer-events: none;
-        transition: border-color 0.3s ease;
-    }
+  #miTabla2 tbody tr:hover {
+      background-color: var(--hover-pink);
+      transform: scale(1.01);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
 
+  #miTabla2 tbody td {
+      padding: 15px;
+      vertical-align: middle;
+      border-bottom: 1px solid #eee;
+      transition: all 0.3s ease;
+  }
 
+  /* Botones mejorados */
+  .btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+  }
 
-    /* Estilos para el campo de búsqueda */
-    .dataTables_filter {
-        position: relative;
-    }
+  /* Efecto de brillo animado */
+  .btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+      transform: rotate(0deg);
+      transition: transform 0.6s ease;
+  }
 
-    .dataTables_filter input[type="search"] {
-        padding: 12px 40px 12px 20px;
-        border: none;
-        border-radius: 25px;
-        background-color: #f2f2f2;
-        font-size: 16px;
-        width: 300px;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+  .btn:hover::before {
+      transform: rotate(90deg);
+  }
 
-    .dataTables_filter input[type="search"]:focus {
-        outline: none;
-        width: 350px;
-        background-color: #fff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
+  .btn-new {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: rgb(0, 0, 0);
+      box-shadow: 0 4px 15px rgba(128, 0, 32, 0.2);
+      position: relative;
+      overflow: hidden;
+  }
 
-    .dataTables_filter::after {
-        content: "\f002";
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        position: absolute;
-        top: 50%;
-        right: 20px;
-        transform: translateY(-50%);
-        color: #999;
-        transition: color 0.3s ease;
-    }
+  .btn-new:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
+      background: linear-gradient(135deg, var(--gradient-end), var(--gradient-start));
+  }
 
-    .dataTables_filter input[type="search"]:focus+::after {
-        color: #333;
-    }
+  .btn-new:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 15px rgba(128, 0, 32, 0.2);
+  }
 
-    /* Estilos para el menú de selección de registros */
-    .dataTables_length {
-        position: relative;
-        display: inline-block;
-        margin-bottom: 20px;
-    }
+  .btn-new i {
+      transition: transform 0.3s ease;
+  }
 
-    .dataTables_length label {
-        font-size: 16px;
-        font-weight: bold;
-        color: #555;
-    }
+  .btn-new:hover i {
+      transform: translateX(5px);
+  }
 
-    .dataTables_length select {
-        padding: 10px 40px 10px 20px;
-        border: none;
-        border-radius: 25px;
-        background-color: #f2f2f2;
-        font-size: 16px;
-        width: 120px;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 15px center;
-        background-size: 20px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+  .btn-edit {
+      background: linear-gradient(45deg, #4a90e2, #357abd);
+      color: white;
+  }
 
-    .dataTables_length select:focus {
-        outline: none;
-        background-color: #fff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
+  .btn-delete {
+      background: linear-gradient(45deg, #ff6b6b, #ee5253);
+      color: white;
+  }
 
-    .dataTables_length select:hover {
-        background-color: #e6e6e6;
-    }
+  .action-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+  }
 
-    .dataTables_length::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        right: 30px;
-        transform: translateY(-50%);
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid #999;
-        pointer-events: none;
-        transition: border-color 0.3s ease;
-    }
+  /* Estilos del DataTable */
+  .dataTables_wrapper {
+      padding: 20px 0;
+  }
 
-    .dataTables_length select:focus+::after {
-        border-top-color: #333;
-    }
+  .dataTables_filter input {
+      border: 2px solid #eee;
+      border-radius: 10px;
+      padding: 8px 15px;
+      transition: all 0.3s ease;
+      width: 250px;
+  }
 
-    @media (max-width: 992px) {
-        #miTabla2 {
-            display: none;
-        }
+  .dataTables_filter input:focus {
+      border-color: var(--primary-burgundy);
+      box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+      outline: none;
+  }
 
-        .mobile-table {
-            display: block;
-        }
+  .dataTables_length select {
+      border: 2px solid #eee;
+      border-radius: 8px;
+      padding: 8px 30px 8px 15px;
+      appearance: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath d='M0 2l4 4 4-4z' fill='%23800020'/%3E%3C/svg%3E") no-repeat right 15px center;
+  }
 
-        /* Estilos para las tarjetas en modo móvil */
-        .mobile-card {
-            background: #fff;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 16px;
-            padding: 16px;
-        }
+  /* Paginación mejorada */
+  .pagination {
+      margin-top: 2rem;
+      gap: 5px;
+  }
 
-        .mobile-card .row {
-            margin-bottom: 8px;
-        }
+  .page-link {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      color: var(--primary-burgundy);
+      font-weight: 500;
+      transition: all 0.3s ease;
+  }
 
-        .mobile-card label {
-            font-weight: bold;
-            color: #333;
-        }
+  .page-link:hover {
+      background-color: var(--pastel-pink);
+      color: var(--primary-burgundy);
+      transform: translateY(-2px);
+  }
 
-        .mobile-card .data {
-            font-size: 14px;
-            color: #666;
-        }
+  .page-item.active .page-link {
+      background: linear-gradient(45deg, var(--primary-burgundy), var(--light-burgundy));
+      border: none;
+      box-shadow: 0 4px 10px rgba(128, 0, 32, 0.2);
+  }
 
-        /* Estilos para los botones de acción en modo móvil */
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-        }
+  /* Animaciones de carga */
+  .table-container {
+      animation: fadeIn 0.5s ease-out;
+  }
 
-        .btn-mobile {
-            flex: 0 1 48%;
-            margin: 0;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
+  @keyframes fadeIn {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
 
-        .btn-mobile i {
-            font-size: 16px;
-            margin-right: 5px;
-        }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
 
-        .btn-mobile:hover {
-            opacity: 0.8;
-        }
+  /* Estilos para el modal de SweetAlert2 */
+  .swal2-popup {
+      border-radius: 20px !important;
+      padding: 2rem !important;
+  }
 
-        /* Colores de los botones */
-        .btn-warning.btn-mobile {
-            background-color: #ffc107;
-            color: #212529;
-        }
+  .swal2-title {
+      color: var(--primary-burgundy) !important;
+  }
 
-        .btn-danger.btn-mobile {
-            background-color: #dc3545;
-            color: #fff;
-        }
+  .swal2-confirm {
+      background: linear-gradient(45deg, var(--primary-burgundy), var(--light-burgundy)) !important;
+      border-radius: 10px !important;
+  }
 
-        .btn-mobile-action {
-            flex: 0 1 48%;
-            margin: 0;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
+  .swal2-cancel {
+      border-radius: 10px !important;
+  }
 
-        .btn-mobile-action i {
-            font-size: 16px;
-            margin-right: 5px;
-        }
+  /* Botón Nuevo Usuario Mejorado */
+  .btn-new {
+      background: linear-gradient(135deg, var(--primary-burgundy), var(--light-burgundy));
+      color: rgb(3, 3, 3);
+      /* Asegura que el texto sea blanco */
+      padding: 12px 24px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+  }
 
-        .btn-mobile-action:hover {
-            opacity: 0.8;
-        }
-        .dataTables_length,
-        .dataTables_filter,
-        .dataTables_paginate {
-            display: none !important;
-        }
-    }
+  .btn-new:hover {
+      background: linear-gradient(135deg, var(--light-burgundy), var(--primary-burgundy));
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
+  }
 
-    @media (min-width: 993px) {
-        .mobile-table {
-            display: none;
-        }
-    }
+  .btn-new:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 20px rgba(128, 0, 32, 0.3);
+  }
+
+  .btn-new i {
+      color: rgb(95, 39, 39);
+      /* Asegura que el icono también sea blanco */
+      background: #494949;
+      /* Fondo del icono */
+      padding: 8px;
+      /* Espaciado interno del icono */
+      border-radius: 50%;
+      /* Hace el fondo circular */
+      transition: transform 0.3s ease;
+  }
+
+  .btn-new:hover i {
+      transform: translateX(5px);
+      /* Mueve el icono hacia la derecha al hacer hover */
+  }
+
+  /* Efecto Ripple al hacer clic */
+  .btn-new::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: rgba(12, 12, 12, 0.3);
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.5s ease, opacity 1s ease;
+  }
+
+  .btn-new:active::after {
+      transform: scale(4);
+      opacity: 1;
+      transition: 0s;
+  }
+
+  /* Asegura que el texto dentro del span herede el color blanco */
+  .btn-new span {
+      color: white;
+  }
+
 </style>
 @section('content')
-<section class="section">
-    <div class="section-header">
+<section class="section" style="background: transparent">
+    <div class="section-header" style="background: transparent">
         <h3 class="page__heading">Logs</h3>
     </div>
 

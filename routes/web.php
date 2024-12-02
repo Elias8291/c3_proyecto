@@ -55,8 +55,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/', [PrestamoController::class, 'index'])->name('prestamos.index');
         Route::get('{id}', [PrestamoController::class, 'show'])->name('prestamos.show');
     });
-    
-    
+
+
     // Rutas para notificaciones
     Route::prefix('notificaciones')->group(function () {
         Route::post('crear', [NotificacionController::class, 'crear'])->name('notificaciones.crear');
@@ -72,20 +72,27 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/documentos/{documentoId}/cancelar', [PrestamoController::class, 'cancelar'])->name('prestamos.cancelar');
     Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
     Route::get('/prestamos', [PrestamoController::class, 'index']);
-  
-  
 
-Route::middleware('auth')->group(function () {
+
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
+        Route::post('/notificaciones/crear', [NotificacionController::class, 'crear'])->name('notificaciones.crear');
+        Route::get('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.marcarLeida');
+    });
+
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
-    Route::post('/notificaciones/crear', [NotificacionController::class, 'crear'])->name('notificaciones.crear');
-    Route::get('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.marcarLeida');
-});
-
-Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
-Route::post('/documentos/{documento}/solicitar', [NotificacionController::class, 'crearNotificacionSolicitud'])
-    ->name('prestamos.solicitar');
+    Route::post('/documentos/{documento}/solicitar', [NotificacionController::class, 'crearNotificacionSolicitud'])
+        ->name('prestamos.solicitar');
 
     Route::post('prestamos/aprobar/{documento}', [PrestamoController::class, 'aprobar'])->name('prestamos.aprobar');
-Route::post('prestamos/rechazar/{documento}', [PrestamoController::class, 'rechazar'])->name('prestamos.rechazar');
+    Route::post('prestamos/rechazar/{documento}', [PrestamoController::class, 'rechazar'])->name('prestamos.rechazar');
+    Route::resource('carpetas', CarpetaController::class);
+    Route::resource('documentos', DocumentoController::class)->except(['show', 'edit']);
+    Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
+    Route::post('/documentos/{carpeta}', [DocumentoController::class, 'store'])->name('documentos.store');
+
+    
+
 });
 // En routes/web.php

@@ -32,8 +32,12 @@ class Documento extends Model
     /**
      * Obtener la carpeta asociada con el documento.
      */
-    public function carpeta()
-    {
-        return $this->belongsTo(Carpeta::class, 'id_carpeta');
-    }
+   /**
+ * Obtener la carpeta asociada con el documento.
+ */
+public function carpeta()
+{
+    return $this->belongsTo(Carpeta::class, 'id_carpeta');
+}
+
 }
