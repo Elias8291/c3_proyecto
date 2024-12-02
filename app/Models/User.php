@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
+    use Notifiable;
     use HasFactory, Notifiable, HasRoles;
+ 
 
     /**
      * The attributes that are mass assignable.
@@ -57,5 +59,12 @@ class User extends Authenticatable
         return $this->belongsTo(Area::class, 'id_area');
     }
  
+    public function routeNotificationForDatabase()
+    {
+        return 'notifications'; // Asegura que las notificaciones se guarden en la base de datos
+    }
 
+    
+
+    
 }

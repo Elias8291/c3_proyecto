@@ -38,6 +38,7 @@ class SeederPermisosC3 extends Seeder
             'crear-caja',
             'editar-caja',
             'eliminar-caja',
+             'solicitar-prestamo',
         ];
 
         foreach ($permisos as $permiso) {

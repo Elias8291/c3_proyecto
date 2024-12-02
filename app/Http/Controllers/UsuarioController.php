@@ -8,7 +8,7 @@ use App\Models\User; // Asegúrate de importar el modelo User
 use App\Models\Area; // Si estás utilizando el modelo Area
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Storage;
 class UsuarioController extends Controller
 {
     // Mostrar el formulario de login
@@ -149,7 +149,7 @@ class UsuarioController extends Controller
         if ($request->hasFile('image')) {
             // Eliminar la imagen anterior si existe
             if ($usuario->image) {
-                \Storage::delete('public/' . $usuario->image);
+                Storage::delete('public/' . $usuario->image);
             }
     
             // Almacenar la nueva imagen

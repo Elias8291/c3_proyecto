@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -15,16 +14,17 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // Creamos el usuario administrador
-        $admin = User::create([
+        // Crear el usuario administrador si no existe
+        $admin = User::firstOrCreate([
+            'email' => 'admin@gmail.com',
+        ], [
             'name' => 'Carlos Eduardo',
             'apellido_paterno' => 'Pérez',
             'apellido_materno' => 'González',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('admin12345'), // Aseguramos la contraseña con bcrypt
+            'password' => bcrypt('admin12345'),
             'telefono' => '555-1234',
-            'image' => null, // Puede ser null
-            'id_area' => 1, // Cambia según el id correspondiente del área
+            'image' => null, 
+            'id_area' => 1,
         ]);
 
         // Asignamos el rol 'Admin' al usuario administrador
@@ -33,24 +33,42 @@ class UserSeeder extends Seeder
             $admin->assignRole($adminRole);
         }
 
-        // Creamos otro usuario
-        $user = User::create([
+        // Crear el primer usuario adicional si no existe
+        $user1 = User::firstOrCreate([
+            'email' => 'abisai@gmail.com',
+        ], [
             'name' => 'Rafael Carlos Eduardo',
             'apellido_paterno' => 'López',
             'apellido_materno' => 'Martínez',
-            'email' => 'abisai@gmail.com',
-            'password' => bcrypt('abisai1456'), // Aseguramos la contraseña con bcrypt
+            'password' => bcrypt('abisai1456'),
             'telefono' => '555-5678',
-            'image' => null, // Puede ser null
-            'id_area' => 2, // Cambia según el id correspondiente del área
+            'image' => null, 
+            'id_area' => 2,
         ]);
 
-        // Asignamos el rol 'Secretaria' al otro usuario
+        // Asignamos el rol 'Secretaria' al primer usuario adicional
         $secretaryRole = Role::where('name', 'Secretaria')->first();
         if ($secretaryRole) {
-            $user->assignRole($secretaryRole);
+            $user1->assignRole($secretaryRole);
         }
 
-        // Puedes agregar más usuarios aquí
+        // Crear el segundo usuario adicional si no existe
+        $user2 = User::firstOrCreate([
+            'email' => 'laura.martinez@gmail.com',
+        ], [
+            'name' => 'Laura Martínez',
+            'apellido_paterno' => 'García',
+            'apellido_materno' => 'Ramírez',
+            'password' => bcrypt('laura12345'),
+            'telefono' => '555-8765',
+            'image' => null, 
+            'id_area' => 3,
+        ]);
+
+        // Asignamos el rol 'Empleado' al segundo usuario adicional
+        $employeeRole = Role::where('name', 'Empleado')->first();
+        if ($employeeRole) {
+            $user2->assignRole($employeeRole);
+        }
     }
 }

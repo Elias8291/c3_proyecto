@@ -9,31 +9,31 @@ class Documento extends Model
 {
     use HasFactory;
 
-    protected $table = 'documentos';
-
     protected $fillable = [
-        'numero_hojas',
-        'fecha_creacion',
-        'estado',
-        'id_evaluado',
-        'id_area',
-        'id_carpeta'
+        'numero_hojas', 'fecha_creacion', 'estado', 'id_evaluado', 'id_area', 'id_carpeta'
     ];
 
-    public function carpeta()
+    /**
+     * Obtener el evaluado asociado con el documento.
+     */
+    public function evaluado()
     {
-        return $this->belongsTo(Carpeta::class, 'id_carpeta');
+        return $this->belongsTo(Evaluado::class, 'id_evaluado');
     }
 
-
+    /**
+     * Obtener el área asociada con el documento.
+     */
     public function area()
     {
         return $this->belongsTo(Area::class, 'id_area');
     }
-    public function show($id)
-{
-    $caja = Caja::with('carpetas.evaluado', 'carpetas.documentos')->findOrFail($id);
-    return view('cajas.show', compact('caja'));
-}
 
+    /**
+     * Obtener la carpeta asociada con el documento.
+     */
+    public function carpeta()
+    {
+        return $this->belongsTo(Carpeta::class, 'id_carpeta');
+    }
 }

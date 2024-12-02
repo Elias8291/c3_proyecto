@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Carpeta;
 use App\Models\Documento;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class EvaluadoController extends Controller
 {
@@ -24,41 +25,32 @@ class EvaluadoController extends Controller
     }
     public function index(Request $request)
     {
-        $query = Evaluado::with('carpetas');
-    
+        $query = Evaluado::query();
+
         // Filtrar por búsqueda de texto
         if ($request->has('search') && !empty($request->input('search'))) {
             $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('primer_nombre', 'LIKE', "%$search%")
-                  ->orWhere('segundo_nombre', 'LIKE', "%$search%")
-                  ->orWhere('primer_apellido', 'LIKE', "%$search%")
-                  ->orWhere('segundo_apellido', 'LIKE', "%$search%")
-                  ->orWhere('CURP', 'LIKE', "%$search%")
-                  ->orWhere('RFC', 'LIKE', "%$search%");
-            });
+            $query->where(DB::raw("CONCAT(primer_nombre, ' ', segundo_nombre, ' ', primer_apellido, ' ', segundo_apellido)"), 'LIKE', "%$search%");
         }
-    
+
         // Filtrar por año de fecha de apertura
         if ($request->has('year') && !empty($request->input('year'))) {
             $year = $request->input('year');
             $query->whereYear('fecha_apertura', $year);
         }
-    
-        // Obtener el valor de 'perPage' de la solicitud y usar 10 como valor predeterminado
+
+        // Obtener cantidad de resultados por página
         $perPage = $request->input('perPage', 10);
-    
-        // Paginar los resultados con el valor de 'perPage'
+
+        // Aplicar paginación después de los filtros
         $evaluados = $query->paginate($perPage);
-    
-        // Verificar si la solicitud es AJAX y devolver solo la vista parcial de la tabla
-        if ($request->ajax()) {
-            return view('evaluados.partials.table', compact('evaluados'))->render();
-        }
-    
+
         return view('evaluados.index', compact('evaluados'));
     }
-    
+
+
+
+
 
 
     /**
@@ -101,6 +93,11 @@ class EvaluadoController extends Controller
             'success' => '¡Evaluado creado exitosamente!',
             'showCreateFolderModal' => true  // Activa el modal para crear carpeta
         ]);
+    }
+
+    public function carpeta()
+    {
+        return $this->hasOne(Carpeta::class, 'id_evaluado');
     }
 
 

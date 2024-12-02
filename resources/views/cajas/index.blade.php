@@ -621,9 +621,7 @@ body {
             @endforeach
         </div>
 
-        <button class="new-folder-btn" onclick="window.location.href='{{ route('cajas.create') }}'">
-            <i class="fas fa-plus fa-lg"></i>
-        </button>
+       
 
         <div class="pagination justify-content-end mt-4">
             {!! $cajas->links() !!}

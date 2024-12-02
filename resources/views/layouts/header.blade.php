@@ -199,38 +199,29 @@
 
 <!-- Barra de navegación -->
 <ul class="navbar-nav navbar-right">
-    @if(\Illuminate\Support\Facades\Auth::user())
-    <!-- Ícono de Notificaciones -->
+ 
     <li class="nav-item dropdown">
         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle notification-icon">
-            <i class="fas fa-bell notification-bell"></i>
-            <span class="notification-badge">3</span>
+           
         </a>
         <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
             <h6 class="dropdown-header">Notificaciones</h6>
-            <div class="notifications-list">
-                <!-- Ejemplos de Notificaciones -->
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> Tienes un nuevo mensaje
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-user mr-2"></i> Nuevo usuario registrado
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-comment mr-2"></i> Nuevo comentario en tu publicación
-                </a>
-            </div>
+           
             <div class="dropdown-footer text-center">
-                <a href="#">Ver todas las notificaciones</a>
+                <a href="{{ route('notificaciones.index') }}">Ver todas las notificaciones</a>
             </div>
         </div>
     </li>
+    
+    
+    
 
     <!-- Menú de Usuario -->
     <li class="nav-item dropdown">
         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-user">
             <div class="d-sm-none d-lg-inline-block">
-                ¡Hola!, {{ \Illuminate\Support\Facades\Auth::user()->name }}
+                ¡Hola!, {{ \Illuminate\Support\Facades\Auth::user()->name }} 
+              
             </div>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
@@ -251,7 +242,6 @@
             </form>
         </div>
     </li>
-    @else
-
-    @endif
+  
+    
 </ul>

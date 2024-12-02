@@ -515,72 +515,80 @@ body {
                     </div>
 
                     <div class="table-container">
-                        <div class="table-responsive">
-                            <table class="table" id="evaluadosTable">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">Nombre Completo</th>
-                                        <th class="text-center">CURP</th>
-                                        <th class="text-center">RFC</th>
-                                        <th class="text-center">Fecha de Evaluación</th>
-                                        <th class="text-center">Resultado de Evaluación</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="evaluadosTableBody">
-                                    @foreach ($evaluados as $evaluado)
-                                    <tr>
-                                        <td class="text-center">{{ $evaluado->primer_nombre }} {{
-                                            $evaluado->segundo_nombre }} {{ $evaluado->primer_apellido }} {{
-                                            $evaluado->segundo_apellido }}</td>
-                                        <td>{{ $evaluado->CURP }}</td>
-                                        <td>{{ $evaluado->RFC }}</td>
-                                        <td class="text-center">{{ $evaluado->fecha_apertura }}</td>
-                                        <td class="text-center">
-                                            @if ($evaluado->resultado_evaluacion == 1)
-                                            Aprobó
-                                            @else
-                                            No Aprobó
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                @if($evaluado->carpeta)
-                                                <i class="fas fa-folder" style="color: var(--primary-burgundy);"
-                                                    title="Carpeta asociada"></i>
-                                                @endif
+    <div class="table-responsive">
+        <table class="table" id="evaluadosTable">
+            <thead>
+                <tr>
+                    <th class="text-center">Nombre Completo</th>
+                    <th class="text-center">CURP</th>
+                    <th class="text-center">RFC</th>
+                    <th class="text-center">Fecha de Evaluación</th>
+                    <th class="text-center">Resultado de Evaluación</th>
+                    <th class="text-center">Acciones</th>
+                    <th class="text-center">Carpeta</th>
+                </tr>
+            </thead>
+            <tbody id="evaluadosTableBody">
 
-                                                @can('editar-evaluado')
-                                                <a href="{{ route('evaluados.edit', $evaluado->id) }}"
-                                                    class="btn btn-edit" title="Editar Evaluado">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                @endcan
-
-                                                @can('eliminar-evaluado')
-                                                <button type="button" class="btn btn-delete" title="Borrar Evaluado"
-                                                    onclick="confirmarEliminacion({{ $evaluado->id }})">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                                <form id="eliminar-form-{{ $evaluado->id }}"
-                                                    action="{{ route('evaluados.destroy', $evaluado->id) }}"
-                                                    method="POST" class="d-none">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
-                                                @endcan
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                @foreach ($evaluados as $evaluado)
+                <tr>
+                    <td class="text-center">
+                        {{ $evaluado->primer_nombre }} {{ $evaluado->segundo_nombre }} 
+                        {{ $evaluado->primer_apellido }} {{ $evaluado->segundo_apellido }}
+                    </td>
+                    <td>{{ $evaluado->CURP }}</td>
+                    <td>{{ $evaluado->RFC }}</td>
+                    <td class="text-center">{{ $evaluado->fecha_apertura }}</td>
+                    <td class="text-center">
+                        @if ($evaluado->resultado_evaluacion == 1)
+                        Aprobó
+                        @else
+                        No Aprobó
+                        @endif
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            @if($evaluado->carpeta)
+                            <i class="fas fa-folder" style="color: var(--primary-burgundy);" title="Carpeta asociada"></i>
+                            @endif
+                            @can('editar-evaluado')
+                            <a href="{{ route('evaluados.edit', $evaluado->id) }}" class="btn btn-edit" title="Editar Evaluado">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            @endcan
+                            @can('eliminar-evaluado')
+                            <button type="button" class="btn btn-delete" title="Borrar Evaluado" onclick="confirmarEliminacion({{ $evaluado->id }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <form id="eliminar-form-{{ $evaluado->id }}" action="{{ route('evaluados.destroy', $evaluado->id) }}" method="POST" class="d-none">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                            @endcan
                         </div>
-                    </div>
-                    <div class="pagination justify-content-end">
-                        {!! $evaluados->links() !!}
-                    </div>
+                    </td>
+                    <td class="text-center">
+            @if($evaluado->carpeta)
+                <a href="{{ route('carpetas.show', $evaluado->carpeta->id) }}" class="btn btn-new" title="Ver Carpeta">
+                    <i class="fas fa-folder"></i>
+                </a>
+            @else
+                <span title="No hay carpeta asociada">
+                    <i class="fas fa-folder-open text-muted"></i>
+                </span>
+            @endif
+        </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="pagination justify-content-end">
+    {!! $evaluados->appends(request()->query())->links() !!}
+</div>
+
+           
                 </div>
             </div>
         </div>
@@ -629,18 +637,17 @@ function confirmarEliminacion(evaluadoId) {
 
 
 
-function searchEvaluados() {
-    var searchInput = document.getElementById('searchInput').value.toLowerCase();
+// Asignar el evento 'input' al campo de búsqueda
+document.getElementById('searchInput').addEventListener('input', function() {
+    var searchInput = this.value.toLowerCase();
     var yearSelect = document.getElementById('yearSelect').value;
     var table = document.getElementById('evaluadosTable');
     var rows = table.getElementsByTagName('tr');
 
     for (var i = 1; i < rows.length; i++) {
         var row = rows[i];
-        var fullName = row.cells[1].textContent.toLowerCase();
-        var curp = row.cells[2].textContent.toLowerCase();
-        var rfc = row.cells[3].textContent.toLowerCase();
-        var fecha_apertura = row.cells[4].textContent;
+        var fullName = row.cells[0].textContent.toLowerCase(); // Índice de "Nombre Completo"
+        var fecha_apertura = row.cells[3].textContent; // Índice de columna "Fecha de Evaluación"
 
         // Extraer el año de la fecha de apertura
         var yearFromFechaApertura = new Date(fecha_apertura).getFullYear().toString();
@@ -648,16 +655,23 @@ function searchEvaluados() {
         var showRow = false;
         if (searchInput === '' && yearSelect === '') {
             showRow = true;
-        } else if (searchInput !== '' && (fullName.includes(searchInput) || curp.includes(searchInput) || rfc.includes(
-                searchInput))) {
+        } else if (searchInput !== '' && fullName.includes(searchInput)) {
             showRow = true;
         } else if (yearSelect !== '' && yearFromFechaApertura === yearSelect) {
+            showRow = true;
+        } else if (
+            searchInput !== '' &&
+            yearSelect !== '' &&
+            fullName.includes(searchInput) &&
+            yearFromFechaApertura === yearSelect
+        ) {
             showRow = true;
         }
 
         row.style.display = showRow ? 'table-row' : 'none';
     }
-}
+});
+
 
 
 
@@ -681,35 +695,22 @@ function filterEvaluados() {
     window.location.href = url.toString();
 }
 
-document.getElementById('searchInput').addEventListener('input', function() {
-    var searchInput = this.value.toLowerCase();
-    var yearSelect = document.getElementById('yearSelect').value;
-    var table = document.getElementById('evaluadosTable');
-    var rows = table.getElementsByTagName('tr');
+function searchEvaluados() {
+    const searchInput = document.getElementById('searchInput').value;
+    const yearSelect = document.getElementById('yearSelect').value;
 
-    for (var i = 1; i < rows.length; i++) {
-        var row = rows[i];
-        var fullName = row.cells[1].textContent.toLowerCase();
-        var curp = row.cells[2].textContent.toLowerCase();
-        var rfc = row.cells[3].textContent.toLowerCase();
-        var fecha_apertura = row.cells[4].textContent;
-
-        // Extraer el año de la fecha de apertura
-        var yearFromFechaApertura = new Date(fecha_apertura).getFullYear().toString();
-
-        var showRow = false;
-        if (searchInput === '' && yearSelect === '') {
-            showRow = true;
-        } else if (searchInput !== '' && (fullName.includes(searchInput) || curp.includes(searchInput) || rfc
-                .includes(searchInput))) {
-            showRow = true;
-        } else if (yearSelect !== '' && yearFromFechaApertura === yearSelect) {
-            showRow = true;
-        }
-
-        row.style.display = showRow ? 'table-row' : 'none';
+    const url = new URL(window.location.href);
+    url.searchParams.set('search', searchInput);
+    if (yearSelect) {
+        url.searchParams.set('year', yearSelect);
+    } else {
+        url.searchParams.delete('year');
     }
-});
+
+    // Redirigir al backend para procesar la búsqueda en toda la base de datos
+    window.location.href = url.toString();
+}
+
 
 document.getElementById('yearSelect').addEventListener('change', filterEvaluados);
 document.addEventListener('DOMContentLoaded', function() {
@@ -732,6 +733,63 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function updateEvaluadosTable() {
+    const searchInput = document.getElementById('searchInput').value;
+    const yearSelect = document.getElementById('yearSelect').value;
+    const perPage = document.getElementById('perPageSelect').value;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('search', searchInput);
+    url.searchParams.set('year', yearSelect);
+    url.searchParams.set('perPage', perPage);
+
+    fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Actualizar el cuerpo de la tabla
+        const tableBody = document.getElementById('evaluadosTableBody');
+        tableBody.innerHTML = '';
+
+        data.evaluados.forEach(evaluado => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="text-center">${evaluado.primer_nombre} ${evaluado.segundo_nombre} ${evaluado.primer_apellido} ${evaluado.segundo_apellido}</td>
+                <td>${evaluado.CURP}</td>
+                <td>${evaluado.RFC}</td>
+                <td class="text-center">${new Date(evaluado.fecha_apertura).toLocaleDateString('es-ES')}</td>
+                <td class="text-center">${evaluado.resultado_evaluacion ? 'Aprobó' : 'No Aprobó'}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="/evaluados/${evaluado.id}/edit" class="btn btn-edit" title="Editar Evaluado">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="btn btn-delete" onclick="confirmarEliminacion(${evaluado.id})" title="Eliminar Evaluado">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Actualizar la paginación
+        const paginationContainer = document.querySelector('.pagination');
+        paginationContainer.innerHTML = data.pagination;
+    })
+    .catch(error => console.error('Error al actualizar la tabla:', error));
+}
+
+// Eventos
+document.getElementById('searchInput').addEventListener('input', updateEvaluadosTable);
+document.getElementById('yearSelect').addEventListener('change', updateEvaluadosTable);
+document.getElementById('perPageSelect').addEventListener('change', updateEvaluadosTable);
+
+
 function updatePerPage() {
     var perPage = document.getElementById('perPageSelect').value;
 
@@ -740,6 +798,7 @@ function updatePerPage() {
     url.searchParams.set('perPage', perPage);
     window.location.href = url.toString();
 }
+
 </script>
 
 @endsection

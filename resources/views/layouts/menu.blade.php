@@ -221,5 +221,14 @@
         </a>
     </li>
     @endcan
+
+  
+    <li class="side-menu-item" style="--item-index: 6">
+        <a href="/prestamos" class="side-menu-link {{ Request::is('prestamos*') ? 'active' : '' }}">
+            <i class="fas fa-box side-menu-icon"></i>
+            <span class="side-menu-text">Prestamos</span>
+        </a>
+    </li>
+
 </ul>
 
