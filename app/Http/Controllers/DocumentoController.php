@@ -5,82 +5,114 @@ namespace App\Http\Controllers;
 use App\Models\Documento;
 use Illuminate\Http\Request;
 use App\Models\Evaluado;
+use App\Models\Area;
 use App\Models\Carpeta;
 
 class DocumentoController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        // Obtiene todos los documentos de la base de datos
-        $documentos = Documento::all();
-        
-        // Retorna la vista con la lista de documentos
-        return view('documentos.index', compact('documentos'));
+        $documentos = Documento::all(); // Obtener todos los documentos
+        return view('documentos.index', compact('documentos')); // Pasar los datos a la vista
     }
-
-    public function create(Request $request)
+    
+    public function create()
     {
-        // Obtener la carpeta y el evaluado utilizando los IDs pasados por el formulario
-        $carpeta = Carpeta::findOrFail($request->input('carpeta_id'));
-        $evaluado = Evaluado::findOrFail($request->input('evaluado_id'));
+        $evaluados = Evaluado::all(); // Asegúrate de tener el modelo Evaluado
+        $areas = Area::all(); // Asegúrate de tener el modelo Area
+        $carpetas = Carpeta::all(); // Asegúrate de tener el modelo Carpeta
     
-        // Retorna la vista de creación de documentos con la carpeta y el evaluado
-        return view('documentos.crear', compact('carpeta', 'evaluado'));
+        return view('documentos.create', compact('evaluados', 'areas', 'carpetas'));
     }
     
-  
-    public function store(Request $request, Carpeta $carpeta)
-{
-    // Validación de los datos
-    $validated = $request->validate([
-        'area_id' => 'required|exists:areas,id',
-        'numero_hojas' => 'required|integer|min:1',
-        'estado' => 'required|in:Disponible,Prestado,Solicitado', // Cambiado para incluir los nuevos estados
-        'fecha_creacion' => 'required|date',
-    ]);
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'numero_hojas' => 'required|string',
+            'fecha_creacion' => 'required|date',
+            'estado' => 'required|string',
+            'id_evaluado' => 'required|exists:evaluados,id',
+            'id_area' => 'required|exists:areas,id',
+            'id_carpeta' => 'nullable|exists:carpetas,id',
+            'pdf_url' => 'nullable|file|mimes:pdf|max:2048',
+        ]);
     
-    // Asignar el id_evaluado (aquí se asume que `Evaluado` está relacionado con `Carpeta` o que puedes obtenerlo de alguna manera)
-    $id_evaluado = $carpeta->evaluado->id; // Asumimos que la relación entre Carpeta y Evaluado está definida correctamente
-
-    // Crear el documento
-    $documento = new Documento();
-    $documento->numero_hojas = $validated['numero_hojas'];
-    $documento->fecha_creacion = $validated['fecha_creacion'];
-    $documento->estado = $validated['estado'];
-    $documento->id_area = $validated['area_id'];
-    $documento->id_carpeta = $carpeta->id; // Relacionar con la carpeta actual
-    $documento->id_evaluado = $id_evaluado; // Asignar el evaluado
-
-    $documento->save();
-
-    // Redirigir a la página de la carpeta con el nuevo documento creado
-    return redirect()->route('carpetas.show', $carpeta->id)
-                     ->with('success', 'Documento creado exitosamente');
-}
-
+        // Manejar el archivo PDF si se proporciona
+        if ($request->hasFile('pdf_url')) {
+            $validated['pdf_url'] = $request->file('pdf_url')->store('documentos', 'public');
+        }
     
+        // Crear el documento
+        $documento = Documento::create($validated);
+    
+        // Redirigir a la vista de la carpeta asociada
+        if ($request->id_carpeta) {
+            return redirect()->route('carpetas.show', $request->id_carpeta)
+                             ->with('success', 'Documento creado correctamente');
+        }
+    
+        // Redirigir al índice si no se especifica una carpeta
+        return redirect()->route('documentos.index')->with('success', 'Documento creado correctamente');
+    }
+    
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $documento = Documento::findOrFail($id);
+        return response()->json($documento);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'numero_hojas' => 'nullable|string',
+            'fecha_creacion' => 'nullable|date',
+            'estado' => 'nullable|string',
+            'id_evaluado' => 'nullable|exists:evaluados,id',
+            'id_area' => 'nullable|exists:areas,id',
+            'id_carpeta' => 'nullable|exists:carpetas,id',
+            'pdf_url' => 'nullable|string',
+        ]);
+
+        $documento = Documento::findOrFail($id);
+        $documento->update($validated);
+        return response()->json($documento);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-        // Buscar el documento por su ID
         $documento = Documento::findOrFail($id);
-    
-        try {
-            // Guardamos el id de la carpeta antes de eliminar el documento
-            $carpetaId = $documento->id_carpeta;
-    
-            // Eliminar el documento
-            $documento->delete();
-    
-            // Redirigir a la vista de la carpeta correspondiente, pasando el ID de la carpeta
-            return redirect()->route('carpetas.show', ['carpeta' => $carpetaId])
-                             ->with('success', 'Documento eliminado correctamente.');
-        } catch (\Exception $e) {
-            // Si ocurre algún error, redirigir con un mensaje de error
-            return redirect()->route('carpetas.show', ['carpeta' => $documento->id_carpeta])
-                             ->with('error', 'Hubo un error al eliminar el documento: ' . $e->getMessage());
-        }
+        $documento->delete();
+        return response()->json(['message' => 'Documento eliminado correctamente']);
     }
-    
-
-    
 }

@@ -27,7 +27,6 @@ class CarpetaController extends Controller
     }
 
 
-
     public function create()
     {
         // Obtener solo las áreas de evaluación incluyendo Perfiles y Programación
@@ -81,9 +80,6 @@ class CarpetaController extends Controller
         return view('carpetas.show', compact('carpeta', 'areas'));
     }
 
-
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -91,21 +87,23 @@ class CarpetaController extends Controller
             'id_caja' => 'required|exists:cajas,id',
             'documentos' => 'nullable|string'
         ]);
-
+    
+        // Crear la carpeta
         $carpeta = Carpeta::create([
             'id_evaluado' => $request->id_evaluado,
             'id_caja' => $request->id_caja,
         ]);
-
+    
+        // Si hay documentos, guardarlos en la base de datos
         if ($request->filled('documentos')) {
             $documentos = json_decode($request->documentos, true);
-
+    
             if (is_array($documentos)) {
                 foreach ($documentos as $documentoData) {
                     Documento::create([
                         'id_carpeta' => $carpeta->id,
                         'numero_hojas' => $documentoData['numeroHojas'],
-                        'id_area' => $documentoData['area'], // Agregar id_area aquí
+                        'id_area' => $documentoData['area'], // Asegúrate de que esto coincide con el modelo
                         'estado' => $documentoData['estado'],
                         'fecha_creacion' => $documentoData['fechaCreacion'],
                         'id_evaluado' => $request->id_evaluado,
@@ -113,9 +111,12 @@ class CarpetaController extends Controller
                 }
             }
         }
-
-        return redirect()->route('carpetas.index')->with('success', 'Carpeta y documentos creados correctamente.');
+    
+        // Redirigir al detalle de la carpeta creada
+        return redirect()->route('carpetas.show', $carpeta->id)
+                         ->with('success', 'Carpeta y documentos creados correctamente.');
     }
+    
 
 
     public function edit($id)

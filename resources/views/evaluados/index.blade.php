@@ -2,6 +2,7 @@
 
 <style>
 :root {
+    --header-color: #9B2847;
     --primary-burgundy: #800020;
     --light-burgundy: #98304b;
     --pastel-pink: #ffd6e0;
@@ -51,25 +52,27 @@ body {
 }
 
 .page__heading {
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 2.5rem;
-    margin: 0 0 1.8rem;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 1rem;
-}
+        color: var(--header-color);
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 2.5rem;
+        position: relative;
+        padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
+    }
 
-.page__heading::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
-    border-radius: 3px;
-}
+    .page__heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 6px;
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
+    }
 
 /* Contenedor de acciones superior */
 .actions-container {
@@ -461,6 +464,82 @@ body {
     font-weight: bold;
     color: #d9534f;
 }
+.evaluado-select-container {
+    position: relative;
+}
+
+.evaluado-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+    display: none;
+}
+
+.evaluado-search-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.evaluado-search-item:hover {
+    background-color: #f7fafc;
+    transform: translateX(5px);
+}
+
+.evaluado-search-item.disabled {
+    color: #a0aec0;
+    cursor: not-allowed;
+    background-color: #f3f4f6;
+}
+
+.evaluado-search-item .name {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 1.1em;
+}
+
+.evaluado-search-item .status {
+    font-size: 0.9em;
+    color: #718096;
+    margin-top: 4px;
+}
+
+.evaluado-search-item.disabled .status {
+    color: #e53e3e;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #800020;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.no-results {
+    padding: 15px;
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+}
 </style>
 
 @section('content')
@@ -798,6 +877,106 @@ function updatePerPage() {
     url.searchParams.set('perPage', perPage);
     window.location.href = url.toString();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('evaluado_search');
+    const searchResults = document.getElementById('searchResults');
+    const idEvaluadoInput = document.getElementById('id_evaluado');
+    const searchStatus = document.getElementById('searchStatus');
+    let searchTimeout;
+
+    async function searchEvaluados(searchTerm) {
+        try {
+            const response = await fetch(`/evaluados?search=${encodeURIComponent(searchTerm)}&ajax=true`);
+            if (!response.ok) throw new Error('Error en la búsqueda');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            return [];
+        }
+    }
+
+    function showLoadingSpinner() {
+        searchStatus.innerHTML = '<div class="loading-spinner"></div> Buscando...';
+    }
+
+    function hideLoadingSpinner() {
+        searchStatus.innerHTML = '';
+    }
+
+    function showResults(evaluados) {
+        searchResults.style.display = 'block';
+        
+        if (evaluados.length === 0) {
+            searchResults.innerHTML = '<div class="no-results">No se encontraron evaluados</div>';
+            return;
+        }
+
+        searchResults.innerHTML = evaluados.map(evaluado => {
+            const hasFolder = evaluado.carpeta !== null;
+            const fullName = `${evaluado.primer_nombre} ${evaluado.segundo_nombre || ''} ${evaluado.primer_apellido} ${evaluado.segundo_apellido || ''}`.trim();
+            
+            return `
+                <div class="evaluado-search-item ${hasFolder ? 'disabled' : ''}" 
+                     data-id="${evaluado.id}">
+                    <span class="name">${fullName}</span>
+                    <span class="status">
+                        ${hasFolder ? 
+                            '⚠️ Ya tiene carpeta asignada' : 
+                            '✅ Disponible para asignar carpeta'}
+                    </span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.trim();
+        
+        clearTimeout(searchTimeout);
+        
+        if (searchTerm.length === 0) {
+            searchResults.style.display = 'none';
+            hideLoadingSpinner();
+            return;
+        }
+
+        showLoadingSpinner();
+        
+        searchTimeout = setTimeout(async () => {
+            const evaluados = await searchEvaluados(searchTerm);
+            hideLoadingSpinner();
+            showResults(evaluados);
+        }, 300);
+    });
+
+    // Evento para seleccionar un evaluado
+    searchResults.addEventListener('click', function(e) {
+        const item = e.target.closest('.evaluado-search-item');
+        if (!item || item.classList.contains('disabled')) return;
+
+        const id = item.dataset.id;
+        const name = item.querySelector('.name').textContent;
+        
+        searchInput.value = name;
+        idEvaluadoInput.value = id;
+        searchResults.style.display = 'none';
+
+        // Mostrar el botón de documentos
+        const toggleBtn = document.getElementById('toggleDocumentsBtn');
+        if (toggleBtn) {
+            toggleBtn.style.display = 'inline-flex';
+        }
+    });
+
+    // Cerrar resultados al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
+});
 
 </script>
 

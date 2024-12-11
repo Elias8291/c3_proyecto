@@ -2,6 +2,7 @@
 
 <style>
     :root {
+        --header-color: #9B2847;
       --primary-burgundy: #800020;
       --light-burgundy: #98304b;
       --pastel-pink: #ffd6e0;
@@ -50,25 +51,27 @@
   }
 
   .page__heading {
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 2.5rem;
-      margin: 0 0 1.8rem;
-      position: relative;
-      display: inline-block;
-      padding-bottom: 1rem;
-  }
+        color: var(--header-color);
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 2.5rem;
+        position: relative;
+        padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
+    }
 
-  .page__heading::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
-      border-radius: 3px;
-  }
+    .page__heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 6px;
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
+    }
 
   /* Contenedor de acciones superior */
   .actions-container {

@@ -773,7 +773,7 @@
             </div>
 
             <!-- Formulario -->
-            <form action="{{ route('carpetas.store') }}" method="POST">
+            <form action="{{ route('carpetas.store') }}" method="POST" enctype="multipart/form-data" id="carpetaForm">
                 @csrf
 
                 <input type="hidden" name="documentos" id="documentos-input">
@@ -826,65 +826,6 @@
                     </button>
                 </div>
 
-                <div id="documentSections" style="display: none;">
-                    <div class="document-section">
-                        <h4><i class="fas fa-file-alt"></i> Agregar Documento</h4>
-                        <div class="document-form-grid">
-                            <div class="document-form-group">
-                                <label for="numero_hojas">Número de Hojas</label>
-                                <input type="number" id="numero_hojas" name="numero_hojas" placeholder="Ej: 10" min="1">
-                            </div>
-
-                            <div class="document-form-group">
-                                <label for="area">Área</label>
-                                <select id="area" name="area">
-                                    <option value="">Seleccione un área</option>
-                                    @foreach($evaluacionAreas as $area)
-                                    <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="document-form-group">
-                                <label for="estado">Estado</label>
-                                <select id="estado" name="estado" disabled>
-                                    <option value="Disponible" selected>Disponible</option>
-                                </select>
-                                <input type="hidden" name="estado" value="Disponible">
-                            </div>
-
-                            <div class="document-form-group">
-                                <label for="fecha_creacion">Fecha de Creación</label>
-                                <input type="date" id="fecha_creacion" name="fecha_creacion">
-                            </div>
-                        </div>
-
-                        <button type="button" class="add-document-btn" onclick="agregarDocumento()">
-                            <i class="fas fa-cart-plus"></i> Añadir Documento
-                        </button>
-
-
-                        <p id="mensaje-error" class="text-warning" style="display: none;"></p>
-                    </div>
-
-                    <div class="document-cart">
-                        <h5><i class="fas fa-clipboard-list"></i> Documentos para agregar</h5>
-                        <!-- Icono actualizado -->
-                        <div id="carritoDocumentos" class="cart-items">
-                            <div class="cart-empty">
-                                <i class="fas fa-inbox"></i> <!-- Icono actualizado -->
-                                <p>No hay documentos agregados</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-
-
-                <!-- Botón de Crear Carpeta -->
                 <button type="submit" class="btn-submit" onclick="enviarCarrito()">Crear Carpeta</button>
             </form>
 
@@ -923,87 +864,6 @@ function enviarCarrito() {
     }
 }
 
-
-function agregarDocumento() {
-    const numeroHojas = document.getElementById('numero_hojas').value;
-    const area = document.getElementById('area');
-    const estado = document.getElementById('estado').value;
-    const fechaCreacion = document.getElementById('fecha_creacion').value;
-    const mensajeError = document.getElementById('mensaje-error');
-
-    if (!numeroHojas || !area.value || !fechaCreacion) {
-        mensajeError.textContent = 'Por favor, completa todos los campos.';
-        mensajeError.style.display = 'block';
-        return;
-    }
-
-    // Verificar si ya existe un documento con la misma área (por id)
-    const existeDocumento = documentos.some(doc => doc.area === area.value);
-
-    if (existeDocumento) {
-        mensajeError.textContent = 'Ya has agregado un documento para esta área.';
-        mensajeError.style.display = 'block';
-        return;
-    }
-
-    // Ocultar el mensaje de error si se agrega un documento nuevo
-    mensajeError.style.display = 'none';
-
-    const documento = {
-        numeroHojas,
-        area: area.value, // id_area
-        areaTexto: area.options[area.selectedIndex].text, // Texto del área
-        estado,
-        fechaCreacion
-    };
-
-    documentos.push(documento);
-    actualizarCarrito();
-    limpiarFormulario();
-}
-
-
-
-function actualizarCarrito() {
-    const carrito = document.getElementById('carritoDocumentos');
-    
-    if (documentos.length === 0) {
-        carrito.innerHTML = `
-            <div class="cart-empty">
-                <i class="fas fa-folder-open"></i>
-                <p>No hay documentos agregados</p>
-            </div>
-        `;
-        return;
-    }
-
-    carrito.innerHTML = documentos.map((doc, index) => `
-        <div class="cart-item">
-            <div class="cart-item-info">
-                <div class="cart-item-title">${doc.areaTexto}</div> <!-- Usa areaTexto aquí -->
-                <div class="cart-item-details">
-                    ${doc.numeroHojas} hojas | ${doc.areaTexto} | ${doc.estado} | ${doc.fechaCreacion} <!-- Usa areaTexto aquí también -->
-                </div>
-            </div>
-            <button class="remove-item-btn" onclick="eliminarDocumento(${index})">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-        </div>
-    `).join('');
-}
-
-
-function eliminarDocumento(index) {
-    documentos.splice(index, 1);
-    actualizarCarrito();
-}
-
-function limpiarFormulario() {
-    document.getElementById('numero_hojas').value = '';
-    document.getElementById('area').selectedIndex = 0;
-    document.getElementById('estado').selectedIndex = 0;
-    document.getElementById('fecha_creacion').value = '';
-}
 document.getElementById('id_evaluado').addEventListener('change', function() {
     var evaluadoId = this.value;
     var infoDiv = document.getElementById('evaluado-info');
@@ -1053,31 +913,6 @@ document.getElementById('id_evaluado').addEventListener('change', function() {
         Array.from(cajaSelect.options).forEach(option => {
             option.style.display = '';
         });
-    }
-});
-
-function toggleDocumentSections() {
-    const sections = document.getElementById('documentSections');
-    const button = document.getElementById('toggleDocumentsBtn');
-    
-    if (sections.style.display === 'none') {
-        sections.style.display = 'block';
-        button.classList.add('active');
-        button.querySelector('span').textContent = 'Ocultar Documentos';
-    } else {
-        sections.style.display = 'none';
-        button.classList.remove('active');
-        button.querySelector('span').textContent = 'Agregar Documentos';
-    }
-}
-document.getElementById('id_caja').addEventListener('change', function() {
-    const toggleDocumentsBtn = document.getElementById('toggleDocumentsBtn');
-    if (this.value) {
-        // Si se seleccionó una caja, muestra el botón
-        toggleDocumentsBtn.style.display = 'inline-block';
-    } else {
-        // Si no hay ninguna caja seleccionada, oculta el botón
-        toggleDocumentsBtn.style.display = 'none';
     }
 });
 

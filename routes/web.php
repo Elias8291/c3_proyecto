@@ -9,7 +9,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PeriodoController;
 use App\Http\Controllers\EvaluadoController;
-use App\Http\Controllers\DocumentoController;
+
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\CarpetaController;
@@ -17,6 +17,7 @@ use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\NotificacionController;
 use App\Models\Caja;
 use App\Models\Notificacion;
+use App\Http\Controllers\DocumentoController;
 
 // Ruta para la página de bienvenida, accesible para todos los usuarios
 Route::get('/', [WelcomeController::class, 'showWelcomePage'])->name('welcome');
@@ -91,7 +92,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('documentos', DocumentoController::class)->except(['show', 'edit']);
     Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
     Route::post('/documentos/{carpeta}', [DocumentoController::class, 'store'])->name('documentos.store');
-
+    Route::get('/evaluados/search', [EvaluadoController::class, 'search'])->name('evaluados.search');
+    Route::post('/documentos2', [DocumentoController::class, 'store'])->name('documentos.store');
+    Route::resource('documentos', DocumentoController::class)->except(['show', 'edit']);
+    Route::resource('documentos', DocumentoController::class);
+    Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
+    Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
     
 
 });

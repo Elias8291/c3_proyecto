@@ -19,7 +19,7 @@
 </aside>
 <style>
   #sidebar-wrapper {
-    background-color: #f4f4f9;
+    background-color: #e2e2e2 ;
     transition: all 0.3s;
   }
 

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 <style>
   :root {
+    --header-color: #9B2847;
     --primary-color: #ffffff;
     --secondary-color: #ffffff;
     --folder-color: #ffffff; /* Color de cartón */
@@ -14,54 +15,6 @@
 body {
     background-color: #F7FAFC;
     color: var(--text-color);
-}
-
-.main-container {
-    padding: 2rem;
-    background: linear-gradient(135deg, var(--guinda-suave-1) 0%, var(--guinda-suave-2) 100%); /* Gradiente de Guinda Suave */
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px; /* Añade bordes redondeados para una apariencia más suave */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidad */
-    transition: background 0.5s ease, box-shadow 0.3s ease;
-}
-
-.main-container:hover {
-    background: linear-gradient(135deg, var(--guinda-suave-2) 0%, var(--guinda-suave-1) 100%); /* Invertir colores al pasar el cursor */
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada al hacer hover */
-}
-
-
-.main-container::before,
-.main-container::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    background-color: rgba(123, 42, 59, 0.1); /* Suave guinda translúcido */
-    z-index: 0;
-}
-
-.main-container::before {
-    width: 250px;
-    height: 250px;
-    top: -50px;
-    left: -50px;
-}
-
-.main-container::after {
-    width: 200px;
-    height: 200px;
-    bottom: 50px;
-    right: 50px;
-}
-
-/* Añadir más figuras geométricas */
-.main-container::after,
-.main-container::before,
-.main-container .figure {
-    background: rgba(123, 42, 59, 0.05); /* Suave guinda translúcido */
-    border-radius: 50%;
 }
 
 .figure {
@@ -378,13 +331,14 @@ body {
     }
 
     .page__heading {
-        color: #ffffff;
+        color: var(--header-color);
+        font-size: 2.8rem;
         font-weight: 800;
-        font-size: 2.5rem;
-        margin: 0 0 1.8rem;
+        margin-bottom: 2.5rem;
         position: relative;
-        display: inline-block;
         padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
     }
 
     .page__heading::after {
@@ -392,10 +346,11 @@ body {
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100%;
+        width: 100px;
         height: 6px;
-        background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
     }
 /* Container for search and per-page selector */
 .controls-container {

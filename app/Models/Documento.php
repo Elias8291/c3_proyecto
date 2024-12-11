@@ -10,7 +10,13 @@ class Documento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'numero_hojas', 'fecha_creacion', 'estado', 'id_evaluado', 'id_area', 'id_carpeta'
+        'id_carpeta',
+        'id_evaluado',
+        'id_area',
+        'numero_hojas',
+        'estado',
+        'fecha_creacion',
+        'pdf_url'  // Asegúrate de que este campo esté aquí
     ];
 
     /**
@@ -32,12 +38,8 @@ class Documento extends Model
     /**
      * Obtener la carpeta asociada con el documento.
      */
-   /**
- * Obtener la carpeta asociada con el documento.
- */
-public function carpeta()
-{
-    return $this->belongsTo(Carpeta::class, 'id_carpeta');
-}
-
+    public function carpeta()
+    {
+        return $this->belongsTo(Carpeta::class, 'id_carpeta');
+    }
 }

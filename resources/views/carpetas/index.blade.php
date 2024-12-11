@@ -2,6 +2,7 @@
 
 <style>
 :root {
+    --header-color: #9B2847;
     --primary-color: #8B1F41;
     --primary-dark: #4A0404;
     --primary-light: #D4A5A5;
@@ -33,25 +34,7 @@
     border: 1px solid var(--gray-200);
 }
 
-.page__heading {
-    font-size: 2rem;
-    font-weight: 700;
-    color: back;
-    margin-bottom: 0;
-    position: relative;
-    padding-bottom: 1rem;
-}
 
-.page__heading::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(to right, var(--primary-color), var(--primary-light));
-    border-radius: 2px;
-}
 
 .search-container {
     position: relative;
@@ -166,28 +149,7 @@
     box-shadow: 0 6px 20px rgba(139, 31, 65, 0.4);
 }
 
-/* Decorative elements */
-.main-container::before,
-.main-container::after {
-    content: '';
-    position: fixed;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(139, 31, 65, 0.05) 0%, rgba(212, 165, 165, 0.05) 100%);
-}
-
-.main-container::before {
-    width: 300px;
-    height: 300px;
-    top: -100px;
-    left: -100px;
-}
-
-.main-container::after {
-    width: 250px;
-    height: 250px;
-    bottom: -50px;
-    right: -50px;
-}
+/
 
 @media (max-width: 768px) {
     .main-container {
@@ -226,11 +188,6 @@
     /* Texto secundario */
 }
 
-.main-container {
-    padding: 2.5rem;
-    background: var(--background-color);
-    min-height: 100vh;
-}
 
 .section-header {
     display: flex;
@@ -548,25 +505,27 @@ div.folder-icon {
 }
 
 .page__heading {
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 2.5rem;
-    margin: 0 0 1.8rem;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 1rem;
-}
+        color: var(--header-color);
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 2.5rem;
+        position: relative;
+        padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
+    }
 
-.page__heading::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, #F5F3E7, #800020);
-    /* Color guinda */
-    border-radius: 2px;
-    margin-top: 5px;
-}
+    .page__heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 6px;
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
+    }
 
 
 .section-header {
@@ -579,39 +538,6 @@ div.folder-icon {
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(25, 58, 116, 0.06);
     border: 1px solid var(--folder-border);
-}
-
-
-.main-container {
-    padding: 2.5rem;
-    background: var(--background-color);
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
-}
-
-.main-container::before,
-.main-container::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    background-color: rgba(139, 31, 65, 0.05);
-    /* Suave guinda translúcido */
-    z-index: 0;
-}
-
-.main-container::before {
-    width: 250px;
-    height: 250px;
-    top: -50px;
-    left: -50px;
-}
-
-.main-container::after {
-    width: 200px;
-    height: 200px;
-    bottom: 50px;
-    right: 50px;
 }
 
 /* Opcional: añadir más figuras decorativas */

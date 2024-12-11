@@ -230,5 +230,14 @@
         </a>
     </li>
 
+    
+    <li class="side-menu-item" style="--item-index: 6">
+        <a href="/documentos2" class="side-menu-link {{ Request::is('documentos*') ? 'active' : '' }}">
+            <i class="fas fa-box side-menu-icon"></i>
+            <span class="side-menu-text">Documentos 2</span>
+        </a>
+    </li>
+    
+
 </ul>
 

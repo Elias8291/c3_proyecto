@@ -2,6 +2,8 @@
 
 <style>
 :root {
+    
+        --header-color: #9B2847;
         --primary-burgundy: #800020;
         --light-burgundy: #98304b;
         --pastel-pink: #ffd6e0;
@@ -51,13 +53,14 @@
     }
 
     .page__heading {
-        color: #ffffff;
+        color: var(--header-color);
+        font-size: 2.8rem;
         font-weight: 800;
-        font-size: 2.5rem;
-        margin: 0 0 1.8rem;
+        margin-bottom: 2.5rem;
         position: relative;
-        display: inline-block;
         padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
     }
 
     .page__heading::after {
@@ -65,10 +68,11 @@
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100%;
+        width: 100px;
         height: 6px;
-        background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
     }
     /* Contenedor de acciones superior */
     .actions-container {
@@ -81,15 +85,7 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
 
-    /* Estilos mejorados de la tabla */
-    .table-container {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        margin: 20px 0;
-        animation: fadeIn 0.5s ease-out;
-    }
+   
 
     #miTabla2 {
         font-family: 'Open Sans', sans-serif;
@@ -334,14 +330,7 @@
     z-index: 0;
 }
 
-.card::before {
-    width: 300px;
-    height: 300px;
-    background: var(--primary-burgundy);
-    top: -100px;
-    left: -100px;
-    transform: rotate(45deg);
-}
+
 
 .card::after {
     width: 200px;
@@ -352,50 +341,6 @@
     transform: rotate(-30deg);
 }
 
-/* Agregar figuras decorativas al fondo del contenedor .table-container */
-.table-container {
-    position: relative;
-    overflow: hidden;
-}
-
-.table-container::before,
-.table-container::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.05;
-    z-index: 0;
-}
-
-.table-container::before {
-    width: 150px;
-    height: 150px;
-    background: var(--pastel-blue);
-    top: -50px;
-    right: -50px;
-    transform: rotate(60deg);
-}
-
-.table-container::after {
-    width: 100px;
-    height: 100px;
-    background: var(--pastel-purple);
-    bottom: -30px;
-    left: -30px;
-    transform: rotate(-45deg);
-}
-
-/* Asegurar que el contenido esté por encima de las figuras */
-.table-container > .table-responsive,
-.card > .actions-container,
-.card > .table-container,
-.card > .pagination,
-.section,
-.section-header,
-.section-body {
-    position: relative;
-    z-index: 1;
-}
 
 /* Agregar figuras abstractas al fondo del body */
 body {

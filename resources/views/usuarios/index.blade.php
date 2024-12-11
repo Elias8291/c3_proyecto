@@ -2,6 +2,7 @@
 
 <style>
     :root {
+        --header-color: #9B2847;
         --primary-burgundy: #800020;
         --light-burgundy: #98304b;
         --pastel-pink: #ffd6e0;
@@ -50,13 +51,14 @@
     }
 
     .page__heading {
-        color: #ffffff;
+        color: var(--header-color);
+        font-size: 2.8rem;
         font-weight: 800;
-        font-size: 2.5rem;
-        margin: 0 0 1.8rem;
+        margin-bottom: 2.5rem;
         position: relative;
-        display: inline-block;
         padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
     }
 
     .page__heading::after {
@@ -64,10 +66,11 @@
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100%;
+        width: 100px;
         height: 6px;
-        background: linear-gradient(90deg, var(--pastel-pink), var(--primary-burgundy));
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
         border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
     }
 
     /* Contenedor de acciones superior */
@@ -399,142 +402,144 @@
     .btn-new span {
         color: white;
     }
-
 </style>
 
 @section('content')
-<section class="section">
-    <div class="d-flex align-items-cente">
-        <h3 class="page__heading">Usuarios</h3>
-    </div>
-    <div class="section-body" >
-        <div class="row"  >
-            <div class="col-lg-12" >
-                <div class="card" >
-                    <div class="actions-container">
-                        <div class="d-flex align-items-center">
-                            <a class="btn btn-new" href="{{ route('usuarios.create') }}">
-                                <i class="fas fa-plus" style="background: #d6e5ff"></i>
-                                <span>Nuevo Usuario</span>
-                            </a>
+    <section class="section">
+        <div class="d-flex align-items-cente">
+            <h3 class="page__heading">Usuarios</h3>
+        </div>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="actions-container">
+                            <div class="d-flex align-items-center">
+                                <a class="btn btn-new" href="{{ route('usuarios.create') }}">
+                                    <i class="fas fa-plus" style="background: #d6e5ff"></i>
+                                    <span>Nuevo Usuario</span>
+                                </a>
+                            </div>
+                            <div class="stats-container">
+                                <!-- Aquí puedes agregar estadísticas rápidas si lo deseas -->
+                            </div>
                         </div>
-                        <div class="stats-container">
-                            <!-- Aquí puedes agregar estadísticas rápidas si lo deseas -->
-                        </div>
-                    </div>
 
-                    <div class="table-container">
-                        <div class="table-responsive">
-                            <table class="table" id="miTabla2">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Completo</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Área</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($usuarios as $usuario)
-                                    <tr>
-                                        <td>{{ $usuario->id }}</td>
-                                        <td>{{ $usuario->name }} {{ $usuario->apellido_paterno }} {{
-                                            $usuario->apellido_materno }}</td>
-                                        <td>{{ $usuario->email }}</td>
-                                        <td>{{ $usuario->telefono }}</td>
-                                        <td>{{ $usuario->area->nombre_area ?? 'N/A' }}</td>
-                                        <td>
-                                            <div class="action-buttons">
-                                                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <button type="button" class="btn btn-delete" onclick="confirmarEliminacion({{ $usuario->id }})">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </div>
-                                            <form id="eliminar-form-{{ $usuario->id }}" action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="d-none">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="table" id="miTabla2">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Email</th>
+                                            <th>Teléfono</th>
+                                            <th>Área</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($usuarios as $usuario)
+                                            <tr>
+                                                <td>{{ $usuario->id }}</td>
+                                                <td>{{ $usuario->name }} {{ $usuario->apellido_paterno }}
+                                                    {{ $usuario->apellido_materno }}</td>
+                                                <td>{{ $usuario->email }}</td>
+                                                <td>{{ $usuario->telefono }}</td>
+                                                <td>{{ $usuario->area->nombre_area ?? 'N/A' }}</td>
+                                                <td>
+                                                    <div class="action-buttons">
+                                                        <a href="{{ route('usuarios.edit', $usuario->id) }}"
+                                                            class="btn btn-edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-delete"
+                                                            onclick="confirmarEliminacion({{ $usuario->id }})">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </div>
+                                                    <form id="eliminar-form-{{ $usuario->id }}"
+                                                        action="{{ route('usuarios.destroy', $usuario->id) }}"
+                                                        method="POST" class="d-none">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="pagination justify-content-end">
-                        {!! $usuarios->links() !!}
+                        <div class="pagination justify-content-end">
+                            {!! $usuarios->links() !!}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-<script>
-    new DataTable('#miTabla2', {
-        lengthMenu: [
-            [5, 10, 15, 25, 50]
-            , [5, 10, 15, 25, 50]
-        ]
-        , language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-            , search: "_INPUT_"
-            , searchPlaceholder: "Buscar usuario..."
-            , lengthMenu: "Mostrar _MENU_ registros"
-        }
-        , pageLength: 10
-        , drawCallback: function() {
-            document.querySelectorAll('.paginate_button').forEach(button => {
-                button.classList.add('page-item');
-                const link = button.querySelector('a');
-                if (link) link.classList.add('page-link');
-            });
-        }
-    });
-
-    function confirmarEliminacion(evaluadoId) {
-        Swal.fire({
-            title: '<strong>¡ADVERTENCIA!</strong>'
-            , html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>'
-            , icon: 'error'
-            , showCancelButton: true
-            , confirmButtonColor: '#d9534f'
-            , cancelButtonColor: '#6c757d'
-            , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>'
-            , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
-            , customClass: {
-                popup: 'animated shake'
-                , title: 'swal-title-large'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Mostrar la segunda confirmación
-                Swal.fire({
-                    title: '<strong>¿Estás completamente seguro?</strong>'
-                    , html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>'
-                    , icon: 'warning'
-                    , showCancelButton: true
-                    , confirmButtonColor: '#d9534f'
-                    , cancelButtonColor: '#6c757d'
-                    , confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>'
-                    , cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>'
-                    , customClass: {
-                        popup: 'animated shake'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('eliminar-form-' + evaluadoId).submit();
-                    }
+    <script>
+        new DataTable('#miTabla2', {
+            lengthMenu: [
+                [5, 10, 15, 25, 50],
+                [5, 10, 15, 25, 50]
+            ],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                search: "_INPUT_",
+                searchPlaceholder: "Buscar usuario...",
+                lengthMenu: "Mostrar _MENU_ registros"
+            },
+            pageLength: 10,
+            drawCallback: function() {
+                document.querySelectorAll('.paginate_button').forEach(button => {
+                    button.classList.add('page-item');
+                    const link = button.querySelector('a');
+                    if (link) link.classList.add('page-link');
                 });
             }
         });
-    }
 
-</script>
+        function confirmarEliminacion(evaluadoId) {
+            Swal.fire({
+                title: '<strong>¡ADVERTENCIA!</strong>',
+                html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>',
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonColor: '#d9534f',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>',
+                cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>',
+                customClass: {
+                    popup: 'animated shake',
+                    title: 'swal-title-large'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar la segunda confirmación
+                    Swal.fire({
+                        title: '<strong>¿Estás completamente seguro?</strong>',
+                        html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d9534f',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>',
+                        cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>',
+                        customClass: {
+                            popup: 'animated shake'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('eliminar-form-' + evaluadoId).submit();
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

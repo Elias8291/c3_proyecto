@@ -32,7 +32,7 @@
                     </div>
                     <div class="documento-body">
                         <div class="documento-detail">
-                            <span class="label">Numero de hojas</span>
+                            <span class="label">Número de hojas</span>
                             <span class="value">{{ $documento->numero_hojas }}</span>
                         </div>
                         <div class="documento-detail">
@@ -45,7 +45,7 @@
                             <span class="value">{{ $documento->estado }}</span>
                         </div>
                     </div>
-
+        
                     <div class="documento-actions">
                         @if ($documento->estado == 'Disponible')
                             <button class="btn-solicitar">Solicitar</button>
@@ -54,63 +54,94 @@
                         @elseif($documento->estado == 'Solicitado')
                             <button class="btn-cancelar">Cancelar</button>
                         @endif
-
+        
                         @if ($documento->estado != 'Solicitado')
                             <!-- Eliminar solo si no está "Solicitado" -->
-                            <button class="btn-eliminar"
-                                onclick="confirmarEliminacionDocumento({{ $documento->id }})">Eliminar</button>
+                            <button class="btn-eliminar" onclick="confirmarEliminacionDocumento({{ $documento->id }})">Eliminar</button>
                         @endif
-
-                        <form id="eliminar-form-{{ $documento->id }}"
-                            action="{{ route('documentos.destroy', $documento->id) }}" method="POST"
-                            style="display: none;">
+        
+                        <!-- Botón para Ver PDF -->
+                        @if ($documento->pdf_url)
+                            <button class="btn-ver-pdf" onclick="mostrarPdf('{{ asset('storage/' . $documento->pdf_url) }}')">
+                                Ver PDF
+                            </button>
+                        @endif
+        
+                        <!-- Formulario para eliminar el documento -->
+                        <form id="eliminar-form-{{ $documento->id }}" action="{{ route('documentos.destroy', $documento->id) }}" method="POST" style="display: none;">
                             @csrf
                             @method('DELETE')
                         </form>
                     </div>
                 </div>
             @endforeach
-
         </div>
+        
+        <!-- Modal para mostrar PDF -->
+        <div id="pdfModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal" onclick="cerrarPdfModal()">&times;</span>
+                <h2>Vista del Documento PDF</h2>
+                <iframe id="pdfViewer" src="" width="100%" height="500px" style="border: none;"></iframe>
+            </div>
+        </div>
+        
 
         <div id="documentoModal" class="modal">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h2>Agregar Nuevo Documento</h2>
-                <form id="documentoForm" action="{{ route('documentos.store', $carpeta->id) }}" method="POST">
+                <form id="documentoForm" action="{{ route('documentos.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="form-group">
-                        <label for="area_id">Área</label>
-                        <select name="area_id" id="area_id" required>
-                            @foreach ($areas as $area)
+                    <!-- Campo oculto para el ID de la carpeta -->
+                    <input type="hidden" name="id_carpeta" value="{{ $carpeta->id }}">
+                    
+                    <!-- Campo oculto para el ID del evaluado asociado a la carpeta -->
+                    <input type="hidden" name="id_evaluado" value="{{ $carpeta->id_evaluado }}">
+        
+                    <div class="mb-3">
+                        <label for="numero_hojas" class="form-label">Número de Hojas</label>
+                        <input type="text" name="numero_hojas" id="numero_hojas" class="form-control" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="fecha_creacion" class="form-label">Fecha de Creación</label>
+                        <input type="date" name="fecha_creacion" id="fecha_creacion" class="form-control" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select name="estado" id="estado" class="form-select" required>
+                            <option value="" disabled selected>Seleccione un estado</option>
+                            <option value="Disponible">Disponible</option>
+                            <option value="Prestado">Prestado</option>
+                            <option value="Solicitado">Solicitado</option>
+                        </select>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="id_area" class="form-label">Área</label>
+                        <select name="id_area" id="id_area" class="form-select" required>
+                            <option value="" disabled selected>Seleccione un área</option>
+                            @foreach($areas as $area)
                                 <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="numero_hojas">Número de Hojas</label>
-                        <input type="number" name="numero_hojas" id="numero_hojas" required min="1">
+        
+                    <div class="mb-3">
+                        <label for="pdf_url" class="form-label">Archivo PDF</label>
+                        <input type="file" name="pdf_url" id="pdf_url" class="form-control" accept="application/pdf" required>
                     </div>
-                    <div class="form-group">
-                        <label for="estado">Estado</label>
-                        <!-- Campo oculto para enviar "Disponible" como estado -->
-                        <input type="hidden" name="estado" value="Disponible">
-                        <span id="estado" class="estado-valor">Disponible</span> 
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="fecha_creacion">Fecha de Creación</label>
-                        <input type="date" name="fecha_creacion" id="fecha_creacion" required>
-                    </div>
+        
                     <div class="form-actions">
-                        <button type="submit" class="btn-guardar">Guardar Documento</button>
-                        <button type="button" class="btn-cancelar">Cancelar</button>
-
+                        <button type="submit" class="btn btn-primary">Guardar Documento</button>
+                        <button type="button" class="btn btn-secondary btn-cancelar">Cancelar</button>
                     </div>
                 </form>
-
             </div>
         </div>
+        
     </div>
 
     <style>
@@ -518,6 +549,146 @@
         .btn-eliminar:hover {
             background-color: var(--color-guinda);
         }
+
+         .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease; /* Suave transición de opacidad */
+    }
+
+    .modal.show {
+        display: block;
+        opacity: 1; /* Mostrar el modal con transición */
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 800px;
+        position: relative;
+        animation: slideDown 0.3s ease-out; /* Animación de entrada */
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .close-modal:hover {
+        color: #800020;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .btn-ver-pdf {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-ver-pdf:hover {
+        background-color: #0056b3;
+    }.modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+        display: block;
+        opacity: 1;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 3% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%; /* Ajusta el ancho del modal */
+        max-width: 1200px; /* Máximo ancho */
+        height: 80%; /* Altura del modal */
+        max-height: 90%; /* Máximo alto */
+        position: relative;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .close-modal:hover {
+        color: #800020;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .btn-ver-pdf {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-ver-pdf:hover {
+        background-color: #0056b3;
+    }
+
+    iframe#pdfViewer {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
     </style>
 
 
@@ -598,5 +769,30 @@
         }
     });
 });
+
+function mostrarPdf(pdfUrl) {
+        const pdfModal = document.getElementById('pdfModal');
+        const pdfViewer = document.getElementById('pdfViewer');
+        pdfViewer.src = pdfUrl; // Asignar la URL del PDF al iframe
+        pdfModal.style.display = 'block'; // Mostrar el modal
+        pdfModal.classList.add('show'); // Agregar la clase para la animación
+    }
+
+    function cerrarPdfModal() {
+        const pdfModal = document.getElementById('pdfModal');
+        pdfModal.classList.remove('show'); // Quitar la clase para la animación
+        setTimeout(() => {
+            pdfModal.style.display = 'none'; // Ocultar el modal después de la animación
+            document.getElementById('pdfViewer').src = ''; // Limpiar el iframe para evitar recargas
+        }, 300);
+    }
+
+    // Cerrar el modal si se hace clic fuera del contenido
+    window.onclick = function(event) {
+        const pdfModal = document.getElementById('pdfModal');
+        if (event.target === pdfModal) {
+            cerrarPdfModal();
+        }
+    };
     </script>
 @endsection

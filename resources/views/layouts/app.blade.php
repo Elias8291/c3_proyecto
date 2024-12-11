@@ -41,7 +41,7 @@
         }
 
         .main-navbar {
-            background: linear-gradient(to right, #700303, #690202);
+            background:rgb(155, 40, 71);
             /* Predominancia de guinda */
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
             font-family: 'Lato', sans-serif;
@@ -50,13 +50,7 @@
             /* Espaciado adicional */
         }
 
-        .main-navbar:hover {
-            background: linear-gradient(to right, #770202, #8b2323);
-            /* Guinda más profundo al pasar el cursor */
-            box-shadow: 0 10px 15px rgba(121, 3, 3, 0.2);
-            /* Sombra más pronunciada */
-        }
-
+     
 
         .navbar-nav .nav-link {
             color: #fff;
@@ -97,13 +91,13 @@
     <div id="app">
         <div class="main-wrapper main-wrapper-1">
 
-            <nav class="navbar navbar-expand-lg main-navbar">
+            <nav class="navbar navbar-expand-lg main-navbar" >
                 @include('layouts.header')
             </nav>
-            <div class="main-sidebar main-sidebar-postion" style="background-color:  #f4f4f9">
+            <div class="main-sidebar main-sidebar-postion" style="background-color:  #e2e2e2">
                 @include('layouts.sidebar')
             </div>
-            <div class="main-content" style="background: radial-gradient(circle at top left, #5c001e 10%, #8b0000 40%, #a52a2a 70%, #c04040 100%);">
+            <div class="main-content" style="background:#eff0f1">
                 @yield('content')
             </div>
 
