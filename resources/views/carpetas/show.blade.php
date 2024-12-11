@@ -689,6 +689,270 @@
         height: 100%;
         border: none;
     }
+    .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+/* Estilos mejorados para el modal de Agregar Nuevo Documento */
+.modal-content {
+    background: linear-gradient(to bottom right, #ffffff, #f8f8f8);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(128, 0, 32, 0.15);
+    max-width: 600px;
+    width: 95%;
+}
+
+.modal-content h2 {
+    color: var(--color-guinda);
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 2px solid var(--color-guinda);
+    padding-bottom: 1rem;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    color: var(--color-guinda);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+}
+
+.form-control:focus, .form-select:focus {
+    outline: none;
+    border-color: var(--color-guinda);
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+}
+
+.form-control:hover, .form-select:hover {
+    border-color: var(--color-guinda-claro);
+}
+
+/* Estilos específicos para el input type file */
+input[type="file"].form-control {
+    padding: 0.6rem;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+input[type="file"].form-control::file-selector-button {
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--color-guinda);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="file"].form-control::file-selector-button:hover {
+    background-color: var(--color-guinda-claro);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.form-actions button {
+    padding: 0.8rem 1.8rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background-color: var(--color-guinda);
+    color: white;
+    box-shadow: 0 4px 6px rgba(128, 0, 32, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-guinda-claro);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(128, 0, 32, 0.25);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    box-shadow: 0 4px 6px rgba(108, 117, 125, 0.2);
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(108, 117, 125, 0.25);
+}
+
+/* Animación para el modal */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal.show .modal-content {
+    animation: modalFadeIn 0.4s ease-out forwards;
+}
+
+/* Estilos responsivos */
+@media (max-width: 576px) {
+    .modal-content {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}
+
+/* Estilos mejorados para el modal de vista PDF */
+#pdfModal .modal-content {
+    width: 95%;
+    max-width: 1400px; /* Aumentado de 1200px */
+    height: 90vh; /* Aumentado de 80% */
+    margin: 2vh auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#pdfModal h2 {
+    margin-bottom: 1rem;
+    padding-right: 2rem;
+}
+
+#pdfModal .close-modal {
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    z-index: 1100;
+    background: var(--color-guinda);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#pdfModal .close-modal:hover {
+    background-color: var(--color-guinda-claro);
+    transform: scale(1.1);
+}
+
+#pdfViewer {
+    flex: 1;
+    width: 100%;
+    height: calc(90vh - 6rem); /* Altura total menos el espacio del header */
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+    #pdfModal .modal-content {
+        width: 98%;
+        height: 95vh;
+        margin: 1vh auto;
+        padding: 1rem;
+    }
+
+    #pdfViewer {
+        height: calc(95vh - 5rem);
+    }
+}
+
+/* Estilos modificados para el botón Ver PDF */
+.btn-ver-pdf {
+    background-color: #2E7D32; /* Verde oscuro */
+    color: white;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(46, 125, 50, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-ver-pdf:hover {
+    background-color: #1B5E20; /* Verde más oscuro para hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(46, 125, 50, 0.3);
+}
+
+.btn-ver-pdf:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(46, 125, 50, 0.2);
+}
+
+/* Para dispositivos móviles */
+@media (max-width: 768px) {
+    .btn-ver-pdf {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
     </style>
 
 
@@ -736,35 +1000,33 @@
     const addDocumentoBtn = document.querySelector('.add-documento-btn');
     const documentoModal = document.getElementById('documentoModal');
     const closeModalBtn = documentoModal.querySelector('.close-modal');
-    const cancelModalBtns = documentoModal.querySelectorAll('.btn-cancelar'); // Cambio importante: usar querySelectorAll
+    const cancelarBtns = documentoModal.querySelectorAll('.btn-cancelar');
 
-    // Función para abrir el modal
     function openModal() {
         documentoModal.style.display = 'flex';
+        documentoModal.classList.add('show');
     }
 
-    // Función para cerrar el modal
     function closeModal() {
-        documentoModal.style.display = 'none';
+        documentoModal.classList.remove('show');
+        setTimeout(() => {
+            documentoModal.style.display = 'none';
+        }, 300);
     }
 
-    // Event listeners para abrir y cerrar el modal
     addDocumentoBtn.addEventListener('click', openModal);
-    
-    // Usar forEach para agregar el evento a todos los botones de cancelar
-    cancelModalBtns.forEach(btn => {
-        btn.addEventListener('click', function(event) {
-            event.preventDefault(); // Previene el comportamiento predeterminado
+    closeModalBtn.addEventListener('click', closeModal);
+
+    cancelarBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
             closeModal();
         });
     });
 
-    // Event listener para el botón de cerrar (X)
-    closeModalBtn.addEventListener('click', closeModal);
-
-    // Cerrar el modal si se hace clic fuera de él
-    documentoModal.addEventListener('click', function(event) {
-        if (event.target === documentoModal) {
+    // Cerrar al hacer clic fuera del modal
+    documentoModal.addEventListener('click', function(e) {
+        if (e.target === documentoModal) {
             closeModal();
         }
     });
