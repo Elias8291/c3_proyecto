@@ -1,15 +1,15 @@
 @extends('layouts.app')
 <style>
-  :root {
+ :root {
     --header-color: #9B2847;
     --primary-color: #ffffff;
     --secondary-color: #ffffff;
-    --folder-color: #ffffff; /* Color de cartón */
-    --folder-tab: #ffffff; /* Tono ligeramente más oscuro para la pestaña */
+    --folder-color: #ffffff;
+    --folder-tab: #ffffff;
     --folder-shadow: rgba(216, 213, 213, 0.05);
     --text-color: #ccd0d8;
     --accent-color: #718096;
-    --folder-border: #C5BBA4; /* Bordes más tenues */
+    --folder-border: #C5BBA4;
 }
 
 body {
@@ -19,7 +19,7 @@ body {
 
 .figure {
     position: absolute;
-    background: rgba(123, 42, 59, 0.08); /* Más translúcido para contraste */
+    background: rgba(123, 42, 59, 0.08);
     z-index: 0;
     border-radius: 50%;
 }
@@ -45,25 +45,11 @@ body {
     right: 10%;
 }
 
-/* Ajustar z-index para que el contenido esté encima del fondo decorativo */
 .section {
     position: relative;
     z-index: 1;
-}
-
-
-.section {
     max-width: 1400px;
     margin: 0 auto;
-}
-
-.search-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    margin-bottom: 2.5rem;
-    box-shadow: 0 4px 20px rgba(74, 85, 104, 0.06);
-    border: 1px solid var(--folder-border);
 }
 
 .cajas-grid {
@@ -73,7 +59,6 @@ body {
     padding: 1.5rem;
 }
 
-/* Estilo de carpeta realista */
 .folder-card {
     position: relative;
     background: var(--folder-color);
@@ -83,7 +68,6 @@ body {
     box-shadow: 0 2px 10px rgba(235, 233, 233, 0.05);
 }
 
-/* Pestaña superior de la carpeta */
 .folder-card::before {
     content: '';
     position: absolute;
@@ -96,7 +80,6 @@ body {
     z-index: 1;
 }
 
-/* Efecto de profundidad lateral */
 .folder-card::after {
     content: '';
     position: absolute;
@@ -168,7 +151,6 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 0.5rem;
-    
     border-radius: 8px;
     transition: all 0.2s ease;
 }
@@ -221,7 +203,7 @@ body {
     color: white;
     transform: translateY(-2px);
 }
-/* Container for search and per-page selector */
+
 .controls-container {
     display: flex;
     align-items: center;
@@ -235,7 +217,6 @@ body {
     border: 1px solid var(--folder-border);
 }
 
-/* Enhanced search container */
 .search-container {
     flex-grow: 1;
     max-width: 500px;
@@ -260,206 +241,26 @@ body {
     box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
 }
 
-.search-input::placeholder {
-    color: #A0AEC0;
-}
-
-.search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #800020;
-    font-size: 1.1rem;
-}
-
-/* Per page selector styling */
-.per-page-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0;
-}
-
-.per-page-container label {
-    font-size: 0.95rem;
-    color: #4A5568;
-    font-weight: 500;
-}
-
-.per-page-select {
-    padding: 0.5rem 2.5rem 0.5rem 1rem;
-    border: 2px solid #E2E8F0;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: #1A202C;
-    background-color: #F8FAFC;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23800020' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1.5em;
-}
-
-.per-page-select:focus {
-    outline: none;
-    border-color: #800020;
-    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
-}
-
-.per-page-select:hover {
-    border-color: #800020;
-}
-
-.results-text {
-    color: #718096;
-    font-size: 0.95rem;
-}
-
-/* Nuevo diseño del encabezado y búsqueda */
-.section-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-        padding: 1rem 1.5rem;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(74, 85, 104, 0.06);
-        border: 1px solid #b9b9b3;
-    }
-
-    .page__heading {
-        color: var(--header-color);
-        font-size: 2.8rem;
-        font-weight: 800;
-        margin-bottom: 2.5rem;
-        position: relative;
-        padding-bottom: 1rem;
-        letter-spacing: -0.5px;
-        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
-    }
-
-    .page__heading::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100px;
-        height: 6px;
-        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
-        border-radius: 3px;
-        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
-    }
-/* Container for search and per-page selector */
-.controls-container {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(74, 85, 104, 0.06);
-    border: 1px solid var(--folder-border);
-}
-
-/* Enhanced search container */
-.search-container {
-    flex-grow: 1;
-    max-width: 500px;
+.page__heading {
+    color: var(--header-color);
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 2.5rem;
     position: relative;
+    padding-bottom: 1rem;
+    letter-spacing: -0.5px;
+    text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
 }
-
-.search-input {
-    width: 100%;
-    padding: 0.875rem 1.25rem 0.875rem 3rem;
-    border: 2px solid #E2E8F0;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    background-color: #F8FAFC;
-    color: #1A202C;
-}
-
-.search-input:focus {
-    background-color: white;
-    border-color: #800020;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
-}
-
-.search-input::placeholder {
-    color: #A0AEC0;
-}
-
-.search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #800020;
-    font-size: 1.1rem;
-}
-
-/* Per page selector styling */
-.per-page-container {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0;
-}
-
-.per-page-container label {
-    font-size: 0.95rem;
-    color: #4A5568;
-    font-weight: 500;
-}
-
-.per-page-select {
-    padding: 0.5rem 2.5rem 0.5rem 1rem;
-    border: 2px solid #E2E8F0;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: #1A202C;
-    background-color: #F8FAFC;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23800020' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1.5em;
-}
-
-.per-page-select:focus {
-    outline: none;
-    border-color: #800020;
-    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
-}
-
-.per-page-select:hover {
-    border-color: #800020;
-}
-
-.results-text {
-    color: #718096;
-    font-size: 0.95rem;
-}
-
-
-
 
 .page__heading::after {
     content: '';
     display: block;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, #F5F3E7, #800020); /* Color guinda */
+    background: linear-gradient(90deg, #F5F3E7, #800020);
     border-radius: 2px;
     margin-top: 5px;
 }
-
 
 .section-header {
     display: flex;
@@ -473,9 +274,131 @@ body {
     border: 1px solid var(--folder-border);
 }
 
+@media (max-width: 768px) {
+    .cajas-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .folder-card {
+        margin: 0 1rem;
+    }
+    
+    .controls-container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .search-container {
+        width: 100%;
+    }
+}
+/* Pagination Container */
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 2rem 1.5rem;
+    font-family: 'Arial', sans-serif;
+}
 
+/* Pagination Navigation Container */
+.pagination nav {
+    border-radius: 0.5rem;
+}
 
+/* Pagination Flex Container */
+.pagination nav div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
+/* Results Text */
+.pagination nav div div p {
+    margin: 0 1rem;
+    color: #4A5568;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Common Styles for Links and Spans */
+.pagination nav div div span,
+.pagination nav div div a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0.25rem 0.75rem;
+    margin: 0 0.125rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+/* Current/Active Page */
+.pagination nav div div span.bg-red-800 {
+    background-color: #800020 !important;
+    color: white;
+    box-shadow: 0 2px 4px rgba(128, 0, 32, 0.2);
+}
+
+/* Regular Links */
+.pagination nav div div a {
+    color: #4A5568;
+}
+
+/* Hover State */
+.pagination nav div div a:hover {
+    background-color: #800020;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(128, 0, 32, 0.2);
+}
+
+/* Disabled State */
+.pagination nav div div span.cursor-default {
+    color: #A0AEC0;
+    cursor: not-allowed;
+}
+
+/* Hide Previous/Next Buttons */
+.pagination nav div div a[rel="prev"],
+.pagination nav div div a[rel="next"] {
+    display: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .pagination {
+        justify-content: center;
+        margin: 1.5rem 0.75rem;
+    }
+    
+    .pagination nav div {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+    }
+    
+    .pagination nav div div span,
+    .pagination nav div div a {
+        min-width: 2rem;
+        height: 2rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .pagination nav div div p {
+        width: 100%;
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+    
+}
 </style>
 
 @section('content')

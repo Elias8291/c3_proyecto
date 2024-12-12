@@ -98,7 +98,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('documentos', DocumentoController::class);
     Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
     Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
-    
+
 
 });
 // En routes/web.php

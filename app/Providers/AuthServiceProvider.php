@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
+use App\Observers\LogObserver;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -30,5 +32,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->email == 'admin@gmail.com' ?? null;
         });
+
+        User::observe(LogObserver::class);
     }
 }

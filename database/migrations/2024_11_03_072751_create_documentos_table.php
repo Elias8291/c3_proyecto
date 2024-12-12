@@ -1,91 +1,38 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint; 
+use Illuminate\Support\Facades\Schema;
 
-use App\Models\Documento;
-use Illuminate\Http\Request;
-
-class DocumentosController extends Controller
+return new class extends Migration
 {
     /**
-     * Display a listing of the resource.
+     * Run the migrations.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function up()
     {
-        $documentos = Documento::all();
-        return response()->json($documentos);
+        Schema::create('documentos', function (Blueprint $table) {
+            $table->id(); // Primary key
+            $table->string('numero_hojas');
+            $table->date('fecha_creacion'); // Document creation date
+            $table->string('estado'); // Document status
+            $table->foreignId('id_evaluado')->constrained('evaluados')->onDelete('cascade'); // Foreign key to evaluados
+            $table->foreignId('id_area')->constrained('areas'); // Foreign key to areas
+            $table->foreignId('id_carpeta')->nullable()->constrained('carpetas')->onDelete('cascade'); // Relation to carpetas
+            $table->string('pdf_url')->nullable(); // Store the PDF file path
+            $table->timestamps(); // created_at and updated_at fields
+        });
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Reverse the migrations.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function store(Request $request)
+    public function down()
     {
-        $validated = $request->validate([
-            'numero_hojas' => 'required|string',
-            'fecha_creacion' => 'required|date',
-            'estado' => 'required|string',
-            'id_evaluado' => 'required|exists:evaluados,id',
-            'id_area' => 'required|exists:areas,id',
-            'id_carpeta' => 'nullable|exists:carpetas,id',
-            'pdf_url' => 'nullable|string',
-        ]);
-
-        $documento = Documento::create($validated);
-        return response()->json($documento, 201);
+        Schema::dropIfExists('documentos');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $documento = Documento::findOrFail($id);
-        return response()->json($documento);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'numero_hojas' => 'nullable|string',
-            'fecha_creacion' => 'nullable|date',
-            'estado' => 'nullable|string',
-            'id_evaluado' => 'nullable|exists:evaluados,id',
-            'id_area' => 'nullable|exists:areas,id',
-            'id_carpeta' => 'nullable|exists:carpetas,id',
-            'pdf_url' => 'nullable|string',
-        ]);
-
-        $documento = Documento::findOrFail($id);
-        $documento->update($validated);
-        return response()->json($documento);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $documento = Documento::findOrFail($id);
-        $documento->delete();
-        return response()->json(['message' => 'Documento eliminado correctamente']);
-    }
-}
+};

@@ -7,35 +7,26 @@ use Illuminate\Http\Request;
 use App\Models\Evaluado;
 use App\Models\Area;
 use App\Models\Carpeta;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class DocumentoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $documentos = Documento::all(); // Obtener todos los documentos
-        return view('documentos.index', compact('documentos')); // Pasar los datos a la vista
+        $documentos = Documento::all();
+        return view('documentos.index', compact('documentos'));
     }
     
     public function create()
     {
-        $evaluados = Evaluado::all(); // Asegúrate de tener el modelo Evaluado
-        $areas = Area::all(); // Asegúrate de tener el modelo Area
-        $carpetas = Carpeta::all(); // Asegúrate de tener el modelo Carpeta
+        $evaluados = Evaluado::all();
+        $areas = Area::all();
+        $carpetas = Carpeta::all();
     
         return view('documentos.create', compact('evaluados', 'areas', 'carpetas'));
     }
     
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -48,44 +39,26 @@ class DocumentoController extends Controller
             'pdf_url' => 'nullable|file|mimes:pdf|max:2048',
         ]);
     
-        // Manejar el archivo PDF si se proporciona
         if ($request->hasFile('pdf_url')) {
             $validated['pdf_url'] = $request->file('pdf_url')->store('documentos', 'public');
         }
     
-        // Crear el documento
         $documento = Documento::create($validated);
     
-        // Redirigir a la vista de la carpeta asociada
         if ($request->id_carpeta) {
             return redirect()->route('carpetas.show', $request->id_carpeta)
                              ->with('success', 'Documento creado correctamente');
         }
     
-        // Redirigir al índice si no se especifica una carpeta
         return redirect()->route('documentos.index')->with('success', 'Documento creado correctamente');
     }
     
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $documento = Documento::findOrFail($id);
         return response()->json($documento);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -103,16 +76,17 @@ class DocumentoController extends Controller
         return response()->json($documento);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $documento = Documento::findOrFail($id);
-        $documento->delete();
-        return response()->json(['message' => 'Documento eliminado correctamente']);
+        
+        try {
+            $documento->delete();
+            return redirect()->back()
+                            ->with('success', 'Documento eliminado correctamente');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                            ->with('error', 'Error al eliminar el documento: ' . $e->getMessage());
+        }
     }
 }

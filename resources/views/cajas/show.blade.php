@@ -183,6 +183,11 @@
 <div class="custom-container" style="background: transparent">
     <div class="main-card" >
         <div class="card-header">
+            <div class="text-left mb-4">
+                <a href="{{ route('cajas.index') }}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+            </div>
             <h1 class="card-title">
                 <i class="bi bi-archive"></i>
                 Vista Previa de Caja
