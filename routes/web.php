@@ -98,7 +98,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('documentos', DocumentoController::class);
     Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
     Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
-
-
+    Route::post('/documentos/{id}/agregar-pdf', [DocumentoController::class, 'agregarPdf'])->name('documentos.agregarPdf');
+    
 });
 // En routes/web.php

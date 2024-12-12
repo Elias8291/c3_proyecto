@@ -89,4 +89,43 @@ class DocumentoController extends Controller
                             ->with('error', 'Error al eliminar el documento: ' . $e->getMessage());
         }
     }
+    public function agregarPdf(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'pdf_url' => 'required|file|mimes:pdf|max:2048'
+            ]);
+    
+            $documento = Documento::findOrFail($id);
+    
+            // Eliminar el PDF anterior si existe
+            if ($documento->pdf_url) {
+                Storage::disk('public')->delete($documento->pdf_url);
+            }
+    
+            // Guardar el nuevo PDF
+            $pdfPath = $request->file('pdf_url')->store('documentos', 'public');
+            $documento->update(['pdf_url' => $pdfPath]);
+    
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'PDF actualizado correctamente',
+                    'pdf_url' => Storage::url($pdfPath)
+                ]);
+            }
+    
+            return redirect()->back()->with('success', 'PDF agregado correctamente');
+    
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al procesar el archivo: ' . $e->getMessage()
+                ], 422);
+            }
+    
+            return redirect()->back()->with('error', 'Error al procesar el archivo: ' . $e->getMessage());
+        }
+    }
 }

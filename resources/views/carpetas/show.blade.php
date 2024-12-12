@@ -104,6 +104,24 @@
             </div>
         </div>
 
+        <<div id="agregarPdfModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="cerrarModalAgregarPdf()">&times;</span>
+                <h2>Agregar PDF al Documento</h2>
+                <form id="pdfUploadForm" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('POST')
+                    <div class="mb-3">
+                        <label for="pdf_file" class="form-label">Seleccionar archivo PDF</label>
+                        <input type="file" name="pdf_url" id="pdf_file" class="form-control" accept="application/pdf" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Guardar PDF</button>
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModalAgregarPdf()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div id="documentoModal" class="modal">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
@@ -128,8 +146,7 @@
                         <select name="estado" id="estado" class="form-select" required>
                             <option value="" disabled selected>Seleccione un estado</option>
                             <option value="Disponible">Disponible</option>
-                            <option value="Prestado">Prestado</option>
-                            <option value="Solicitado">Solicitado</option>
+                            >
                         </select>
                     </div>
 
@@ -1111,6 +1128,29 @@
     }
 }
 
+#agregarPdfModal .modal-content {
+    max-width: 500px;
+}
+
+#pdfUploadForm .form-label {
+    color: var(--color-guinda);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+#pdfUploadForm input[type="file"] {
+    border: 2px dashed var(--color-guinda);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#pdfUploadForm input[type="file"]:hover {
+    border-color: var(--color-guinda-claro);
+    background-color: rgba(128, 0, 32, 0.05);
+}
+
     </style>
 
 <script>
@@ -1213,14 +1253,82 @@
     
     // Form validation
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('documentoForm');
-        const numeroHojasInput = document.querySelector('input[name="numero_hojas"]');
-        const fechaCreacionInput = document.querySelector('input[name="fecha_creacion"]');
-        const estadoSelect = document.querySelector('select[name="estado"]');
-        const areaSelect = document.querySelector('select[name="id_area"]');
-        const submitButton = document.querySelector('button[type="submit"]');
-        const carpetaId = document.querySelector('input[name="id_carpeta"]').value;
+    // Modal de Documento
+    const addDocumentoBtn = document.querySelector('.add-documento-btn');
+    const documentoModal = document.getElementById('documentoModal');
+    const closeModalBtn = documentoModal?.querySelector('.close-modal');
+    const cancelarBtns = documentoModal?.querySelectorAll('.btn-cancelar');
+    const documentoForm = document.getElementById('documentoForm');
+
+    // Función para abrir el modal
+    function openDocumentoModal() {
+        documentoModal.style.display = 'flex';
+        documentoModal.classList.add('show');
+        // Resetear el formulario y los mensajes de error
+        if (documentoForm) {
+            documentoForm.reset();
+            documentoForm.querySelectorAll('.error-message').forEach(msg => msg.remove());
+            documentoForm.querySelectorAll('.form-error').forEach(el => el.classList.remove('form-error'));
+        }
+        // Establecer el estado como "Disponible" por defecto
+        const estadoSelect = documentoForm.querySelector('select[name="estado"]');
+        if (estadoSelect) {
+            estadoSelect.value = 'Disponible';
+        }
+    }
+
+    // Función para cerrar el modal
+    function closeDocumentoModal() {
+        documentoModal.classList.remove('show');
+        setTimeout(() => {
+            documentoModal.style.display = 'none';
+        }, 300);
+    }
+
+    // Event listeners para el modal
+    if (addDocumentoBtn) {
+        addDocumentoBtn.addEventListener('click', openDocumentoModal);
+    }
     
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeDocumentoModal);
+    }
+
+    if (cancelarBtns) {
+        cancelarBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeDocumentoModal();
+            });
+        });
+    }
+
+    // Validación del formulario
+    if (documentoForm) {
+        const numeroHojasInput = documentoForm.querySelector('input[name="numero_hojas"]');
+        const fechaCreacionInput = documentoForm.querySelector('input[name="fecha_creacion"]');
+        const estadoSelect = documentoForm.querySelector('select[name="estado"]');
+        const areaSelect = documentoForm.querySelector('select[name="id_area"]');
+        const submitButton = documentoForm.querySelector('button[type="submit"]');
+        const carpetaId = documentoForm.querySelector('input[name="id_carpeta"]')?.value;
+
+        function addErrorMessage(input, message) {
+            removeErrorMessage(input);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message text-red-500 text-sm mt-1';
+            errorDiv.textContent = message;
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+            input.classList.add('form-error');
+        }
+
+        function removeErrorMessage(input) {
+            const errorDiv = input.parentNode.querySelector('.error-message');
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+            input.classList.remove('form-error');
+        }
+
         async function checkAreaExistente(areaId) {
             try {
                 const response = await fetch(`/carpetas/${carpetaId}/areas/${areaId}/check`);
@@ -1231,94 +1339,217 @@
                 return false;
             }
         }
-    
-        function addErrorMessage(input, message) {
-            removeErrorMessage(input);
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message';
-            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-            input.parentNode.insertBefore(errorDiv, input.nextSibling);
-            input.classList.add('form-error');
-        }
-    
-        function removeErrorMessage(input) {
-            const errorDiv = input.parentNode.querySelector('.error-message');
-            if (errorDiv) {
-                errorDiv.remove();
-            }
-            input.classList.remove('form-error');
-        }
-    
-        numeroHojasInput.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-    
-            if (!this.value) {
-                addErrorMessage(this, 'El número de hojas es requerido');
-            } else if (this.value === '0') {
-                addErrorMessage(this, 'El número debe ser mayor a 0');
-                this.value = '';
-            } else {
-                removeErrorMessage(this);
-            }
-            validateForm();
-        });
-    
-        const today = new Date().toISOString().split('T')[0];
-        fechaCreacionInput.setAttribute('max', today);
-    
-        fechaCreacionInput.addEventListener('input', function() {
-            const selectedDate = new Date(this.value);
-            const todayDate = new Date();
-            todayDate.setHours(0, 0, 0, 0);
-    
-            if (!this.value) {
-                addErrorMessage(this, 'La fecha es requerida');
-            } else if (selectedDate > todayDate) {
-                addErrorMessage(this, 'La fecha no puede ser posterior a hoy');
-            } else {
-                removeErrorMessage(this);
-            }
-            validateForm();
-        });
-    
-        if (estadoSelect) {
-            estadoSelect.innerHTML = '<option value="Disponible">Disponible</option>';
-            estadoSelect.value = 'Disponible';
-        }
-    
-        areaSelect.addEventListener('change', async function() {
-            if (this.value) {
-                const areaExiste = await checkAreaExistente(this.value);
-                if (areaExiste) {
-                    addErrorMessage(this, 'Ya existe un documento para esta área en la carpeta');
-                } else {
-                    removeErrorMessage(this);
-                }
-            }
-            validateForm();
-        });
-    
+
         function validateForm() {
-            const isNumeroHojasValid = !numeroHojasInput.classList.contains('form-error') && numeroHojasInput.value;
-            const isFechaValid = !fechaCreacionInput.classList.contains('form-error') && fechaCreacionInput.value;
-            const isAreaValid = !areaSelect.classList.contains('form-error') && areaSelect.value;
-    
-            submitButton.disabled = !(isNumeroHojasValid && isFechaValid && isAreaValid);
-            submitButton.style.opacity = submitButton.disabled ? '0.5' : '1';
-            submitButton.style.cursor = submitButton.disabled ? 'not-allowed' : 'pointer';
+            let isValid = true;
+
+            // Validar número de hojas
+            if (!numeroHojasInput.value || numeroHojasInput.value === '0') {
+                isValid = false;
+                addErrorMessage(numeroHojasInput, 'El número de hojas es requerido y debe ser mayor a 0');
+            }
+
+            // Validar fecha
+            if (!fechaCreacionInput.value) {
+                isValid = false;
+                addErrorMessage(fechaCreacionInput, 'La fecha es requerida');
+            }
+
+            // Validar área
+            if (!areaSelect.value) {
+                isValid = false;
+                addErrorMessage(areaSelect, 'El área es requerida');
+            }
+
+            return isValid;
         }
-    
-        form.addEventListener('submit', function(e) {
-            const hasErrors = form.querySelectorAll('.form-error').length > 0;
-            if (hasErrors) {
-                e.preventDefault();
+
+        // Event listener para el envío del formulario
+        documentoForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (validateForm()) {
+                try {
+                    const formData = new FormData(this);
+                    submitButton.disabled = true;
+                    
+                    // Enviar el formulario
+                    this.submit();
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un error al crear el documento'
+                    });
+                    submitButton.disabled = false;
+                }
+            } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Por favor, corrige los errores antes de enviar el formulario'
+                    text: 'Por favor, complete todos los campos requeridos correctamente'
                 });
             }
         });
-    });
+
+        // Validaciones en tiempo real
+        if (numeroHojasInput) {
+            numeroHojasInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                removeErrorMessage(this);
+            });
+        }
+
+        if (fechaCreacionInput) {
+            const today = new Date().toISOString().split('T')[0];
+            fechaCreacionInput.setAttribute('max', today);
+
+            fechaCreacionInput.addEventListener('input', function() {
+                removeErrorMessage(this);
+            });
+        }
+
+        if (areaSelect) {
+            areaSelect.addEventListener('change', async function() {
+                removeErrorMessage(this);
+                if (this.value) {
+                    const areaExiste = await checkAreaExistente(this.value);
+                    if (areaExiste) {
+                        addErrorMessage(this, 'Ya existe un documento para esta área en la carpeta');
+                    }
+                }
+            });
+        }
+    }
+});
+
+    let documentoIdActual;
+
+function mostrarModalAgregarPdf(documentoId) {
+    documentoIdActual = documentoId;
+    const modal = document.getElementById('agregarPdfModal');
+    const form = document.getElementById('pdfUploadForm');
+    
+    form.action = `/documentos/${documentoId}/agregar-pdf`;
+    
+    modal.style.display = 'flex';
+    modal.classList.add('show');
+}
+
+function cerrarModalAgregarPdf() {
+    const modal = document.getElementById('agregarPdfModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = 'none';
+        document.getElementById('pdfUploadForm').reset();
+    }, 300);
+}
+
+document.getElementById('pdfUploadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+    
+    // Cambiar el botón a estado de carga
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="loading-spinner"></span>Subiendo...';
+    
+    try {
+        const response = await fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            credentials: 'same-origin'
+        });
+
+        // Verificar el tipo de contenido de la respuesta
+        const contentType = response.headers.get('content-type');
+        let result;
+
+        if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+        } else {
+            // Si no es JSON, podría ser una redirección o un error HTML
+            throw new Error('La respuesta del servidor no es válida');
+        }
+        
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'PDF agregado correctamente',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            throw new Error(result.message || 'Error al subir el PDF');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error al subir el archivo. Por favor, inténtalo de nuevo.'
+        });
+    } finally {
+        // Restaurar el botón a su estado original
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+    }
+});
+
+// Cerrar modal al hacer clic fuera
+window.onclick = function(e) {
+    const modal = document.getElementById('agregarPdfModal');
+    if (e.target === modal) {
+        cerrarModalAgregarPdf();
+    }
+};
+
+// Validación del archivo antes de enviar
+document.getElementById('pdf_file').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB en bytes
+    
+    if (file && file.type !== 'application/pdf') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Archivo no válido',
+            text: 'Por favor, selecciona un archivo PDF'
+        });
+        this.value = '';
+        return;
+    }
+    
+    if (file && file.size > maxSize) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Archivo demasiado grande',
+            text: 'El archivo no debe superar los 2MB'
+        });
+        this.value = '';
+    }
+});
+
+document.getElementById('id_area').addEventListener('change', function() {
+    const selectedArea = this.value;
+
+    fetch(`/api/carpeta/${carpetaId}/check-area/${selectedArea}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.available) {
+                alert('El área seleccionada ya tiene un documento en esta carpeta.');
+                this.value = '';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+});
     </script>
 @endsection
