@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Carpeta;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use App\Observers\LogObserver;
+use App\Models\Documento;
+use App\Models\Evaluado;
+use App\Models\Prestamo;
+use App\Models\Caja;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -34,5 +39,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         User::observe(LogObserver::class);
+        Documento::observe(LogObserver::class);
+        Carpeta::observe(LogObserver::class);
+        Evaluado::observe(LogObserver::class);
+        Prestamo::observe(LogObserver::class);
+        Caja::observe(LogObserver::class);
     }
 }

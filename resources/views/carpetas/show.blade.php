@@ -14,11 +14,16 @@
             <div class="header-details">
                 <span class="carpeta-id">Carpeta #{{ $carpeta->id }}</span>
                 <span class="evaluado-nombre">{{ $carpeta->evaluado->nombre }}</span>
+            </div> 
+            <div class="add-documento-container">
+                <button class="add-documento-btn" onclick="openDocumentoModal()">
+                    <span class="plus-icon">+</span>
+                    Nuevo Documento
+                </button>
             </div>
-            <button class="add-documento-btn">
-                <i class="plus-icon">+</i>
-                Agregar Documento
-            </button>
+
+            
+
         </div>
 
         <div class="documentos-grid">
@@ -42,7 +47,8 @@
                         </div>
                         <div class="documento-detail">
                             <span class="label">Fecha de Creación</span>
-                            <span class="value">{{ \Carbon\Carbon::parse($documento->fecha_creacion)->format('d/m/Y') }}</span>
+                            <span
+                                class="value">{{ \Carbon\Carbon::parse($documento->fecha_creacion)->format('d/m/Y') }}</span>
                         </div>
                         <div class="documento-detail">
                             <span class="label">Estado</span>
@@ -51,9 +57,11 @@
                         @if ($documento->pdf_url)
                             <div class="documento-detail pdf-detail">
                                 <span class="label">Documento PDF</span>
-                                <button class="icon-pdf" onclick="mostrarPdf('{{ asset('storage/' . $documento->pdf_url) }}')">
+                                <button class="icon-pdf"
+                                    onclick="mostrarPdf('{{ asset('storage/' . $documento->pdf_url) }}')">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="pdf-icon">
-                                        <path d="M181.9 256.1c-5-16-4.9-46.9-2-46.9 8.4 0 7.6 36.9 2 46.9zm-1.7 47.2c-7.7 20.2-17.3 43.3-28.4 62.7 18.3-7 39-17.2 62.9-21.9-12.7-9.6-24.9-23.4-34.5-40.8zM86.1 428.1c0 .8 13.2-5.4 34.9-40.2-6.7 6.3-29.1 24.5-34.9 40.2zM248 160h136v328c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V24C0 10.7 10.7 0 24 0h200v136c0 13.2 10.8 24 24 24zm-8 171.8c-20-12.2-33.3-29-42.7-53.8 4.5-18.5 11.6-46.6 6.2-64.2-4.7-29.4-42.4-26.5-47.8-6.8-5 18.3-.4 44.1 8.1 77-11.6 27.6-28.7 64.6-40.8 85.8-.1 0-.1.1-.2.1-27.1 13.9-73.6 44.5-54.5 68 5.6 6.9 16 10 21.5 10 17.9 0 35.7-18 61.1-61.8 25.8-8.5 54.1-19.1 79-23.2 21.7 11.8 47.1 19.5 64 19.5 29.2 0 31.2-32 19.7-43.4-13.9-13.6-54.3-9.7-73.6-7.2zM377 105L279 7c-4.5-4.5-10.6-7-17-7h-6v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-74.1 255.3c4.1-2.7-2.5-11.9-42.8-9 37.1 15.8 42.8 9 42.8 9z"/>
+                                        <path
+                                            d="M181.9 256.1c-5-16-4.9-46.9-2-46.9 8.4 0 7.6 36.9 2 46.9zm-1.7 47.2c-7.7 20.2-17.3 43.3-28.4 62.7 18.3-7 39-17.2 62.9-21.9-12.7-9.6-24.9-23.4-34.5-40.8zM86.1 428.1c0 .8 13.2-5.4 34.9-40.2-6.7 6.3-29.1 24.5-34.9 40.2zM248 160h136v328c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V24C0 10.7 10.7 0 24 0h200v136c0 13.2 10.8 24 24 24zm-8 171.8c-20-12.2-33.3-29-42.7-53.8 4.5-18.5 11.6-46.6 6.2-64.2-4.7-29.4-42.4-26.5-47.8-6.8-5 18.3-.4 44.1 8.1 77-11.6 27.6-28.7 64.6-40.8 85.8-.1 0-.1.1-.2.1-27.1 13.9-73.6 44.5-54.5 68 5.6 6.9 16 10 21.5 10 17.9 0 35.7-18 61.1-61.8 25.8-8.5 54.1-19.1 79-23.2 21.7 11.8 47.1 19.5 64 19.5 29.2 0 31.2-32 19.7-43.4-13.9-13.6-54.3-9.7-73.6-7.2zM377 105L279 7c-4.5-4.5-10.6-7-17-7h-6v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-74.1 255.3c4.1-2.7-2.5-11.9-42.8-9 37.1 15.8 42.8 9 42.8 9z" />
                                     </svg>
                                 </button>
                             </div>
@@ -61,10 +69,11 @@
                             <div class="documento-detail pdf-detail">
                                 <span class="label">Documento PDF</span>
                                 <button class="btn-agregar-pdf" onclick="mostrarModalAgregarPdf({{ $documento->id }})">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16"
+                                        height="16" fill="currentColor">
+                                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                                     </svg>
-                               
+
                                 </button>
                             </div>
                         @endif
@@ -72,11 +81,13 @@
 
                     <div class="documento-actions">
                         @if ($documento->estado == 'Disponible')
-                            <button class="btn-solicitar">Solicitar</button>
+                            <button class="btn-solicitar"
+                                onclick="solicitarPrestamo({{ $documento->id }})">Solicitar</button>
                         @elseif($documento->estado == 'Prestado')
-                            <button class="btn-devolver">Devolver</button>
+                            <button onclick="devolverPrestamo({{ $documento->id }})" class="btn-devolver">Devolver</button>
                         @elseif($documento->estado == 'Solicitado')
-                            <button class="btn-cancelar">Cancelar</button>
+                            <button class="btn-cancelar"
+                                onclick="cancelarSolicitud({{ $documento->id }})">Cancelar</button>
                         @endif
 
                         @if ($documento->estado != 'Solicitado')
@@ -94,6 +105,60 @@
                 </div>
             @endforeach
         </div>
+        <div id="documentoModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeDocumentoModal()">&times;</span>
+                <h2>Agregar Nuevo Documento</h2>
+                <form id="documentoForm" action="{{ route('documentos.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <!-- Campo oculto para el ID de la carpeta -->
+                    <input type="hidden" name="id_carpeta" value="{{ $carpeta->id }}">
+                    <!-- Campo oculto para el ID del evaluado -->
+                    <input type="hidden" name="id_evaluado" value="{{ $carpeta->evaluado->id }}">
+                    
+                    <div class="mb-3">
+                        <label for="id_area" class="form-label">Área</label>
+                        <select class="form-select" id="id_area" name="id_area" required>
+                            <option value="">Seleccione un área</option>
+                            @foreach(\App\Models\Area::all() as $area)
+                                <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="numero_hojas" class="form-label">Número de Hojas</label>
+                        <input type="number" class="form-control" id="numero_hojas" name="numero_hojas" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="fecha_creacion" class="form-label">Fecha de Creación</label>
+                        <input type="date" class="form-control" id="fecha_creacion" name="fecha_creacion" required>
+                    </div>
+        
+                    <div class="mb-3">
+                        <label for="pdf_file" class="form-label">Documento PDF (Opcional)</label>
+                        <div class="pdf-upload-container">
+                            <input type="file" 
+                                   class="form-control" 
+                                   id="pdf_file" 
+                                   name="pdf_url" 
+                                   accept="application/pdf">
+                            <small class="text-muted">Formato permitido: PDF. Tamaño máximo: 2MB</small>
+                        </div>
+                    </div>
+        
+                    <!-- Campo oculto para el estado -->
+                    <input type="hidden" name="estado" value="Disponible">
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-guardar">Guardar</button>
+                        <button type="button" class="btn-cancelar" onclick="closeDocumentoModal()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
 
         <!-- Modal para mostrar PDF -->
         <div id="pdfModal" class="modal" style="display: none;">
@@ -104,7 +169,7 @@
             </div>
         </div>
 
-        <<div id="agregarPdfModal" class="modal">
+        <div id="agregarPdfModal" class="modal">
             <div class="modal-content">
                 <span class="close-modal" onclick="cerrarModalAgregarPdf()">&times;</span>
                 <h2>Agregar PDF al Documento</h2>
@@ -113,7 +178,8 @@
                     @method('POST')
                     <div class="mb-3">
                         <label for="pdf_file" class="form-label">Seleccionar archivo PDF</label>
-                        <input type="file" name="pdf_url" id="pdf_file" class="form-control" accept="application/pdf" required>
+                        <input type="file" name="pdf_url" id="pdf_file" class="form-control" accept="application/pdf"
+                            required>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Guardar PDF</button>
@@ -122,57 +188,7 @@
                 </form>
             </div>
         </div>
-        <div id="documentoModal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <h2>Agregar Nuevo Documento</h2>
-                <form id="documentoForm" action="{{ route('documentos.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="id_carpeta" value="{{ $carpeta->id }}">
-                    <input type="hidden" name="id_evaluado" value="{{ $carpeta->id_evaluado }}">
 
-                    <div class="mb-3">
-                        <label for="numero_hojas" class="form-label">Número de Hojas</label>
-                        <input type="text" name="numero_hojas" id="numero_hojas" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="fecha_creacion" class="form-label">Fecha de Creación</label>
-                        <input type="date" name="fecha_creacion" id="fecha_creacion" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="estado" class="form-label">Estado</label>
-                        <select name="estado" id="estado" class="form-select" required>
-                            <option value="" disabled selected>Seleccione un estado</option>
-                            <option value="Disponible">Disponible</option>
-                            >
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="id_area" class="form-label">Área</label>
-                        <select name="id_area" id="id_area" class="form-select" required>
-                            <option value="" disabled selected>Seleccione un área</option>
-                            @foreach ($areas as $area)
-                                <option value="{{ $area->id }}">{{ $area->nombre_area }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="pdf_url" class="form-label">Archivo PDF (Opcional)</label>
-                        <input type="file" name="pdf_url" id="pdf_url" class="form-control"
-                            accept="application/pdf">
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Guardar Documento</button>
-                        <button type="button" class="btn btn-secondary btn-cancelar">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </div>
     <style>
         :root {
@@ -419,45 +435,6 @@
 
         .btn-agregar-primero:hover {
             background-color: var(--color-guinda-claro);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: var(--color-blanco);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem;
-            box-shadow: var(--sombra-suave);
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            color: var(--color-guinda);
-            font-size: 2rem;
-            cursor: pointer;
-        }
-
-        .modal-content h2 {
-            color: var(--color-guinda);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-size: 1.6rem;
         }
 
         .form-group {
@@ -1065,491 +1042,628 @@
         }
 
         .pdf-detail {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e0e0e0;
-}
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
 
-.icon-pdf {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--color-guinda);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-}
+        .icon-pdf {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--color-guinda);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
 
-.icon-pdf:hover {
-    background: var(--color-guinda-claro);
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(128, 0, 32, 0.2);
-}
+        .icon-pdf:hover {
+            background: var(--color-guinda-claro);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(128, 0, 32, 0.2);
+        }
 
-.icon-pdf .pdf-icon {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
-}
+        .icon-pdf .pdf-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
 
-.icon-pdf span {
-    font-weight: 500;
-}
+        .icon-pdf span {
+            font-weight: 500;
+        }
 
-/* Ajustes para el modal del PDF */
-#pdfModal .modal-content {
-    width: 95%;
-    max-width: 1200px;
-    height: 90vh;
-    margin: 2vh auto;
-}
+        /* Ajustes para el modal del PDF */
+        #pdfModal .modal-content {
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            margin: 2vh auto;
+        }
 
-#pdfViewer {
-    width: 100%;
-    height: calc(90vh - 100px);
-    border: none;
-    border-radius: 8px;
-}
+        #pdfViewer {
+            width: 100%;
+            height: calc(90vh - 100px);
+            border: none;
+            border-radius: 8px;
+        }
 
-@media (max-width: 768px) {
-    .pdf-detail {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+        @media (max-width: 768px) {
+            .pdf-detail {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-    .icon-pdf {
-        margin-top: 0.5rem;
-        width: 100%;
-        justify-content: center;
-    }
-}
+            .icon-pdf {
+                margin-top: 0.5rem;
+                width: 100%;
+                justify-content: center;
+            }
+        }
 
-#agregarPdfModal .modal-content {
-    max-width: 500px;
-}
+        #agregarPdfModal .modal-content {
+            max-width: 500px;
+        }
 
-#pdfUploadForm .form-label {
-    color: var(--color-guinda);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
+        #pdfUploadForm .form-label {
+            color: var(--color-guinda);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
 
-#pdfUploadForm input[type="file"] {
-    border: 2px dashed var(--color-guinda);
-    padding: 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        #pdfUploadForm input[type="file"] {
+            border: 2px dashed var(--color-guinda);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-#pdfUploadForm input[type="file"]:hover {
-    border-color: var(--color-guinda-claro);
-    background-color: rgba(128, 0, 32, 0.05);
-}
-
+        #pdfUploadForm input[type="file"]:hover {
+            border-color: var(--color-guinda-claro);
+            background-color: rgba(128, 0, 32, 0.05);
+        }
     </style>
 
-<script>
-    function confirmarEliminacionDocumento(documentoId) {
-        Swal.fire({
-            title: '<strong>¡ADVERTENCIA!</strong>',
-            html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este documento. Esta acción no se puede deshacer.</p>',
-            icon: 'error',
-            showCancelButton: true,
-            confirmButtonColor: '#d9534f',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>',
-            cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>',
-            customClass: {
-                popup: 'animated shake',
-                title: 'swal-title-large'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: '<strong>¿Estás completamente seguro?</strong>',
-                    html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>',
+    <script>
+        // Función para manejar la búsqueda en tiempo real
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const folderItems = document.querySelectorAll('[data-search-content]');
+
+            folderItems.forEach(folder => {
+                const content = folder.textContent.toLowerCase();
+                folder.style.display = content.includes(searchTerm) ? 'flex' : 'none';
+            });
+        });
+
+        // Función para confirmar eliminación con doble verificación
+        async function confirmarEliminacion(carpetaId) {
+            try {
+                // Primera confirmación
+                const firstResult = await Swal.fire({
+                    title: '¿Eliminar carpeta?',
+                    html: `
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p class="mb-0" style="font-size: 1.1rem;">
+                        Esta acción eliminará permanentemente la carpeta y todos sus documentos asociados.
+                    </p>
+                </div>
+            `,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#d9534f',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>',
-                    cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
                     customClass: {
-                        popup: 'animated shake'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('eliminar-form-' + documentoId).submit();
+                        popup: 'swal2-warning-custom',
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-secondary'
                     }
                 });
-            }
-        });
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const addDocumentoBtn = document.querySelector('.add-documento-btn');
-        const documentoModal = document.getElementById('documentoModal');
-        const closeModalBtn = documentoModal.querySelector('.close-modal');
-        const cancelarBtns = documentoModal.querySelectorAll('.btn-cancelar');
-    
-        function openModal() {
-            documentoModal.style.display = 'flex';
-            documentoModal.classList.add('show');
-        }
-    
-        function closeModal() {
-            documentoModal.classList.remove('show');
-            setTimeout(() => {
-                documentoModal.style.display = 'none';
-            }, 300);
-        }
-    
-        addDocumentoBtn.addEventListener('click', openModal);
-        closeModalBtn.addEventListener('click', closeModal);
-    
-        cancelarBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeModal();
-            });
-        });
-    
-        documentoModal.addEventListener('click', function(e) {
-            if (e.target === documentoModal) {
-                closeModal();
-            }
-        });
-    });
-    
-    // PDF viewing functionality
-    function mostrarPdf(pdfUrl) {
-        const pdfModal = document.getElementById('pdfModal');
-        const pdfViewer = document.getElementById('pdfViewer');
-        pdfViewer.src = pdfUrl;
-        pdfModal.style.display = 'block';
-        pdfModal.classList.add('show');
-    }
-    
-    function cerrarPdfModal() {
-        const pdfModal = document.getElementById('pdfModal');
-        pdfModal.classList.remove('show');
-        setTimeout(() => {
-            pdfModal.style.display = 'none';
-            document.getElementById('pdfViewer').src = '';
-        }, 300);
-    }
-    
-    window.onclick = function(event) {
-        const pdfModal = document.getElementById('pdfModal');
-        if (event.target === pdfModal) {
-            cerrarPdfModal();
-        }
-    };
-    
-    // Form validation
-    document.addEventListener('DOMContentLoaded', function() {
-    // Modal de Documento
-    const addDocumentoBtn = document.querySelector('.add-documento-btn');
-    const documentoModal = document.getElementById('documentoModal');
-    const closeModalBtn = documentoModal?.querySelector('.close-modal');
-    const cancelarBtns = documentoModal?.querySelectorAll('.btn-cancelar');
-    const documentoForm = document.getElementById('documentoForm');
 
-    // Función para abrir el modal
-    function openDocumentoModal() {
-        documentoModal.style.display = 'flex';
-        documentoModal.classList.add('show');
-        // Resetear el formulario y los mensajes de error
-        if (documentoForm) {
-            documentoForm.reset();
-            documentoForm.querySelectorAll('.error-message').forEach(msg => msg.remove());
-            documentoForm.querySelectorAll('.form-error').forEach(el => el.classList.remove('form-error'));
-        }
-        // Establecer el estado como "Disponible" por defecto
-        const estadoSelect = documentoForm.querySelector('select[name="estado"]');
-        if (estadoSelect) {
-            estadoSelect.value = 'Disponible';
-        }
-    }
-
-    // Función para cerrar el modal
-    function closeDocumentoModal() {
-        documentoModal.classList.remove('show');
-        setTimeout(() => {
-            documentoModal.style.display = 'none';
-        }, 300);
-    }
-
-    // Event listeners para el modal
-    if (addDocumentoBtn) {
-        addDocumentoBtn.addEventListener('click', openDocumentoModal);
-    }
-    
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeDocumentoModal);
-    }
-
-    if (cancelarBtns) {
-        cancelarBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeDocumentoModal();
-            });
-        });
-    }
-
-    // Validación del formulario
-    if (documentoForm) {
-        const numeroHojasInput = documentoForm.querySelector('input[name="numero_hojas"]');
-        const fechaCreacionInput = documentoForm.querySelector('input[name="fecha_creacion"]');
-        const estadoSelect = documentoForm.querySelector('select[name="estado"]');
-        const areaSelect = documentoForm.querySelector('select[name="id_area"]');
-        const submitButton = documentoForm.querySelector('button[type="submit"]');
-        const carpetaId = documentoForm.querySelector('input[name="id_carpeta"]')?.value;
-
-        function addErrorMessage(input, message) {
-            removeErrorMessage(input);
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error-message text-red-500 text-sm mt-1';
-            errorDiv.textContent = message;
-            input.parentNode.insertBefore(errorDiv, input.nextSibling);
-            input.classList.add('form-error');
-        }
-
-        function removeErrorMessage(input) {
-            const errorDiv = input.parentNode.querySelector('.error-message');
-            if (errorDiv) {
-                errorDiv.remove();
-            }
-            input.classList.remove('form-error');
-        }
-
-        async function checkAreaExistente(areaId) {
-            try {
-                const response = await fetch(`/carpetas/${carpetaId}/areas/${areaId}/check`);
-                const data = await response.json();
-                return data.exists;
-            } catch (error) {
-                console.error('Error al verificar área:', error);
-                return false;
-            }
-        }
-
-        function validateForm() {
-            let isValid = true;
-
-            // Validar número de hojas
-            if (!numeroHojasInput.value || numeroHojasInput.value === '0') {
-                isValid = false;
-                addErrorMessage(numeroHojasInput, 'El número de hojas es requerido y debe ser mayor a 0');
-            }
-
-            // Validar fecha
-            if (!fechaCreacionInput.value) {
-                isValid = false;
-                addErrorMessage(fechaCreacionInput, 'La fecha es requerida');
-            }
-
-            // Validar área
-            if (!areaSelect.value) {
-                isValid = false;
-                addErrorMessage(areaSelect, 'El área es requerida');
-            }
-
-            return isValid;
-        }
-
-        // Event listener para el envío del formulario
-        documentoForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            if (validateForm()) {
-                try {
-                    const formData = new FormData(this);
-                    submitButton.disabled = true;
-                    
-                    // Enviar el formulario
-                    this.submit();
-                } catch (error) {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Ocurrió un error al crear el documento'
+                if (firstResult.isConfirmed) {
+                    // Segunda confirmación
+                    const finalResult = await Swal.fire({
+                        title: 'Confirmar eliminación',
+                        html: `
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p class="mb-0" style="font-size: 1.1rem;">
+                            ¿Está completamente seguro de eliminar esta carpeta?
+                            <br>
+                            <strong>Esta acción no se puede deshacer.</strong>
+                        </p>
+                    </div>
+                `,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Sí, eliminar definitivamente',
+                        cancelButtonText: 'Cancelar',
+                        customClass: {
+                            popup: 'swal2-danger-custom',
+                            confirmButton: 'btn btn-danger',
+                            cancelButton: 'btn btn-secondary'
+                        }
                     });
-                    submitButton.disabled = false;
-                }
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Por favor, complete todos los campos requeridos correctamente'
-                });
-            }
-        });
 
-        // Validaciones en tiempo real
-        if (numeroHojasInput) {
-            numeroHojasInput.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-                removeErrorMessage(this);
-            });
-        }
+                    if (finalResult.isConfirmed) {
+                        // Mostrar indicador de carga
+                        Swal.fire({
+                            title: 'Eliminando...',
+                            html: 'Por favor espere mientras se elimina la carpeta',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
 
-        if (fechaCreacionInput) {
-            const today = new Date().toISOString().split('T')[0];
-            fechaCreacionInput.setAttribute('max', today);
-
-            fechaCreacionInput.addEventListener('input', function() {
-                removeErrorMessage(this);
-            });
-        }
-
-        if (areaSelect) {
-            areaSelect.addEventListener('change', async function() {
-                removeErrorMessage(this);
-                if (this.value) {
-                    const areaExiste = await checkAreaExistente(this.value);
-                    if (areaExiste) {
-                        addErrorMessage(this, 'Ya existe un documento para esta área en la carpeta');
+                        // Enviar el formulario
+                        const form = document.getElementById(`eliminar-form-${carpetaId}`);
+                        if (form) {
+                            form.submit();
+                        } else {
+                            throw new Error('Formulario no encontrado');
+                        }
                     }
                 }
-            });
+            } catch (error) {
+                console.error('Error en el proceso de eliminación:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al intentar eliminar la carpeta',
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
+            }
         }
-    }
-});
 
-    let documentoIdActual;
+        let documentoIdActual;
 
-function mostrarModalAgregarPdf(documentoId) {
-    documentoIdActual = documentoId;
+        function mostrarModalAgregarPdf(documentoId) {
     const modal = document.getElementById('agregarPdfModal');
     const form = document.getElementById('pdfUploadForm');
     
+    // Establecer la URL correcta para el formulario
     form.action = `/documentos/${documentoId}/agregar-pdf`;
     
-    modal.style.display = 'flex';
-    modal.classList.add('show');
+    // Mostrar el modal con animación
+    modal.style.display = 'block';
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
 }
 
 function cerrarModalAgregarPdf() {
     const modal = document.getElementById('agregarPdfModal');
+    
+    // Quitar la clase show para la animación
     modal.classList.remove('show');
+    
+    // Esperar a que termine la animación antes de ocultar
     setTimeout(() => {
         modal.style.display = 'none';
-        document.getElementById('pdfUploadForm').reset();
+        document.getElementById('pdfUploadForm').reset(); // Limpiar el formulario
     }, 300);
 }
 
+// Manejar el envío del formulario de PDF
 document.getElementById('pdfUploadForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
     const submitButton = this.querySelector('button[type="submit"]');
     const originalButtonText = submitButton.innerHTML;
-    
-    // Cambiar el botón a estado de carga
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<span class="loading-spinner"></span>Subiendo...';
-    
+
     try {
+        // Validar el archivo
+        const fileInput = this.querySelector('input[type="file"]');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            throw new Error('Por favor, selecciona un archivo PDF');
+        }
+
+        if (file.type !== 'application/pdf') {
+            throw new Error('El archivo debe ser un PDF');
+        }
+
+        if (file.size > 2 * 1024 * 1024) { // 2MB
+            throw new Error('El archivo no debe superar los 2MB');
+        }
+
+        // Mostrar estado de carga
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner"></span> Subiendo...';
+
         const response = await fetch(this.action, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            credentials: 'same-origin'
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
         });
 
-        // Verificar el tipo de contenido de la respuesta
-        const contentType = response.headers.get('content-type');
-        let result;
+        const data = await response.json();
 
-        if (contentType && contentType.includes('application/json')) {
-            result = await response.json();
-        } else {
-            // Si no es JSON, podría ser una redirección o un error HTML
-            throw new Error('La respuesta del servidor no es válida');
-        }
-        
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: 'PDF agregado correctamente',
-                showConfirmButton: false,
-                timer: 1500
+                title: 'Éxito',
+                text: 'PDF agregado correctamente',
+                timer: 1500,
+                showConfirmButton: false
             }).then(() => {
                 window.location.reload();
             });
         } else {
-            throw new Error(result.message || 'Error al subir el PDF');
+            throw new Error(data.message || 'Error al subir el PDF');
         }
     } catch (error) {
-        console.error('Error:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Ocurrió un error al subir el archivo. Por favor, inténtalo de nuevo.'
+            text: error.message
         });
     } finally {
-        // Restaurar el botón a su estado original
         submitButton.disabled = false;
         submitButton.innerHTML = originalButtonText;
     }
 });
 
-// Cerrar modal al hacer clic fuera
-window.onclick = function(e) {
-    const modal = document.getElementById('agregarPdfModal');
-    if (e.target === modal) {
+// Cerrar modales al hacer clic fuera
+window.onclick = function(event) {
+    const pdfModal = document.getElementById('pdfModal');
+    const agregarPdfModal = document.getElementById('agregarPdfModal');
+    const documentoModal = document.getElementById('documentoModal');
+
+    if (event.target === pdfModal) {
+        cerrarPdfModal();
+    } else if (event.target === agregarPdfModal) {
         cerrarModalAgregarPdf();
+    } else if (event.target === documentoModal) {
+        closeDocumentoModal();
     }
 };
 
 // Validación del archivo antes de enviar
-document.getElementById('pdf_file').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const maxSize = 2 * 1024 * 1024; // 2MB en bytes
-    
-    if (file && file.type !== 'application/pdf') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Archivo no válido',
-            text: 'Por favor, selecciona un archivo PDF'
-        });
-        this.value = '';
-        return;
-    }
-    
-    if (file && file.size > maxSize) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Archivo demasiado grande',
-            text: 'El archivo no debe superar los 2MB'
-        });
-        this.value = '';
-    }
+document.querySelectorAll('input[type="file"]').forEach(input => {
+    input.addEventListener('change', function(e) {
+        const file = this.files[0];
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (file) {
+            if (file.type !== 'application/pdf') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo no válido',
+                    text: 'Por favor, selecciona un archivo PDF'
+                });
+                this.value = '';
+                return;
+            }
+
+            if (file.size > maxSize) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo demasiado grande',
+                    text: 'El archivo no debe superar los 2MB'
+                });
+                this.value = '';
+                return;
+            }
+        }
+    });
 });
 
-document.getElementById('id_area').addEventListener('change', function() {
-    const selectedArea = this.value;
 
-    fetch(`/api/carpeta/${carpetaId}/check-area/${selectedArea}`)
-        .then(response => response.json())
-        .then(data => {
-            if (!data.available) {
-                alert('El área seleccionada ya tiene un documento en esta carpeta.');
+
+        // Validación del archivo antes de enviar
+        document.getElementById('pdf_file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2MB en bytes
+
+            if (file && file.type !== 'application/pdf') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo no válido',
+                    text: 'Por favor, selecciona un archivo PDF'
+                });
+                this.value = '';
+                return;
+            }
+
+            if (file && file.size > maxSize) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo demasiado grande',
+                    text: 'El archivo no debe superar los 2MB'
+                });
                 this.value = '';
             }
-        })
-        .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('id_area').addEventListener('change', function() {
+            const selectedArea = this.value;
+
+            fetch(`/api/carpeta/${carpetaId}/check-area/${selectedArea}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.available) {
+                        alert('El área seleccionada ya tiene un documento en esta carpeta.');
+                        this.value = '';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function solicitarPrestamo(documentoId) {
+            fetch('/prestamos/solicitar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({
+                        documento_id: documentoId
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: data.message,
+                            timer: 1500,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            location.reload(); // Recargar la página para reflejar cambios
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message,
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un problema al realizar la solicitud.',
+                    });
+                });
+        }
+
+        function cancelarSolicitud(documentoId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¿Deseas cancelar esta solicitud de préstamo?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#800020',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'No, mantener'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Primero, obtener el préstamo asociado al documento
+                    fetch(`/prestamos/cancelar-por-documento/${documentoId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: data.message,
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Error al cancelar la solicitud'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ocurrió un problema al cancelar la solicitud.'
+                            });
+                        });
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get modal elements
+            const addDocumentoBtn = document.querySelector('.add-documento-btn');
+            const documentoModal = document.getElementById('documentoModal');
+            const closeModalBtn = documentoModal.querySelector('.close-modal');
+            const cancelarBtn = documentoModal.querySelector('.btn-secondary');
+
+            // Function to open modal
+            function openModal() {
+                documentoModal.style.display = 'flex';
+                documentoModal.classList.add('show');
+                // Reset form if exists
+                const form = documentoModal.querySelector('form');
+                if (form) form.reset();
+            }
+
+            // Function to close modal
+            function closeModal() {
+                documentoModal.classList.remove('show');
+                setTimeout(() => {
+                    documentoModal.style.display = 'none';
+                }, 300);
+            }
+
+            // Add click event listeners
+            if (addDocumentoBtn) {
+                addDocumentoBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openModal();
+                });
+            }
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeModal);
+            }
+
+            if (cancelarBtn) {
+                cancelarBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeModal();
+                });
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === documentoModal) {
+                    closeModal();
+                }
+            });
+        });
+
+        function devolverPrestamo(documentoId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¿Deseas devolver este préstamo?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#800020',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, devolver',
+                cancelButtonText: 'No, mantener'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/prestamos/devolver-por-documento/${documentoId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json'
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: data.message,
+                                    timer: 1500,
+                                    showConfirmButton: false,
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Error al devolver el préstamo'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ocurrió un problema al devolver el préstamo.'
+                            });
+                        });
+                }
+            });
+        }
+
+        function openDocumentoModal() {
+    const modal = document.getElementById('documentoModal');
+    modal.style.display = 'block';
+    modal.classList.add('show');
+}
+
+function closeDocumentoModal() {
+    const modal = document.getElementById('documentoModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
+
+// Cerrar modal al hacer clic fuera de él
+window.onclick = function(event) {
+    const modal = document.getElementById('documentoModal');
+    if (event.target == modal) {
+        closeDocumentoModal();
+    }
+}
+
+// Manejar el envío del formulario
+document.getElementById('documentoForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Aquí puedes agregar la lógica para manejar el envío del formulario
+    Swal.fire({
+        title: 'Éxito',
+        text: 'Documento agregado correctamente',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+    }).then(() => {
+        closeDocumentoModal();
+    });
 });
+
+function mostrarPdf(pdfUrl) {
+    const modal = document.getElementById('pdfModal');
+    const pdfViewer = document.getElementById('pdfViewer');
+    
+    // Establecer la URL del PDF en el visor
+    pdfViewer.src = pdfUrl;
+    
+    // Mostrar el modal con animación
+    modal.style.display = 'block';
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+}
+
+function cerrarPdfModal() {
+    const modal = document.getElementById('pdfModal');
+    const pdfViewer = document.getElementById('pdfViewer');
+    
+    // Quitar la clase show para la animación
+    modal.classList.remove('show');
+    
+    // Esperar a que termine la animación antes de ocultar
+    setTimeout(() => {
+        modal.style.display = 'none';
+        pdfViewer.src = ''; // Limpiar el src del iframe
+    }, 300);
+}
     </script>
 @endsection

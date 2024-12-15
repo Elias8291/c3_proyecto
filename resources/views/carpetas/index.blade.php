@@ -969,39 +969,53 @@ document.getElementById('searchInput').addEventListener('keyup', function(e) {
     });
 });
 
-function confirmarEliminacion(evaluadoId) {
+function cancelarSolicitud(documentoId) {
     Swal.fire({
-        title: '<strong>¡ADVERTENCIA!</strong>',
-        html: '<p style="font-size: 1.2rem; color: #d9534f; font-weight: bold;">Estás a punto de BORRAR permanentemente este evaluado. Esta acción no se puede deshacer.</p>',
-        icon: 'error',
+        title: '¿Estás seguro?',
+        text: "¿Deseas cancelar esta solicitud de préstamo?",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#d9534f',
+        confirmButtonColor: '#800020',
         cancelButtonColor: '#6c757d',
-        confirmButtonText: '<span style="font-size: 1.1rem;">Sí, BORRAR</span>',
-        cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>',
-        customClass: {
-            popup: 'animated shake',
-            title: 'swal-title-large'
-        }
+        confirmButtonText: 'Sí, cancelar',
+        cancelButtonText: 'No, mantener'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Mostrar la segunda confirmación
-            Swal.fire({
-                title: '<strong>¿Estás completamente seguro?</strong>',
-                html: '<p style="font-size: 1.1rem;">Esta es tu última oportunidad para cancelar.</p>',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d9534f',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: '<span style="font-size: 1.1rem;">Sí, estoy seguro</span>',
-                cancelButtonText: '<span style="font-size: 1rem;">Cancelar</span>',
-                customClass: {
-                    popup: 'animated shake'
+            fetch(`/prestamos/cancelar/${documentoId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
                 }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('eliminar-form-' + evaluadoId).submit();
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: data.message,
+                        timer: 1500,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    throw new Error(data.message || 'Error al cancelar la solicitud');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Ocurrió un problema al cancelar la solicitud.'
+                });
             });
         }
     });

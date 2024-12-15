@@ -42,4 +42,35 @@ class Documento extends Model
     {
         return $this->belongsTo(Carpeta::class, 'id_carpeta');
     }
+
+    public function prestamo_actual()
+    {
+        return $this->hasOne(Prestamo::class)
+            ->where('estado', 'Aprobado')
+            ->whereNull('fecha_devolucion');
+    }
+
+    public function prestamo_pendiente()
+    {
+        return $this->hasOne(Prestamo::class)
+            ->where('estado', 'Pendiente');
+    }
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class);
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($carpeta) {
+            // Eliminar documentos relacionados
+            $carpeta->documentos()->delete();
+        });
+    }
+
+    
 }

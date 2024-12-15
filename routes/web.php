@@ -99,6 +99,30 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
     Route::get('/documentos2', [DocumentoController::class, 'index'])->name('documentos2.index');
     Route::post('/documentos/{id}/agregar-pdf', [DocumentoController::class, 'agregarPdf'])->name('documentos.agregarPdf');
+    Route::post('/prestamos/solicitar', [PrestamoController::class, 'solicitarPrestamo'])->name('prestamos.solicitar');
+    Route::post('/prestamos/solicitar', [PrestamoController::class, 'solicitar'])->name('prestamos.solicitar');
+    Route::post('/prestamos/{id}/aprobar', [PrestamoController::class, 'aprobar'])->name('prestamos.aprobar');
+    Route::post('/prestamos/{id}/devolver', [PrestamoController::class, 'devolver'])->name('prestamos.devolver');
+    Route::post('/prestamos/{id}/cancelar', [PrestamoController::class, 'cancelar'])->name('prestamos.cancelar');
+    Route::post('/prestamos/cancelar-por-documento/{documentoId}', [PrestamoController::class, 'cancelarPorDocumento'])->name('prestamos.cancelarPorDocumento');
+    Route::get('/prestamos/filtrar', [PrestamoController::class, 'filtrar'])->name('prestamos.filtrar');
+    Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamos.index');
+    Route::put('/prestamos/{id}/aprobar', [PrestamoController::class, 'aprobar'])->name('prestamos.aprobar');
+    Route::put('/prestamos/{id}/rechazar', [PrestamoController::class, 'rechazar'])->name('prestamos.rechazar');
+    Route::put('/prestamos/{id}/cancelar', [PrestamoController::class, 'cancelar'])->name('prestamos.cancelar');
+    Route::post('/prestamos/devolver-por-documento/{documentoId}', [PrestamoController::class, 'devolverPorDocumento'])
+    ->name('prestamos.devolverPorDocumento');
+    Route::get('/prestamos/{id}/detalles', [PrestamoController::class, 'detalles'])->name('prestamos.detalles');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
+        Route::patch('/notificaciones/{id}/leida', [NotificacionController::class, 'marcarComoLeida'])->name('notificaciones.leida');
+        Route::delete('/notificaciones/{id}', [NotificacionController::class, 'eliminar'])->name('notificaciones.eliminar');
+        Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
+    });
+    Route::post('/notificaciones/archivo', [NotificacionController::class, 'enviarNotificacionArchivo'])
+    ->name('notificaciones.enviarArchivo')
+    ->middleware('auth');
     
+
 });
 // En routes/web.php

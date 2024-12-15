@@ -15,18 +15,18 @@
         <style>
             body,
             html {
-            font-family: 'Nunito', sans-serif;
-            height: 100%;
-            margin: 0;
-            background: linear-gradient(to bottom right, rgba(114, 114, 114, 0.8), rgba(36, 35, 35, 0.349)),
-            url('{{ asset('img/1img.jpg') }}') no-repeat center center fixed;
-            background-size: cover;
-            background-attachment: fixed;
-            /* Esto asegura que el fondo sea fijo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+                font-family: 'Nunito', sans-serif;
+                height: 100%;
+                margin: 0;
+                background: linear-gradient(to bottom right, rgba(114, 114, 114, 0.8), rgba(36, 35, 35, 0.349)),
+                    url('{{ asset('img/1img.jpg') }}') no-repeat center center fixed;
+                background-size: cover;
+                background-attachment: fixed;
+                /* Esto asegura que el fondo sea fijo */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
 
             .hover:transform {
                 transition: transform .2s ease-in-out;
@@ -182,7 +182,7 @@
                 animation: move-background 10s infinite linear;
             }
 
-            /* 
+            /*
 @keyframes move-background {
     0% {
         background-position: 0% 0%;
@@ -281,143 +281,143 @@
             }
 
             /* Contenedor principal y sombras */
-.custom-container {
-    max-width: 900px;
-    margin: auto;
-    border: 3px solid #4b479c;
-    border-radius: 15px;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
+            .custom-container {
+                max-width: 900px;
+                margin: auto;
+                border: 3px solid #4b479c;
+                border-radius: 15px;
+                padding: 20px;
+                background-color: #ffffff;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
 
-.custom-container:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
-}
+            .custom-container:hover {
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+                transform: translateY(-2px);
+            }
 
-/* Botones de acción */
-.btn-submit {
-    transition: all 0.3s ease;
-    background-color: #4b479c;
-    color: #ffffff;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+            /* Botones de acción */
+            .btn-submit {
+                transition: all 0.3s ease;
+                background-color: #4b479c;
+                color: #ffffff;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 8px;
+                font-size: 18px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
 
-.btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-    background-color: #3a2c70;
-}
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+                background-color: #3a2c70;
+            }
 
-/* Fondo de la página y secciones */
-.bg-primary {
-    background-color: #4b479c;
-}
+            /* Fondo de la página y secciones */
+            .bg-primary {
+                background-color: #4b479c;
+            }
 
-.section {
-    padding: 60px 0;
-    background-color: #f5f5f5;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-}
+            .section {
+                padding: 60px 0;
+                background-color: #f5f5f5;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+            }
 
-.section-heading {
-    color: #4b479c;
-    font-size: 32px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-}
+            .section-heading {
+                color: #4b479c;
+                font-size: 32px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+            }
 
-/* Formularios */
-.form-label {
-    font-weight: bold;
-    color: #4b479c;
-    margin-bottom: 5px;
-    font-size: 16px;
-}
+            /* Formularios */
+            .form-label {
+                font-weight: bold;
+                color: #4b479c;
+                margin-bottom: 5px;
+                font-size: 16px;
+            }
 
-.form-control {
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-    font-size: 16px;
-    background-color: #f9f9f9;
-}
+            .form-control {
+                padding: 12px 15px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                width: 100%;
+                box-sizing: border-box;
+                transition: all 0.2s ease;
+                font-size: 16px;
+                background-color: #f9f9f9;
+            }
 
-.form-control:focus {
-    border-color: #4b479c;
-    box-shadow: 0 0 8px rgba(75, 71, 156, 0.3);
-    background-color: #ffffff;
-}
+            .form-control:focus {
+                border-color: #4b479c;
+                box-shadow: 0 0 8px rgba(75, 71, 156, 0.3);
+                background-color: #ffffff;
+            }
 
-/* Imágenes de perfil */
-.fixed-container {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-    margin: 0 auto;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
+            /* Imágenes de perfil */
+            .fixed-container {
+                width: 150px;
+                height: 150px;
+                overflow: hidden;
+                margin: 0 auto;
+                border-radius: 50%;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+            }
 
-.fixed-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    object-position: center;
-}
+            .fixed-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+                object-position: center;
+            }
 
-/* Iconos y elementos interactivos */
-.text-blueGray-600 {
-    color: #718096;
-}
+            /* Iconos y elementos interactivos */
+            .text-blueGray-600 {
+                color: #718096;
+            }
 
-.text-blueGray-400 {
-    color: #a0aec0;
-}
+            .text-blueGray-400 {
+                color: #a0aec0;
+            }
 
-.text-blue-500 {
-    color: #4b479c;
-}
+            .text-blue-500 {
+                color: #4b479c;
+            }
 
-.text-blue-500:hover {
-    color: #3a2c70;
-}
+            .text-blue-500:hover {
+                color: #3a2c70;
+            }
 
-.hover\\:underline:hover {
-    text-decoration: underline;
-}
+            .hover\\:underline:hover {
+                text-decoration: underline;
+            }
 
-/* Redes sociales */
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
+            /* Redes sociales */
+            .social-icons {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+            }
 
-.social-icons a {
-    font-size: 24px;
-    color: #4b479c;
-    transition: color 0.3s;
-}
+            .social-icons a {
+                font-size: 24px;
+                color: #4b479c;
+                transition: color 0.3s;
+            }
 
-.social-icons a:hover {
-    color: #3a2c70;
-}
-
+            .social-icons a:hover {
+                color: #3a2c70;
+            }
+            
         </style>
     </head>
 
@@ -464,9 +464,9 @@
                             name="email" placeholder="Ingresa tu correo" tabindex="1"
                             value="{{ old('email', Cookie::get('email')) }}" autofocus required>
                         @if ($errors->has('email'))
-                        <div class="invalid-feedback text-red-500">
-                            {{ $errors->first('email') }}
-                        </div>
+                            <div class="invalid-feedback text-red-500">
+                                {{ $errors->first('email') }}
+                            </div>
                         @endif
                     </div>
 
@@ -478,17 +478,17 @@
                             class="form-control bg-gray-200 text-gray-900 border-gray-300 focus:border-blue-400 focus:ring-blue-400{{ $errors->has('password') ? ' is-invalid' : '' }}"
                             name="password" tabindex="2" required>
                         @if ($errors->has('password'))
-                        <div class="invalid-feedback text-red-500">
-                            {{ $errors->first('password') }}
-                        </div>
+                            <div class="invalid-feedback text-red-500">
+                                {{ $errors->first('password') }}
+                            </div>
                         @endif
                     </div>
 
                     <div class="form-group mt-4">
                         <div class="flex items-center">
                             <input type="checkbox" name="remember" id="remember"
-                                class="form-checkbox h-5 w-5 text-blue-600" {{ old('remember', Cookie::get('remember'))
-                                ? 'checked' : '' }}>
+                                class="form-checkbox h-5 w-5 text-blue-600"
+                                {{ old('remember', Cookie::get('remember')) ? 'checked' : '' }}>
                             <label for="remember" class="ml-2 text-gray-700">Recuérdame</label>
                         </div>
                     </div>
@@ -540,41 +540,40 @@
 
         <script>
             function showLoginForm() {
-            var overlay = document.getElementById('overlay');
-            overlay.style.display = 'flex';
-            hideBackgroundBlur();
-        }
+                var overlay = document.getElementById('overlay');
+                overlay.style.display = 'flex';
+                hideBackgroundBlur();
+            }
 
-        function hideLoginForm() {
-            var overlay = document.getElementById('overlay');
-            overlay.style.display = 'none';
-            hideBackgroundBlur();
-        }
+            function hideLoginForm() {
+                var overlay = document.getElementById('overlay');
+                overlay.style.display = 'none';
+                hideBackgroundBlur();
+            }
 
-        function showPasswordResetForm() {
-            var overlay = document.getElementById('overlay');
-            overlay.style.display = 'none';
-            var passwordResetOverlay = document.getElementById('passwordResetOverlay');
-            passwordResetOverlay.style.display = 'flex';
-            showBackgroundBlur();
-        }
+            function showPasswordResetForm() {
+                var overlay = document.getElementById('overlay');
+                overlay.style.display = 'none';
+                var passwordResetOverlay = document.getElementById('passwordResetOverlay');
+                passwordResetOverlay.style.display = 'flex';
+                showBackgroundBlur();
+            }
 
-        function hidePasswordResetForm() {
-            var passwordResetOverlay = document.getElementById('passwordResetOverlay');
-            passwordResetOverlay.style.display = 'none';
-            hideBackgroundBlur();
-        }
+            function hidePasswordResetForm() {
+                var passwordResetOverlay = document.getElementById('passwordResetOverlay');
+                passwordResetOverlay.style.display = 'none';
+                hideBackgroundBlur();
+            }
 
-        function showBackgroundBlur() {
-            var overlayBlur = document.getElementById('overlayBlur');
-            overlayBlur.style.display = 'block';
-        }
+            function showBackgroundBlur() {
+                var overlayBlur = document.getElementById('overlayBlur');
+                overlayBlur.style.display = 'block';
+            }
 
-        function hideBackgroundBlur() {
-            var overlayBlur = document.getElementById('overlayBlur');
-            overlayBlur.style.display = 'none';
-        }
-
+            function hideBackgroundBlur() {
+                var overlayBlur = document.getElementById('overlayBlur');
+                overlayBlur.style.display = 'none';
+            }
         </script>
     </body>
 

@@ -1,98 +1,64 @@
 
 <style>
-.navbar-nav {
-    display: flex;
-    align-items: center;
-    list-style: none;
+:root {
+    --primary: #9B6B8F;
+    --text-primary: #2C272E;
+    --bg-hover: #F7F4F8;
+    --border-color: #E8E5EA;
 }
 
-.navbar-nav .nav-link:hover,
-.navbar-nav .dropdown-item:hover {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-}
 .notification-icon {
     position: relative;
-    padding: 0.5em 1em;
-    color: #ffffff;
-    transition: transform 0.3s ease, color 0.3s ease;
+    padding: 0.75em 1.25em;
+    color: var(--primary);
+    transition: transform 0.2s ease;
     cursor: pointer;
 }
 
-/* Efecto hover para la notificación con borde */
 .notification-icon:hover {
-    transform: translateY(-3px);
-    color: #ffd700; /* Color dorado al pasar el cursor */
-    border: 2px solid #A52A2A; /* Borde color guinda */
-    border-radius: 5px; /* Opcional: redondear esquinas del borde */
+    transform: translateY(-2px);
 }
 
 .notification-bell {
-    font-size: 1.5rem;
-    animation: bell-swing 1.5s infinite;
-    transform-origin: top;
+    font-size: 1.75rem;
 }
 
 .notification-badge {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: #e74c3c;
-    color: #ffffff;
+    top: 8px;
+    right: 8px;
+    background-color: var(--primary);
+    color: white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
-    font-weight: bold;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-.notification-badge.new {
-    background-color: #c0392b;
-    transform: scale(1.1);
-}
-
-/* Agregar borde al cuadro de notificaciones */
 .notifications-dropdown {
-    width: 320px;
-    padding: 0;
-    border: 2px solid #A52A2A; /* Borde color guinda */
-    border-radius: 8px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+    width: 550px; /* Aumentado de 400px */
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     margin-top: 15px;
 }
 
-/* Opcional: Cambiar el borde al pasar el cursor sobre el ícono de notificaciones */
-.notification-icon:hover + .dropdown-menu {
-    border-color: #800000; /* Color guinda más oscuro al hacer hover */
-}
-
-
-.notifications-dropdown::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    right: 20px;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid white;
-}
-
 .dropdown-header {
-    background: #f8f9fa;
-    color: #2d3748;
+    background: white;
+    color: var(--text-primary);
     font-weight: 600;
-    padding: 15px 20px;
-    border-bottom: 1px solid #edf2f7;
-    border-radius: 8px 8px 0 0;
+    padding: 22px 30px; /* Aumentado el padding */
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1rem;
 }
 
 .notifications-list {
-    max-height: 360px;
+    max-height: 520px; /* Aumentada la altura máxima */
     overflow-y: auto;
 }
 
@@ -100,96 +66,67 @@
     width: 6px;
 }
 
-.notifications-list::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
 .notifications-list::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
+    background-color: var(--border-color);
     border-radius: 3px;
 }
 
 .notifications-list .dropdown-item {
-    padding: 12px 20px;
-    border-bottom: 1px solid #edf2f7;
-    color: #4a5568;
-    transition: all 0.2s ease;
+    padding: 20px 30px; /* Aumentado el padding */
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: background-color 0.2s ease;
     display: flex;
-    align-items: center;
-}
-
-.notifications-list .dropdown-item:last-child {
-    border-bottom: none;
+    flex-direction: column;
+    gap: 8px; /* Aumentado el espacio entre elementos */
 }
 
 .notifications-list .dropdown-item:hover {
-    background-color: #f7fafc;
-    color: #2d3748;
+    background-color: var(--bg-hover);
 }
 
 .notifications-list .dropdown-item i {
-    font-size: 1rem;
-    margin-right: 12px;
-    color: #000407;
-    width: 20px;
-    text-align: center;
+    font-size: 1.2rem;
+    margin-right: 15px;
+    color: var(--primary);
+}
+
+.notifications-list .dropdown-item small {
+    color: #777;
+    font-size: 0.9rem; /* Aumentado ligeramente */
+}
+
+.notifications-list .dropdown-item.unread {
+    background-color: var(--bg-hover);
+    border-left: 3px solid var(--primary);
+}
+
+.notifications-list .dropdown-item .notification-content {
+    font-size: 1rem; /* Tamaño de fuente explícito para el contenido */
+    line-height: 1.5;
 }
 
 .dropdown-footer {
-    padding: 12px;
-    background: #f8f9fa;
-    border-top: 1px solid #edf2f7;
-    border-radius: 0 0 8px 8px;
+    padding: 20px 30px; /* Aumentado el padding */
+    background: white;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
 }
 
 .dropdown-footer a {
-    color: #4299e1;
-    font-size: 0.875rem;
+    color: var(--primary);
+    font-size: 1rem;
     font-weight: 500;
     text-decoration: none;
     transition: color 0.2s ease;
+    padding: 8px 16px; /* Añadido padding para área de clic más grande */
 }
 
 .dropdown-footer a:hover {
-    color: #2b6cb0;
-    text-decoration: underline;
-}
-
-/* Estilos para notificaciones no leídas */
-.notifications-list .dropdown-item.unread {
-    background-color: #ebf8ff;
-}
-
-.notifications-list .dropdown-item.unread:hover {
-    background-color: #e6f6ff;
-}
-
-/* Animación de entrada para el dropdown */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.notifications-dropdown.show {
-    animation: slideIn 0.2s ease-out forwards;
-}
-
-@keyframes bell-swing {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(15deg); }
-    50% { transform: rotate(-15deg); }
-    75% { transform: rotate(10deg); }
-    100% { transform: rotate(0deg); }
+    color: var(--text-primary);
 }
 </style>
 
-</style>
 <form class="form-inline mr-auto" action="#">
     <ul class="navbar-nav mr-3">
         <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
@@ -199,22 +136,33 @@
 
 <!-- Barra de navegación -->
 <ul class="navbar-nav navbar-right">
- 
+    @if (auth()->check())
     <li class="nav-item dropdown">
         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle notification-icon">
-           
+            <i class="fas fa-bell notification-bell"></i>
+            @if ($notificacionesNoLeidas > 0)
+                <span class="notification-badge new">{{ $notificacionesNoLeidas }}</span>
+            @endif
         </a>
         <div class="dropdown-menu dropdown-menu-right notifications-dropdown">
             <h6 class="dropdown-header">Notificaciones</h6>
-           
+            <div class="notifications-list">
+                @forelse ($notificaciones as $notificacion)
+                    <a href="#" class="dropdown-item {{ $notificacion->leida ? '' : 'unread' }}">
+                        <i class="fas fa-envelope"></i>
+                        {{ $notificacion->mensaje }}
+                        <small class="text-muted d-block">{{ $notificacion->created_at->diffForHumans() }}</small>
+                    </a>
+                @empty
+                    <p class="dropdown-item text-center">No tienes notificaciones</p>
+                @endforelse
+            </div>
             <div class="dropdown-footer text-center">
                 <a href="{{ route('notificaciones.index') }}">Ver todas las notificaciones</a>
             </div>
         </div>
     </li>
-    
-    
-    
+@endif
 
     <!-- Menú de Usuario -->
     <li class="nav-item dropdown">

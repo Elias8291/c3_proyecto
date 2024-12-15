@@ -259,6 +259,15 @@ body {
         height: 65px;
     }
 }
+.main-footer {
+    background-color: var(--card-bg); /* Usa la misma variable de color que las tarjetas */
+    padding: 1rem;
+    border-top: 1px solid rgba(155, 40, 71, 0.08); /* Usa el mismo color del borde de las tarjetas */
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 -5px 15px var(--shadow-color);
+    color: var(--text-dark);
+}
 </style>
 
 @section('content')
@@ -351,7 +360,7 @@ body {
             </div>
           
         </div>
-        <!-- Puedes añadir más tarjetas aquí siguiendo el mismo esquema -->
+  
     </div>
 
    

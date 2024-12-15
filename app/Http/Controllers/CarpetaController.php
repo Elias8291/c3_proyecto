@@ -8,6 +8,10 @@ use App\Models\Documento;
 use App\Models\Caja;
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage; 
+
 
 class CarpetaController extends Controller
 {
@@ -52,23 +56,80 @@ class CarpetaController extends Controller
 
     public function destroy($id)
     {
-        // Busca el documento por su ID
-        $documento = Documento::findOrFail($id);
-    
         try {
-            // Elimina el documento de la base de datos
-            $documento->delete();
+            DB::beginTransaction();
+            
+            // Log inicio del proceso
+            Log::info('Iniciando eliminación de carpeta ID: ' . $id);
+            
+            // Buscar la carpeta con sus relaciones
+            $carpeta = Carpeta::with(['documentos'])->findOrFail($id);
+            
+            // Verificar si la carpeta existe
+            if (!$carpeta) {
+                throw new \Exception('Carpeta no encontrada');
+            }
+            
+            // Log información de la carpeta
+            Log::info('Carpeta encontrada:', [
+                'id' => $carpeta->id,
+                'num_documentos' => $carpeta->documentos->count()
+            ]);
     
-            // Redirige a la vista de la carpeta asociada, pasando el ID de la carpeta
-            return redirect()->route('carpetas.show', ['carpeta' => $documento->carpeta_id])
-                             ->with('success', 'Documento eliminado correctamente.');
+            // Eliminar documentos uno por uno
+            foreach ($carpeta->documentos as $documento) {
+                Log::info('Procesando documento ID: ' . $documento->id);
+                
+                // Eliminar archivo PDF si existe
+                if ($documento->pdf_url) {
+                    try {
+                        $path = str_replace('storage/', '', $documento->pdf_url);
+                        if (Storage::disk('public')->exists($path)) {
+                            Storage::disk('public')->delete($path);
+                            Log::info('Archivo PDF eliminado: ' . $path);
+                        } else {
+                            Log::warning('Archivo PDF no encontrado: ' . $path);
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Error al eliminar archivo PDF: ' . $e->getMessage());
+                        // Continuar con el proceso incluso si falla la eliminación del archivo
+                    }
+                }
+                
+                // Eliminar registro del documento
+                try {
+                    $documento->delete();
+                    Log::info('Documento eliminado correctamente de la base de datos');
+                } catch (\Exception $e) {
+                    Log::error('Error al eliminar documento de la base de datos: ' . $e->getMessage());
+                    throw $e;
+                }
+            }
+    
+            // Eliminar la carpeta
+            try {
+                $carpeta->delete();
+                Log::info('Carpeta eliminada correctamente');
+            } catch (\Exception $e) {
+                Log::error('Error al eliminar carpeta: ' . $e->getMessage());
+                throw $e;
+            }
+    
+            DB::commit();
+            Log::info('Transacción completada exitosamente');
+    
+            return redirect()->route('carpetas.index')
+                            ->with('success', 'Carpeta y todos sus documentos eliminados correctamente.');
+                            
         } catch (\Exception $e) {
-            // Si ocurre algún error, redirige a la vista de la carpeta con el error
-            return redirect()->route('carpetas.show', ['carpeta' => $documento->carpeta_id])
-                             ->with('error', 'Hubo un error al eliminar el documento: ' . $e->getMessage());
+            DB::rollBack();
+            Log::error('Error en el proceso de eliminación: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+            
+            return redirect()->route('carpetas.index')
+                            ->with('error', 'Error al eliminar la carpeta: ' . $e->getMessage());
         }
     }
-    
 
 
 

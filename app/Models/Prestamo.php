@@ -31,9 +31,10 @@ class Prestamo extends Model
      * Relación con el modelo Documento.
      */
     public function documento()
-    {
-        return $this->belongsTo(Documento::class);
-    }
+{
+    return $this->belongsTo(Documento::class, 'documento_id');
+}
+
 
     /**
      * Relación con el usuario que solicitó el préstamo.

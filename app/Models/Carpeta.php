@@ -26,7 +26,6 @@ class Carpeta extends Model
     {
         return $this->hasMany(Documento::class, 'id_carpeta');
     }
-    
 
     
 
