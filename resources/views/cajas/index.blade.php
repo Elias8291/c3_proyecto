@@ -950,7 +950,7 @@ textarea {
             <div class="d-flex align-items-center">
                 @can('crear-caja')
                 <a class="btn btn-new" href="{{ route('cajas.create') }}"
-                    style="background: var(--primary-color); color: white; font-weight: bold; text-decoration: none;">
+                style="background: #800020; color: white; font-weight: bold; text-decoration: none;">
                     <i class="fas fa-plus"></i>
                     <span>Nueva Caja</span>
                 </a>
