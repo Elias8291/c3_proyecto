@@ -128,4 +128,23 @@ class DocumentoController extends Controller
             return redirect()->back()->with('error', 'Error al procesar el archivo: ' . $e->getMessage());
         }
     }
+
+    public function buscar(Request $request)
+{
+    $query = $request->input('query');
+    $evaluados = Evaluado::where('primer_nombre', 'like', '%' . $query . '%')
+        ->orWhere('segundo_nombre', 'like', '%' . $query . '%')
+        ->orWhere('primer_apellido', 'like', '%' . $query . '%')
+        ->orWhere('segundo_apellido', 'like', '%' . $query . '%')
+        ->get();
+
+    return response()->json($evaluados);
+}
+
+public function datos($id)
+{
+    $evaluado = Evaluado::findOrFail($id);
+    return response()->json($evaluado);
+}
+
 }

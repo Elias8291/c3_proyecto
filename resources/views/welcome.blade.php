@@ -1,580 +1,607 @@
-<<!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evalus - Sistema de Autenticación</title>
+    <style>
+        :root {
+            --color-guinda: #9D2449;
+            --color-white: #ffffff;
+            --color-error: #dc3545;
+            --color-success: #28a745;
+        }
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Registro - Sistema de Alumnos</title>
-        <!-- Tailwind CSS -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        <!-- FontAwesome for icons -->
-        <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
-        <script src="{{ asset('js/sweetalert2.js') }}"></script>
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        <style>
-            body,
-            html {
-                font-family: 'Nunito', sans-serif;
-                height: 100%;
-                margin: 0;
-                background: linear-gradient(to bottom right, rgba(114, 114, 114, 0.8), rgba(36, 35, 35, 0.349)),
-                    url('{{ asset('img/1img.jpg') }}') no-repeat center center fixed;
-                background-size: cover;
-                background-attachment: fixed;
-                /* Esto asegura que el fondo sea fijo */
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
 
-            .hover:transform {
-                transition: transform .2s ease-in-out;
-            }
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
 
-            .text-accent {
-                color: #76B041;
-                /* Verde del logotipo */
-            }
+        .auth-container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(157, 36, 73, 0.15);
+            background: white;
+            animation: fadeIn 0.5s ease-out;
+        }
 
-            .card:hover {
-                box-shadow: 0 5px 15px rgba(163, 23, 23, 0.3);
-                transform: translateY(-5px);
-            }
+        .header {
+            background-color: var(--color-guinda);
+            padding: 4rem 3rem;
+            width: 45%;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
 
-            .animate {
-                animation: fadeIn 1s ease-in-out;
-            }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50h-25v-25h25z' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
 
-            @keyframes fadeIn {
-                0% {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
+        .logo-text {
+            font-size: 5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
 
-                100% {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
+        .header h1 {
+            font-size: 1.8rem;
+            margin: 1rem 0;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
 
-            .animate {
-                animation: fadeInUp 1.2s ease-in-out;
-            }
+        .form-container {
+            padding: 4rem;
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-out;
+        }
 
-            .animate-glow {
-                animation: glowEffect 1.5s ease-in-out forwards;
-            }
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
 
-            @keyframes glowEffect {
-                0% {
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                    transform: translateY(20px);
-                    opacity: 0;
-                }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: #333;
+            font-size: 1rem;
+        }
 
-                100% {
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f8f8;
+        }
 
-            .hover\:shadow-3xl:hover {
-                box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
-            }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--color-guinda);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(157, 36, 73, 0.1);
+        }
 
-            .hover\:scale-105:hover {
-                transform: scale(1.05);
-            }
+        .invalid-feedback {
+            color: var(--color-error);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
 
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--color-guinda);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+        }
 
-            .overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 10;
-                display: none;
-                justify-content: center;
-                align-items: center;
-            }
+        .btn:hover {
+            filter: brightness(110%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(157, 36, 73, 0.2);
+        }
 
-            .login-container,
-            .register-container {
+        .btn-secondary {
+            background-color: #6c757d;
+            margin-top: 1rem;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .form-check input {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .instructions {
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .link {
+            color: var(--color-guinda);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .link:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
                 max-width: 400px;
-                background-color: #ffffff;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-                padding: 20px;
-                animation: scaleIn .3s ease-in-out;
-            }
-
-            .login-title,
-            .register-title {
-                font-size: 24px;
-                font-weight: bold;
-                color: #000000;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            .form-group {
-                margin-bottom: 20px;
-            }
-
-            .form-control {
-                width: 100%;
-                padding: 10px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                outline: none;
-            }
-
-            .form-control:focus {
-                border-color: #000000;
-            }
-
-            .btn-primary {
-                background-color: #000000;
-                color: #ffffff;
-                padding: 12px 20px;
-                border-radius: 25px;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn-primary:hover {
-                background-color: #663a4b;
-            }
-
-            .btn-secondary {
-                background-color: #131313;
-                color: #ffffff;
-                padding: 12px 20px;
-                border-radius: 25px;
-                transition: background-color 0.3s ease;
-            }
-
-            .btn-secondary:hover {
-                background-color: #005a96;
-            }
-
-            @keyframes scaleIn {
-                from {
-                    transform: scale(0.8);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-            }
-
-            .btn-primary:hover,
-            .btn-secondary:hover {
-                transform: scale(1.05);
-            }
-
-            .background-animate {
-                animation: move-background 10s infinite linear;
-            }
-
-            /*
-@keyframes move-background {
-    0% {
-        background-position: 0% 0%;
-    }
-    100% {
-        background-position: 100% 100%;
-    }
-}
-*/
-
-            @keyframes glow {
-
-                0%,
-                100% {
-                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-                }
-
-                50% {
-                    box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
-                }
-            }
-
-            @keyframes float {
-
-                0%,
-                100% {
-                    transform: translateY(0);
-                }
-
-                50% {
-                    transform: translateY(-15px);
-                }
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-
-                to {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            @keyframes textGlow {
-
-                0%,
-                100% {
-                    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-                }
-
-                50% {
-                    text-shadow: 0 0 25px rgba(255, 255, 255, 1);
-                }
-            }
-
-            @keyframes pulse {
-
-                0%,
-                100% {
-                    opacity: 1;
-                }
-
-                50% {
-                    opacity: 0.6;
-                }
-            }
-
-            /* Añadimos cubic-bezier para más suavidad */
-            .animate-glow {
-                animation: glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            }
-
-            .animate-float {
-                animation: float 6s ease-in-out infinite;
-            }
-
-            .animate-fade-in {
-                animation: fadeIn 1.5s ease-out;
-            }
-
-            .animate-fade-in-up {
-                animation: fadeInUp 1.5s ease-out;
-            }
-
-            /* Contenedor principal y sombras */
-            .custom-container {
-                max-width: 900px;
-                margin: auto;
-                border: 3px solid #4b479c;
-                border-radius: 15px;
-                padding: 20px;
-                background-color: #ffffff;
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease;
-            }
-
-            .custom-container:hover {
-                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-                transform: translateY(-2px);
-            }
-
-            /* Botones de acción */
-            .btn-submit {
-                transition: all 0.3s ease;
-                background-color: #4b479c;
-                color: #ffffff;
-                padding: 12px 20px;
-                border: none;
-                border-radius: 8px;
-                font-size: 18px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-
-            .btn-submit:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-                background-color: #3a2c70;
-            }
-
-            /* Fondo de la página y secciones */
-            .bg-primary {
-                background-color: #4b479c;
-            }
-
-            .section {
-                padding: 60px 0;
-                background-color: #f5f5f5;
-                min-height: 100vh;
-                display: flex;
-                align-items: center;
-            }
-
-            .section-heading {
-                color: #4b479c;
-                font-size: 32px;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 20px;
-            }
-
-            /* Formularios */
-            .form-label {
-                font-weight: bold;
-                color: #4b479c;
-                margin-bottom: 5px;
-                font-size: 16px;
-            }
-
-            .form-control {
-                padding: 12px 15px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                width: 100%;
-                box-sizing: border-box;
-                transition: all 0.2s ease;
-                font-size: 16px;
-                background-color: #f9f9f9;
-            }
-
-            .form-control:focus {
-                border-color: #4b479c;
-                box-shadow: 0 0 8px rgba(75, 71, 156, 0.3);
-                background-color: #ffffff;
-            }
-
-            /* Imágenes de perfil */
-            .fixed-container {
-                width: 150px;
-                height: 150px;
-                overflow: hidden;
-                margin: 0 auto;
-                border-radius: 50%;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease;
-            }
-
-            .fixed-image {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 50%;
-                object-position: center;
-            }
-
-            /* Iconos y elementos interactivos */
-            .text-blueGray-600 {
-                color: #718096;
-            }
-
-            .text-blueGray-400 {
-                color: #a0aec0;
-            }
-
-            .text-blue-500 {
-                color: #4b479c;
-            }
-
-            .text-blue-500:hover {
-                color: #3a2c70;
-            }
-
-            .hover\\:underline:hover {
-                text-decoration: underline;
-            }
-
-            /* Redes sociales */
-            .social-icons {
-                display: flex;
-                justify-content: center;
-                gap: 15px;
-            }
-
-            .social-icons a {
-                font-size: 24px;
-                color: #4b479c;
-                transition: color 0.3s;
-            }
-
-            .social-icons a:hover {
-                color: #3a2c70;
             }
             
-        </style>
-    </head>
+            .header, .form-container {
+                width: 100%;
+                padding: 2rem;
+            }
+            
+            .logo-text {
+                font-size: 3rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
 
-    <body class="background-animate">
-        <div
-            class="max-w-4xl mx-auto bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400 rounded-3xl shadow-2xl p-12 flex items-center justify-center animate-glow hover:shadow-3xl hover:scale-105 transform transition duration-700 ease-in-out">
+        .password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
-            <div class="mr-8 hidden md:block flex justify-center items-center animate-float">
-                <img src="{{ asset('img/PD1.png') }}" alt="Descripción de la imagen"
-                    style="width: 900px; height: auto; border: 0; box-shadow: none;" class="rounded-lg">
-            </div>
-            <div
-                class="card w-full md:w-4/5 lg:w-3/4 md:px-12 text-center bg-gray-900 text-white rounded-lg shadow-lg p-12 animate-fade-in">
-                <h1 class="text-5xl font-extrabold mb-8 animate-text-glow" style="color:#F0F0F0;">
-                    BIENVENIDO AL PORTAL DEL C3
-                </h1>
+.password-container input {
+    padding-right: 45px; /* Espacio para el botón */
+}
 
-                <p class="text-lg text-gray-300 mb-12 animate-fade-in-up">Página web de gestión de documentos del Centro
-                    Estatal de Evaluación y Control de Oaxaca.</p>
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
 
-                <div class="mb-4 flex justify-center">
-                    <a href="#"
-                        class="inline-block bg-black text-white font-semibold rounded-full py-4 px-8 hover:bg-gray-800 transition-all duration-300 transform hover:scale-105"
-                        onclick="showLoginForm()">Iniciar sesión</a>
+.password-toggle:hover {
+    opacity: 0.7;
+}
+
+.eye-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+/* Asegurarse que el botón no tenga outline al hacer focus */
+.password-toggle:focus {
+    outline: none;
+}
+
+/* Estilo para cuando el password es visible */
+.password-toggle.active .eye-icon {
+    color: var(--color-guinda);
+}
+    </style>
+</head>
+<body>
+    <!-- Contenedor Principal -->
+    <div class="auth-container" id="mainContainer">
+        <div class="header">
+            <div class="logo-text">Evalus</div>
+            <h1>Centro de Evaluación</h1>
+            <p>Gobierno del Estado</p>
+        </div>
+        
+        <div class="form-container">
+            <form method="POST" action="{{ route('login') }}" id="loginForm">
+                @csrf
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" 
+                           class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                           value="{{ old('email', Cookie::get('email')) }}"
+                           placeholder="Ingrese su correo electrónico" required autofocus>
+                    @if ($errors->has('email'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('email') }}
+                        </span>
+                    @endif
                 </div>
-            </div>
 
-        </div>
-
-
-        </div>
-
-
-        <!-- Overlay -->
-        <div class="overlay" id="overlay" style="background-color: rgba(0, 0, 0, 0.5);">
-            <div class="login-container bg-gray-100 text-gray-800 p-8 rounded-lg shadow-xl">
-                <div class="login-title text-3xl font-bold mb-6 text-gray-900">Inicio de Sesión</div>
-                <form id="loginForm" method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label for="email" class="text-gray-700">Correo Electrónico</label>
-                        <input id="email" type="email"
-                            class="form-control bg-gray-200 text-gray-900 border-gray-300 focus:border-blue-400 focus:ring-blue-400{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                            name="email" placeholder="Ingresa tu correo" tabindex="1"
-                            value="{{ old('email', Cookie::get('email')) }}" autofocus required>
-                        @if ($errors->has('email'))
-                            <div class="invalid-feedback text-red-500">
-                                {{ $errors->first('email') }}
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="form-group mt-4">
-                        <label for="password" class="control-label text-gray-700">Contraseña</label>
-                        <a href="#" class="text-blue-500 hover:text-blue-700"
-                            onclick="event.preventDefault(); showPasswordResetForm();">¿Olvidaste tu contraseña?</a>
-                        <input id="password" type="password" placeholder="Ingresa tu contraseña"
-                            class="form-control bg-gray-200 text-gray-900 border-gray-300 focus:border-blue-400 focus:ring-blue-400{{ $errors->has('password') ? ' is-invalid' : '' }}"
-                            name="password" tabindex="2" required>
-                        @if ($errors->has('password'))
-                            <div class="invalid-feedback text-red-500">
-                                {{ $errors->first('password') }}
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="form-group mt-4">
-                        <div class="flex items-center">
-                            <input type="checkbox" name="remember" id="remember"
-                                class="form-checkbox h-5 w-5 text-blue-600"
-                                {{ old('remember', Cookie::get('remember')) ? 'checked' : '' }}>
-                            <label for="remember" class="ml-2 text-gray-700">Recuérdame</label>
-                        </div>
-                    </div>
-                    <div class="form-group mt-6">
-                        <button type="submit"
-                            class="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 w-full rounded transition duration-300"
-                            tabindex="4">
-                            Iniciar Sesión
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" 
+                               class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                               placeholder="Ingrese su contraseña" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('password', 'eyeIcon')">
+                            <span id="eyeIcon" class="eye-icon">👁️</span>
                         </button>
-                        <button type="button"
-                            class="btn bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 w-full rounded mt-3 transition duration-300"
-                            onclick="hideLoginForm()">Cancelar</button>
                     </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Overlay para recuperar contraseña -->
-        <div class="overlay fixed inset-0 z-50 flex items-center justify-center" id="passwordResetOverlay"
-            style="background-color: rgba(0, 0, 0, 0.6); display: none;">
-            <div class="bg-gray-100 text-gray-800 rounded-lg shadow-lg p-8 w-full max-w-md">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Recuperar Contraseña</h2>
-                    <p class="text-gray-600">Ingresa tu correo electrónico para recibir instrucciones para restablecer
-                        tu contraseña.</p>
+                    @if ($errors->has('password'))
+                        <span class="invalid-feedback">
+                            {{ $errors->first('password') }}
+                        </span>
+                    @endif
                 </div>
-                <form id="passwordResetForm" method="POST" action="{{ route('password.email') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label for="email" class="text-gray-700">Correo Electrónico</label>
-                        <input id="email" type="email"
-                            class="form-control bg-gray-200 text-gray-900 border-gray-300 focus:border-blue-400 focus:ring-blue-400"
-                            name="email" placeholder="Ingresa tu correo" required>
-                    </div>
-                    <div class="form-group text-center mt-6">
-                        <button type="submit"
-                            class="btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 w-full rounded transition duration-300">
-                            Enviar Solicitud
-                        </button>
-                        <button type="button"
-                            class="btn bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 w-full rounded mt-3 transition duration-300"
-                            onclick="hidePasswordResetForm()">Cancelar</button>
-                    </div>
-                </form>
-            </div>
+
+                <div class="form-check">
+                    <input type="checkbox" name="remember" id="remember" 
+                           {{ old('remember', Cookie::get('remember')) ? 'checked' : '' }}>
+                    <label for="remember">Recordar mis datos</label>
+                </div>
+
+                <button type="submit" class="btn">
+                    Iniciar Sesión
+                </button>
+
+                <a href="#" class="link" style="display: block; text-align: center; margin-top: 1rem;"
+                   onclick="showRecoveryModal()">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </form>
         </div>
+    </div>
 
-        <div class="overlay-blur fixed inset-0 bg-black bg-opacity-50 hidden" id="overlayBlur"></div>
+    <!-- Modal de Recuperación de Contraseña -->
+    <div class="modal" id="recoveryModal">
+        <div class="modal-content">
+            <div class="instructions">
+                <h2 style="color: var(--color-guinda); margin-bottom: 1rem;">Recuperación de Contraseña</h2>
+                <p>Ingresa tu correo electrónico y te enviaremos las instrucciones para restablecer tu contraseña.</p>
+            </div>
 
-        <script>
-            function showLoginForm() {
-                var overlay = document.getElementById('overlay');
-                overlay.style.display = 'flex';
-                hideBackgroundBlur();
+            <form method="POST" action="{{ route('password.email') }}" id="recoveryForm">
+                @csrf
+                <div class="form-group">
+                    <label for="recovery_email">Correo Electrónico</label>
+                    <input type="email" id="recovery_email" name="email" required
+                           placeholder="Ingrese su correo electrónico">
+                </div>
+
+                <button type="submit" class="btn">
+                    Enviar Instrucciones
+                </button>
+
+                <button type="button" class="btn btn-secondary" onclick="hideRecoveryModal()">
+                    Cancelar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Validación del formulario de login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            let isValid = true;
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+
+            // Validación de email
+            if (!email.value || !email.value.includes('@')) {
+                showError(email, 'Por favor ingrese un correo electrónico válido');
+                isValid = false;
+            } else {
+                clearError(email);
             }
 
-            function hideLoginForm() {
-                var overlay = document.getElementById('overlay');
-                overlay.style.display = 'none';
-                hideBackgroundBlur();
+            // Validación de contraseña
+            if (!password.value || password.value.length < 6) {
+                showError(password, 'La contraseña debe tener al menos 6 caracteres');
+                isValid = false;
+            } else {
+                clearError(password);
             }
 
-            function showPasswordResetForm() {
-                var overlay = document.getElementById('overlay');
-                overlay.style.display = 'none';
-                var passwordResetOverlay = document.getElementById('passwordResetOverlay');
-                passwordResetOverlay.style.display = 'flex';
-                showBackgroundBlur();
+            if (!isValid) {
+                e.preventDefault();
             }
+        });
 
-            function hidePasswordResetForm() {
-                var passwordResetOverlay = document.getElementById('passwordResetOverlay');
-                passwordResetOverlay.style.display = 'none';
-                hideBackgroundBlur();
+        // Validación del formulario de recuperación
+        document.getElementById('recoveryForm').addEventListener('submit', function(e) {
+            const email = document.getElementById('recovery_email');
+            
+            if (!email.value || !email.value.includes('@')) {
+                e.preventDefault();
+                showError(email, 'Por favor ingrese un correo electrónico válido');
+            } else {
+                clearError(email);
             }
+        });
 
-            function showBackgroundBlur() {
-                var overlayBlur = document.getElementById('overlayBlur');
-                overlayBlur.style.display = 'block';
+        function showError(input, message) {
+            input.classList.add('is-invalid');
+            let feedback = input.nextElementSibling;
+            if (!feedback || !feedback.classList.contains('invalid-feedback')) {
+                feedback = document.createElement('span');
+                feedback.className = 'invalid-feedback';
+                input.parentNode.insertBefore(feedback, input.nextSibling);
             }
+            feedback.textContent = message;
+        }
 
-            function hideBackgroundBlur() {
-                var overlayBlur = document.getElementById('overlayBlur');
-                overlayBlur.style.display = 'none';
+        function clearError(input) {
+            input.classList.remove('is-invalid');
+            const feedback = input.nextElementSibling;
+            if (feedback && feedback.classList.contains('invalid-feedback')) {
+                feedback.remove();
             }
-        </script>
-    </body>
+        }
 
-    </html>
+        function showRecoveryModal() {
+            document.getElementById('recoveryModal').style.display = 'flex';
+        }
+
+        function hideRecoveryModal() {
+            document.getElementById('recoveryModal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('recoveryModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+
+          // Expresión regular para validar email
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    
+    // Expresión regular para validar contraseña
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+   // Reemplaza las validaciones existentes con estas más simples
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    let isValid = true;
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+
+    // Validación del email
+    if (!email.value || !email.value.includes('@')) {
+        showError(email, 'Por favor ingrese un correo electrónico válido');
+        isValid = false;
+    } else {
+        clearError(email);
+    }
+
+    // Validación simple de la contraseña
+    if (!password.value) {
+        showError(password, 'La contraseña es requerida');
+        isValid = false;
+    } else {
+        clearError(password);
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+    }
+});
+
+// Quitar la validación en tiempo real de la contraseña
+document.getElementById('password').addEventListener('input', function(e) {
+    const password = e.target;
+    if (!password.value) {
+        showError(password, 'La contraseña es requerida');
+    } else {
+        clearError(password);
+    }
+});
+
+// Mantener la validación en tiempo real del email
+document.getElementById('email').addEventListener('input', function(e) {
+    const email = e.target;
+    if (!email.value) {
+        showError(email, 'El correo electrónico es requerido');
+    } else if (!email.value.includes('@')) {
+        showError(email, 'Por favor ingrese un correo electrónico válido');
+    } else {
+        clearError(email);
+    }
+});
+
+    // Validación del formulario de recuperación
+    document.getElementById('recoveryForm').addEventListener('submit', function(e) {
+        const email = document.getElementById('recovery_email');
+        
+        if (!email.value) {
+            e.preventDefault();
+            showError(email, 'El correo electrónico es requerido');
+        } else if (!emailRegex.test(email.value)) {
+            e.preventDefault();
+            showError(email, 'Por favor ingrese un correo electrónico válido (ejemplo: usuario@dominio.com)');
+        } else {
+            clearError(email);
+        }
+    });
+
+    // Funciones auxiliares
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        input.style.borderColor = '#dc3545';
+        
+        let feedback = input.nextElementSibling;
+        if (!feedback || !feedback.classList.contains('invalid-feedback')) {
+            feedback = document.createElement('span');
+            feedback.className = 'invalid-feedback';
+            input.parentNode.insertBefore(feedback, input.nextSibling);
+        }
+        feedback.textContent = message;
+        feedback.style.display = 'block';
+    }
+
+    function clearError(input) {
+        input.classList.remove('is-invalid');
+        input.style.borderColor = '';
+        const feedback = input.nextElementSibling;
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+            feedback.style.display = 'none';
+        }
+    }
+
+    // Funciones del modal
+    function showRecoveryModal() {
+        document.getElementById('recoveryModal').style.display = 'flex';
+    }
+
+    function hideRecoveryModal() {
+        document.getElementById('recoveryModal').style.display = 'none';
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+        const modal = document.getElementById('recoveryModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+
+    function togglePassword(inputId, iconId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = document.getElementById(iconId);
+    const button = eyeIcon.parentElement;
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.textContent = '🔓';
+        button.classList.add('active');
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.textContent = '👁️';
+        button.classList.remove('active');
+    }
+}
+
+// También agregarlo en el modal de recuperación si es necesario
+document.addEventListener('DOMContentLoaded', function() {
+    // Prevenir que el botón de mostrar contraseña envíe el formulario
+    const toggleButtons = document.querySelectorAll('.password-toggle');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+        });
+    });
+});
+    </script>
+</body>
+</html>

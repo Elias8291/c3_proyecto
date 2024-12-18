@@ -18,7 +18,7 @@
 
     <style>
         body {
-            background-color: #f3f4f6; /* Color de fondo sólido */
+            background-color: #000000; /* Color de fondo sólido */
             min-height: 100vh; /* Asegura que el fondo cubra toda la pantalla */
             margin: 0;
         }

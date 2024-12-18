@@ -35,6 +35,7 @@
     @yield('css')
 
     <style>
+        
         .btn-back:hover {
             background-color: #9b0324ea !important;
             /* Guinda más oscuro al pasar el cursor */
@@ -50,6 +51,10 @@
             /* Espaciado adicional */
         }
 
+        .main-footer {
+        background-color: #ffffff !important; /* Fondo blanco */
+        color: #000000; /* Texto negro (opcional para mejor contraste) */
+    }
      
 
         .navbar-nav .nav-link {

@@ -91,8 +91,10 @@
                         @endif
 
                         @if ($documento->estado != 'Solicitado')
-                            <button class="btn-eliminar"
-                                onclick="confirmarEliminacionDocumento({{ $documento->id }})">Eliminar</button>
+                        <button class="btn-eliminar" 
+                        onclick="confirmarEliminacionDocumento({{ $documento->id }})">
+                        Eliminar
+                    </button>
                         @endif
 
                         <form id="eliminar-form-{{ $documento->id }}"
@@ -1141,6 +1143,50 @@
             });
         });
 
+        function confirmarEliminacionDocumento(documentoId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará permanentemente el documento",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#800020',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Obtener el formulario
+            const form = document.getElementById(`eliminar-form-${documentoId}`);
+            if (!form) {
+                console.error('Formulario no encontrado');
+                return;
+            }
+
+            // Asegurarse que el CSRF token esté presente
+            const token = document.querySelector('meta[name="csrf-token"]').content;
+            if (!form.querySelector('input[name="_token"]')) {
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = token;
+                form.appendChild(csrfInput);
+            }
+
+            // Mostrar loading mientras se procesa
+            Swal.fire({
+                title: 'Eliminando...',
+                text: 'Por favor espere',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Enviar el formulario
+            form.submit();
+        }
+    });
+}
         // Función para confirmar eliminación con doble verificación
         async function confirmarEliminacion(carpetaId) {
             try {
@@ -1258,32 +1304,60 @@ function cerrarModalAgregarPdf() {
 // Manejar el envío del formulario de PDF
 document.getElementById('pdfUploadForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-
+    
     const formData = new FormData(this);
     const submitButton = this.querySelector('button[type="submit"]');
     const originalButtonText = submitButton.innerHTML;
-
+    
     try {
         // Validar el archivo
         const fileInput = this.querySelector('input[type="file"]');
         const file = fileInput.files[0];
         
         if (!file) {
-            throw new Error('Por favor, selecciona un archivo PDF');
+            Swal.fire({
+                icon: 'error',
+                title: 'No se ha seleccionado ningún archivo',
+                text: 'Por favor, selecciona un archivo PDF',
+                confirmButtonColor: '#800020'
+            });
+            return;
         }
-
+        
         if (file.type !== 'application/pdf') {
-            throw new Error('El archivo debe ser un PDF');
+            const fileType = file.type || 'tipo desconocido';
+            Swal.fire({
+                icon: 'error',
+                title: 'Tipo de archivo no válido',
+                text: 'Solo se permiten archivos PDF',
+                footer: `Tipo de archivo detectado: ${fileType}`,
+                confirmButtonColor: '#800020'
+            });
+            fileInput.value = ''; // Limpiar el input
+            return;
         }
-
-        if (file.size > 2 * 1024 * 1024) { // 2MB
-            throw new Error('El archivo no debe superar los 2MB');
+        
+        const maxSize = 2 * 1024 * 1024; // 2MB
+        if (file.size > maxSize) {
+            const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            Swal.fire({
+                icon: 'error',
+                title: 'Archivo demasiado grande',
+                text: 'El archivo no debe superar los 2MB',
+                footer: `Tamaño actual: ${fileSizeMB}MB`,
+                confirmButtonColor: '#800020'
+            });
+            fileInput.value = ''; // Limpiar el input
+            return;
         }
-
+        
         // Mostrar estado de carga
         submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="spinner"></span> Subiendo...';
-
+        submitButton.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Subiendo...
+        `;
+        
         const response = await fetch(this.action, {
             method: 'POST',
             body: formData,
@@ -1292,16 +1366,17 @@ document.getElementById('pdfUploadForm').addEventListener('submit', async functi
                 'Accept': 'application/json'
             }
         });
-
+        
         const data = await response.json();
-
+        
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: 'Éxito',
-                text: 'PDF agregado correctamente',
+                title: 'PDF agregado correctamente',
+                text: 'El archivo se ha subido con éxito',
                 timer: 1500,
-                showConfirmButton: false
+                showConfirmButton: false,
+                confirmButtonColor: '#800020'
             }).then(() => {
                 window.location.reload();
             });
@@ -1311,15 +1386,15 @@ document.getElementById('pdfUploadForm').addEventListener('submit', async functi
     } catch (error) {
         Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: error.message
+            title: 'Error en la subida',
+            text: error.message,
+            confirmButtonColor: '#800020'
         });
     } finally {
         submitButton.disabled = false;
         submitButton.innerHTML = originalButtonText;
     }
 });
-
 // Cerrar modales al hacer clic fuera
 window.onclick = function(event) {
     const pdfModal = document.getElementById('pdfModal');
@@ -1665,5 +1740,19 @@ function cerrarPdfModal() {
         pdfViewer.src = ''; // Limpiar el src del iframe
     }, 300);
 }
+
+window.onclick = function(event) {
+    const pdfModal = document.getElementById('pdfModal');
+    const agregarPdfModal = document.getElementById('agregarPdfModal');
+    const documentoModal = document.getElementById('documentoModal');
+
+    if (event.target === pdfModal) {
+        cerrarPdfModal();
+    } else if (event.target === agregarPdfModal) {
+        cerrarModalAgregarPdf();
+    } else if (event.target === documentoModal) {
+        closeDocumentoModal();
+    }
+};
     </script>
 @endsection

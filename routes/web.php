@@ -123,6 +123,12 @@ Route::group(['middleware' => ['auth']], function () {
     ->name('notificaciones.enviarArchivo')
     ->middleware('auth');
     
-
+    Route::get('/carpetas/search-evaluados', [CarpetaController::class, 'searchEvaluados'])->name('carpetas.search-evaluados');
+    Route::delete('/documentos/{id}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
+    Route::middleware('auth')->group(function () {
+        Route::get('/mis-documentos', [PrestamoController::class, 'misDocumentosPrestados'])
+             ->name('prestamos.mis_documentos');
+    });
+    Route::post('/usuarios/check-email', [UsuarioController::class, 'checkEmail'])->name('usuarios.checkEmail');
 });
 // En routes/web.php

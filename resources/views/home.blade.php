@@ -26,6 +26,12 @@ body {
     background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
 }
 
+.main-footer {
+        background-color: #ffffff !important; /* Fondo blanco */
+        color: #000000 !important; /* Texto negro */
+        box-shadow: none !important; /* Elimina sombras si existen */
+        border-top: none !important; /* Elimina bordes superiores si existen */
+    }
 .dashboard-container {
     padding: 2.5rem;
     max-width: 1600px;
@@ -205,7 +211,7 @@ body {
     background: radial-gradient(
         circle,
         rgba(155, 40, 71, 0.03) 0%,
-        transparent 70%
+       
     );
     opacity: 0;
     transition: opacity 0.6s ease;

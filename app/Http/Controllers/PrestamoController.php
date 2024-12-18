@@ -367,4 +367,25 @@ public function detalles($id)
         ], 500);
     }
 }
+
+
+public function misDocumentosPrestados()
+{
+    try {
+        // Obtener préstamos aprobados con documentos asociados del usuario autenticado
+        $prestamos = Prestamo::with('documento')
+            ->where('usuario_id', Auth::id()) // Filtra por el ID del usuario autenticado
+            ->where('estado', 'Aprobado')     // Filtra los préstamos en estado 'Aprobado'
+            ->get();
+
+        return view('prestamos.mis_documentos', compact('prestamos'));
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al obtener tus documentos prestados.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
 }

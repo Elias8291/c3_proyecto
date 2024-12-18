@@ -1020,5 +1020,24 @@ function cancelarSolicitud(documentoId) {
         }
     });
 }
+
+function confirmarEliminacion(carpetaId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción eliminará la carpeta y todos sus documentos.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#800020',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Envía el formulario si el usuario confirma
+            document.getElementById(`eliminar-form-${carpetaId}`).submit();
+        }
+    });
+}
+
 </script>
 @endsection

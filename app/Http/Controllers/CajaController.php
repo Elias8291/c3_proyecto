@@ -94,4 +94,12 @@ class CajaController extends Controller
         // Redirigir al índice de cajas con un mensaje de éxito
         return redirect()->route('cajas.index')->with('success', 'Caja actualizada correctamente.');
     }
+    public function destroy($id)
+    {
+        // Buscar la caja por ID y eliminarla
+        $caja = Caja::findOrFail($id);
+        $caja->delete();
+
+        return redirect()->route('cajas.index')->with('success', 'Caja eliminada correctamente.');
+    } 
 }

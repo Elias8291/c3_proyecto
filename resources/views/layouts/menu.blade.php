@@ -223,13 +223,19 @@
     @endcan
 
   
-    <li class="side-menu-item" style="--item-index: 6">
-        <a href="/prestamos" class="side-menu-link {{ Request::is('prestamos*') ? 'active' : '' }}">
+    <li class="side-menu-item" style="--item-index: 8">
+        <a href="/prestamos" class="side-menu-link {{ Request::is('prestamos*') && !Request::is('mis-documentos*') ? 'active' : '' }}">
             <i class="fas fa-box side-menu-icon"></i>
             <span class="side-menu-text">Prestamos</span>
         </a>
     </li>
-
+    
+    <li class="side-menu-item" style="--item-index: 9">
+        <a href="/mis-documentos" class="side-menu-link {{ Request::is('mis-documentos*') ? 'active' : '' }}">
+            <i class="fas fa-box side-menu-icon"></i>
+            <span class="side-menu-text">Mis prestamos</span>
+        </a>
+    </li>
     
 
 </ul>

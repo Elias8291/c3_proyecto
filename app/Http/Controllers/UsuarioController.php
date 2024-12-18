@@ -181,4 +181,15 @@ class UsuarioController extends Controller
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }
+
+    public function checkEmail(Request $request)
+{
+    $email = $request->input('email');
+
+    // Verifica si el email ya existe en la base de datos
+    $exists = User::where('email', $email)->exists();
+
+    return response()->json(['exists' => $exists]);
+}
+
 }

@@ -4,8 +4,8 @@
     <div class="dashboard-container">
         <!-- Título y Búsqueda -->
         <div class="header-top">
-            <div class="title-section">
-                <h1> Préstamos</h1>
+            <div class="d-flex align-items-center">
+                <h3 class="page__heading">  <p>Prestamos</p></h3>
             </div>
             <div class="search-section">
                 <div class="search-container">
@@ -911,6 +911,7 @@ document.addEventListener('keydown', function(e) {
     gap: 20px;
 }
 
+
 .detalles-section {
     background: #fff;
     padding: 15px;
@@ -1079,6 +1080,31 @@ button:hover, .action-btn:hover {
 .page-link {
     transition: all 0.3s ease;
 }
+
+
+.page__heading {
+        color: #8B1F41;
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 2.5rem;
+        position: relative;
+        padding-bottom: 1rem;
+        letter-spacing: -0.5px;
+        text-shadow: 2px 2px 4px rgba(155, 40, 71, 0.1);
+    }
+
+    .page__heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 6px;
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        border-radius: 3px;
+        box-shadow: 0 2px 4px rgba(155, 40, 71, 0.2);
+    }
+
 
 .page-link:hover {
     background: linear-gradient(45deg, #800020, #b30000);

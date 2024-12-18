@@ -415,10 +415,9 @@
         --shadow-burgundy: rgba(128, 0, 32, 0.2);
     }
 
-    /* Button base styles */
     .btn-burgundy {
     background: linear-gradient(135deg, var(--primary-burgundy), var(--light-burgundy));
-    color: #ffffff; /* Texto blanco */
+    color: #ffffff !important; /* Añadido !important para asegurar que se aplique */
     padding: 8px 16px;
     border-radius: 8px;
     font-size: 14px;
@@ -433,21 +432,20 @@
     overflow: hidden;
 }
 
-/* Hover effect - mantiene el texto blanco */
+/* Asegurar que el texto permanezca blanco en hover */
 .btn-burgundy:hover {
     background: linear-gradient(135deg, var(--light-burgundy), var(--primary-burgundy));
     transform: translateY(-2px);
     box-shadow: 0 6px 15px var(--shadow-burgundy);
-    color: #ffffff; /* Asegura que el texto permanezca blanco al hacer hover */
+    color: #ffffff !important;
 }
 
-/* Active/Click effect - mantiene el texto blanco */
+/* Asegurar que el texto permanezca blanco al hacer click */
 .btn-burgundy:active {
     transform: translateY(1px);
     box-shadow: 0 2px 8px var(--shadow-burgundy);
-    color: #ffffff; /* Asegura que el texto permanezca blanco al hacer click */
+    color: #ffffff !important;
 }
-
 /* Button shine effect */
 .btn-burgundy::before {
     content: '';
@@ -484,7 +482,68 @@
     background: rgba(128, 0, 32, 0.05);
     border-radius: 6px;
 }
+/* Paginación mejorada y más compacta */
+.pagination {
+    margin-top: 1.5rem;
+    gap: 3px;
+    display: flex;
+    align-items: center;
+}
 
+.page-link {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--primary-burgundy);
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    margin: 0 2px;
+    line-height: 1;
+}
+
+.page-link:hover {
+    background-color: var(--pastel-pink);
+    color: var(--primary-burgundy);
+    transform: translateY(-1px);
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(45deg, var(--primary-burgundy), var(--light-burgundy));
+    border: none;
+    box-shadow: 0 2px 6px rgba(128, 0, 32, 0.2);
+}
+
+.page-item.disabled .page-link {
+    background-color: transparent;
+    color: #6c757d;
+    opacity: 0.5;
+}
+
+/* Ajustes específicos para los iconos de navegación */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+}
+
+/* DataTables paginación específica */
+.dataTables_paginate .paginate_button {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: linear-gradient(45deg, var(--primary-burgundy), var(--light-burgundy)) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: var(--pastel-pink) !important;
+    border: none !important;
+    color: var(--primary-burgundy) !important;
+}
    
 </style>
 @section('content')
@@ -499,7 +558,7 @@
                     <div class="card">
                         <div class="card-body">
                             <table class="table table-striped mt-2" id="miTabla2">
-                                <thead style="background-color:#5f42d4">
+                                <thead style="background-color:#4d0a01">
                                     <th style="color:#fff;" class="text-center">Id</th>
                                     <th style="color:#fff;" class="text-center">Fecha</th>
                                     <th style="color:#fff;" class="text-center">Accion</th>
@@ -517,10 +576,11 @@
                                             <td class="text-center">{{ $log->table }}</td>
                                             <td class="text-center">{{ $log->record_id }}</td>
 
-                                            <td class="text-center"> <button class="btn btn-burgundy"
-                                                    onclick="mostrarInformacion({{ $log->id }})">Mostrar</button>
-                                                <div id="info-{{ $log->id }}" style="display: none;">
-                                                    {{ $log->executedSQL }} </div>
+                                            <td class="text-center">
+                                                <button class="btn btn-burgundy" onclick="mostrarInformacion({{ $log->id }})">Mostrar</button>
+                                                <div id="info-{{ $log->id }}" style="display: none; color: white;">
+                                                    {{ $log->executedSQL }}
+                                                </div>
                                             </td>
                                             <td class="text-center">{{ $log->user_name }}</td>
                                         </tr>
@@ -561,9 +621,7 @@
                                 </div>
                             @endforeach
 
-                            <div class="pagination justify-content-end">
-                                {!! $logs->links() !!}
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

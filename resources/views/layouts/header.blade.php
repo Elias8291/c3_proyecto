@@ -108,7 +108,7 @@
 
 .dropdown-footer {
     padding: 20px 30px; /* Aumentado el padding */
-    background: white;
+    background: rgb(8, 8, 8);
     border-top: 1px solid var(--border-color);
     text-align: center;
 }

@@ -337,9 +337,12 @@
                     <!-- Imagen de Perfil -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="image">Imagen de Perfil</label>
-                        <input name="image" type="file" accept="image/*"
+                        <input name="image" type="file" accept="image/*"  id="imageInput"
                             class="form-control @error('image') form-error @enderror">
                         @error('image')
+
+
+                        
                         <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
@@ -457,5 +460,60 @@
         alert('Existen errores en el formulario. Por favor, revisa los campos marcados.');
         @endif
     });
+
+
+    // Agregar esta función en la sección de scripts
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const previewImage = document.querySelector('.fixed-image');
+
+    imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            // Verificar si es una imagen
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, seleccione un archivo de imagen válido.');
+                this.value = '';
+                return;
+            }
+
+            // Crear URL temporal para la imagen
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                
+                // Aplicar una animación suave
+                previewImage.style.opacity = '0';
+                setTimeout(() => {
+                    previewImage.style.transition = 'opacity 0.3s ease';
+                    previewImage.style.opacity = '1';
+                }, 100);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Agregar validación de tamaño y tipo de imagen
+    imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            // Verificar el tamaño (por ejemplo, máximo 2MB)
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            if (file.size > maxSize) {
+                alert('La imagen es demasiado grande. El tamaño máximo es 2MB.');
+                this.value = '';
+                return;
+            }
+
+            // Verificar el tipo de archivo
+            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert('Por favor, seleccione un archivo de imagen válido (JPEG, PNG o GIF).');
+                this.value = '';
+                return;
+            }
+        }
+    });
+});
 </script>
 @endsection
