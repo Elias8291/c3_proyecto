@@ -160,5 +160,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/notificaciones/{id}', [NotificacionController::class, 'eliminar'])
         ->name('notificaciones.eliminar');
 });
+
+// En routes/web.php
+Route::post('/prestamos/{id}/notificar-aprobacion', [PrestamoController::class, 'notificarAprobacionPrestamo'])
+    ->name('prestamos.notificarAprobacion');
 });
 // En routes/web.php

@@ -154,7 +154,8 @@ class PrestamoController extends Controller
             
             // Actualizar el estado del documento
             $prestamo->documento->update(['estado' => 'Prestado']);
-            
+            // Ejemplo de uso
+            $this->notificarAprobacionPrestamo($prestamo->id);
             DB::commit();
             
             return response()->json([
@@ -476,4 +477,44 @@ public function misDocumentosPrestados()
     }
 }
 
+
+public function notificarAprobacionPrestamo($prestamoId)
+{
+    try {
+        $prestamo = Prestamo::with(['documento.evaluado', 'usuario', 'documento.area'])
+            ->findOrFail($prestamoId);
+
+        // Verificar que el préstamo esté aprobado
+        if ($prestamo->estado !== 'Aprobado') {
+            return response()->json([
+                'success' => false,
+                'message' => 'El préstamo no está aprobado.',
+            ], 400);
+        }
+
+        // Crear notificación para el usuario que solicitó el préstamo
+        Notificacion::create([
+            'usuario_emisor_id' => Auth::id(),
+            'usuario_receptor_id' => $prestamo->usuario_id,
+            'area_id' => Auth::user()->id_area,
+            'mensaje' => sprintf(
+                'Tu solicitud de préstamo para el documento %s ha sido aprobada. Ya puedes pasar a recogerlo al área de archivo.',
+                $prestamo->documento->evaluado->primer_nombre
+            ),
+            'leida' => false
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Notificación de aprobación enviada correctamente.',
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al enviar la notificación de aprobación.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 }

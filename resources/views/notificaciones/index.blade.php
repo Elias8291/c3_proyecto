@@ -22,32 +22,40 @@
     
     <div class="notifications-content">
         @forelse ($notificaciones as $notificacion)
-            <div class="notification-card {{ $notificacion->leida ? '' : 'unread' }}" 
-                 data-notification-id="{{ $notificacion->id }}">
-                <div class="notification-icon">
-                    <i class="fas fa-bell"></i>
-                </div>
-                <div class="notification-body">
-                    <div class="notification-message">
-                        {{ $notificacion->mensaje }}
-                    </div>
-                    <div class="notification-meta">
-                        <span class="notification-time">
-                            <i class="fas fa-clock"></i>
-                            {{ $notificacion->created_at->diffForHumans() }}
-                        </span>
-                        @if(!$notificacion->leida)
-                            <form action="{{ route('notificaciones.marcarComoLeida', $notificacion->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="mark-read-btn">
-                                    <i class="fas fa-check"></i>
-                                    Marcar como leída
-                                </button>
-                            </form>
-                        @endif
-                    </div>
-                </div>
-            </div>
+        <div class="notification-card {{ $notificacion->leida ? '' : 'unread' }}" 
+            data-notification-id="{{ $notificacion->id }}">
+           <div class="notification-icon">
+               <i class="fas fa-bell"></i>
+           </div>
+           <div class="notification-body">
+               <div class="notification-message">
+                   {{ $notificacion->mensaje }}
+               </div>
+               <div class="notification-meta">
+                   <div class="notification-actions">
+                       <span class="notification-time">
+                           <i class="fas fa-clock"></i>
+                           {{ $notificacion->created_at->diffForHumans() }}
+                       </span>
+                       @can('ver-notificacion-prestamo')
+                           <a href="{{ route('prestamos.index') }}" class="view-btn">
+                               <i class="fas fa-eye"></i>
+                               Ver préstamo
+                           </a>
+                       @endcan
+                   </div>
+                   @if(!$notificacion->leida)
+                       <form action="{{ route('notificaciones.marcarComoLeida', $notificacion->id) }}" method="POST" class="d-inline">
+                           @csrf
+                           <button type="submit" class="mark-read-btn">
+                               <i class="fas fa-check"></i>
+                               Marcar como leída
+                           </button>
+                       </form>
+                   @endif
+               </div>
+           </div>
+       </div>
         @empty
             <div class="empty-state">
                 <i class="fas fa-bell-slash"></i>
@@ -82,10 +90,7 @@
     cursor: pointer;
 }
 
-.notification-icon:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
+
 
 .notification-bell {
     font-size: 1.5rem;
@@ -210,28 +215,12 @@
     border-left: 4px solid var(--primary);
 }
 
-.notification-icon {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(45deg, var(--primary-light), var(--white));
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1.25rem;
-    transition: all 0.3s var(--transition);
-}
 
 .notification-card:hover .notification-icon {
     transform: scale(1.1) rotate(5deg);
 }
 
-.notification-icon i {
-    color: var(--primary);
-    font-size: 1.4rem;
-    filter: drop-shadow(0 2px 4px rgba(177, 12, 67, 0.2));
-}
+
 
 .notification-body {
     flex-grow: 1;
@@ -353,6 +342,64 @@
     }
 
     .mark-read-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Estilos para el botón de ver */
+.notification-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.view-btn {
+    background-color: var(--text-primary);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s var(--transition);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.view-btn i {
+    font-size: 0.8rem;
+}
+
+.view-btn:hover {
+    background-color: var(--text-secondary);
+    color: var(--white);
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Ajuste del layout para los botones */
+.notification-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .notification-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .view-btn {
         width: 100%;
         justify-content: center;
     }
