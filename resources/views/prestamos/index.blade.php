@@ -5,7 +5,7 @@
         <!-- Título y Búsqueda -->
         <div class="header-top">
             <div class="d-flex align-items-center">
-                <h3 class="page__heading">  <p>Prestamos</p></h3>
+                <h3 class="page__heading">  <p> Listas de Préstamos</p></h3>
             </div>
             <div class="search-section">
                 <div class="search-container">
@@ -14,10 +14,7 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
-                <button class="new-loan-btn">
-                    <i class="fas fa-plus"></i>
-                    Nuevo Préstamo
-                </button>
+               
             </div>
         </div>
 

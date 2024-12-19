@@ -135,6 +135,14 @@ Route::get('/evaluados/{evaluado}/datos', [EvaluadoController::class, 'getDatosE
 Route::get('/evaluados/search', [EvaluadoController::class, 'search'])->name('evaluados.search');
 Route::get('/search-evaluados', [EvaluadoController::class, 'searchEvaluados'])->name('evaluados.search');
 Route::get('/cajas-disponibles/{evaluadoId}', [CajaController::class, 'getCajasDisponibles'])->name('cajas.disponibles');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [UsuarioController::class, 'profile'])->name('usuarios.profile');
+    Route::get('/profile/edit', [UsuarioController::class, 'editProfile'])->name('usuarios.profile.edit');
+    Route::put('/profile/update', [UsuarioController::class, 'updateProfile'])->name('usuarios.profile.update');
+});
+
+Route::put('/perfil/actualizar', [UsuarioController::class, 'updateProfile'])->name('usuarios.profile.update');
+Route::delete('/documentos/{documento}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
 
 });
 // En routes/web.php

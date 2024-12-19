@@ -1142,11 +1142,10 @@
                 folder.style.display = content.includes(searchTerm) ? 'flex' : 'none';
             });
         });
-
         function confirmarEliminacionDocumento(documentoId) {
     Swal.fire({
         title: '¿Estás seguro?',
-        text: "Esta acción eliminará permanentemente el documento",
+        text: "Esta acción eliminará permanentemente el documento.",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#800020',
@@ -1155,138 +1154,21 @@
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Obtener el formulario
             const form = document.getElementById(`eliminar-form-${documentoId}`);
-            if (!form) {
-                console.error('Formulario no encontrado');
-                return;
+            if (form) {
+                form.submit(); // Enviar el formulario
+            } else {
+                console.error('No se encontró el formulario de eliminación.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo encontrar el formulario para eliminar el documento.',
+                });
             }
-
-            // Asegurarse que el CSRF token esté presente
-            const token = document.querySelector('meta[name="csrf-token"]').content;
-            if (!form.querySelector('input[name="_token"]')) {
-                const csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = '_token';
-                csrfInput.value = token;
-                form.appendChild(csrfInput);
-            }
-
-            // Mostrar loading mientras se procesa
-            Swal.fire({
-                title: 'Eliminando...',
-                text: 'Por favor espere',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            // Enviar el formulario
-            form.submit();
         }
     });
 }
-        // Función para confirmar eliminación con doble verificación
-        async function confirmarEliminacion(carpetaId) {
-            try {
-                // Primera confirmación
-                const firstResult = await Swal.fire({
-                    title: '¿Eliminar carpeta?',
-                    html: `
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p class="mb-0" style="font-size: 1.1rem;">
-                        Esta acción eliminará permanentemente la carpeta y todos sus documentos asociados.
-                    </p>
-                </div>
-            `,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar',
-                    customClass: {
-                        popup: 'swal2-warning-custom',
-                        confirmButton: 'btn btn-danger',
-                        cancelButton: 'btn btn-secondary'
-                    }
-                });
 
-                if (firstResult.isConfirmed) {
-                    // Segunda confirmación
-                    const finalResult = await Swal.fire({
-                        title: 'Confirmar eliminación',
-                        html: `
-                    <div class="alert alert-danger" role="alert">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <p class="mb-0" style="font-size: 1.1rem;">
-                            ¿Está completamente seguro de eliminar esta carpeta?
-                            <br>
-                            <strong>Esta acción no se puede deshacer.</strong>
-                        </p>
-                    </div>
-                `,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Sí, eliminar definitivamente',
-                        cancelButtonText: 'Cancelar',
-                        customClass: {
-                            popup: 'swal2-danger-custom',
-                            confirmButton: 'btn btn-danger',
-                            cancelButton: 'btn btn-secondary'
-                        }
-                    });
-
-                    if (finalResult.isConfirmed) {
-                        // Mostrar indicador de carga
-                        Swal.fire({
-                            title: 'Eliminando...',
-                            html: 'Por favor espere mientras se elimina la carpeta',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // Enviar el formulario
-                        const form = document.getElementById(`eliminar-form-${carpetaId}`);
-                        if (form) {
-                            form.submit();
-                        } else {
-                            throw new Error('Formulario no encontrado');
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Error en el proceso de eliminación:', error);
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Ocurrió un error al intentar eliminar la carpeta',
-                    icon: 'error',
-                    confirmButtonColor: '#d33'
-                });
-            }
-        }
-
-        let documentoIdActual;
-
-        function mostrarModalAgregarPdf(documentoId) {
-    const modal = document.getElementById('agregarPdfModal');
-    const form = document.getElementById('pdfUploadForm');
-    
-    // Establecer la URL correcta para el formulario
-    form.action = `/documentos/${documentoId}/agregar-pdf`;
-    
-    // Mostrar el modal con animación
-    modal.style.display = 'block';
-    setTimeout(() => {
-        modal.classList.add('show');
-    }, 10);
-}
 
 function cerrarModalAgregarPdf() {
     const modal = document.getElementById('agregarPdfModal');

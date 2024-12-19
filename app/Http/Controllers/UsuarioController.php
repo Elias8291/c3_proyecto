@@ -191,5 +191,67 @@ class UsuarioController extends Controller
 
     return response()->json(['exists' => $exists]);
 }
+public function profile()
+{
+    $usuario = Auth::user();
+    return view('usuarios.show', compact('usuario')); // Cambiado de 'usuarios.profile' a 'usuarios.profile.show'
+}
+
+public function editProfile()
+{
+    $usuario = Auth::user();
+    $areas = Area::all();
+    return view('usuarios.profile.edit', compact('usuario', 'areas'));
+}
+
+public function updateProfile(Request $request)
+{
+    $usuario = Auth::user();
+
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'apellido_paterno' => 'required|string|max:255',
+        'apellido_materno' => 'nullable|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $usuario->id,
+        'telefono' => 'nullable|string|max:10',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'current_password' => 'required_with:password|string', // Requiere la contraseña actual si se quiere cambiar la contraseña
+        'password' => 'nullable|string|confirmed|min:8', // Nueva contraseña
+    ]);
+
+    // Validar contraseña actual si se intenta cambiar la contraseña
+    if ($request->filled('current_password')) {
+        if (!Hash::check($request->current_password, $usuario->password)) {
+            return back()->withErrors(['current_password' => 'La contraseña actual es incorrecta.']);
+        }
+
+        // Si pasa la validación, cambia la contraseña
+        if ($request->filled('password')) {
+            $usuario->password = Hash::make($request->password);
+        }
+    }
+
+    // Manejar la imagen de perfil
+    if ($request->hasFile('image')) {
+        if ($usuario->image) {
+            Storage::delete('public/' . $usuario->image);
+        }
+        $usuario->image = $request->file('image')->store('profile_images', 'public');
+    }
+
+    // Actualizar datos personales
+    $usuario->name = $request->name;
+    $usuario->apellido_paterno = $request->apellido_paterno;
+    $usuario->apellido_materno = $request->apellido_materno;
+    $usuario->email = $request->email;
+    $usuario->telefono = $request->telefono;
+
+    $usuario->save();
+
+    // Mensaje de éxito
+    session()->flash('success', '¡Perfil actualizado exitosamente!');
+
+    return redirect()->route('usuarios.profile');
+}
 
 }

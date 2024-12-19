@@ -154,6 +154,24 @@
             0 0 15px rgba(177, 12, 67, 0.1),
             0 0 30px rgba(177, 12, 67, 0.05);
     }
+    .side-menu-icon-only .side-menu-text {
+    display: none; /* Oculta los textos */
+}
+
+.side-menu-icon-only .side-menu-link {
+    justify-content: center; /* Centra los íconos */
+    padding: 12px; /* Ajusta el espacio */
+}
+
+.side-menu-icon-only .side-menu {
+    max-width: 60px; /* Ajusta el ancho de la barra lateral */
+    overflow: hidden; /* Evita el desbordamiento */
+}
+
+.side-menu-icon-only .side-menu-icon {
+    color: var(--primary-color); /* Asegúrate de que el color sea visible */
+}
+
 </style>
 
 <ul class="side-menu" style="background: transparent">
@@ -168,6 +186,13 @@
     </li>
     @endcan
     
+    <li class="side-menu-item" style="--item-index: 9">
+        <a href="{{ route('usuarios.profile') }}" class="side-menu-link {{ Request::is('profile*') ? 'active' : '' }}">
+            <i class="fas fa-user side-menu-icon"></i>
+            <span class="side-menu-text">Mi perfil</span>
+        </a>
+    </li>
+
     @can('ver-usuarios')
     <li class="side-menu-item" style="--item-index: 2">
         <a href="/usuarios" class="side-menu-link {{ Request::is('usuarios*') ? 'active' : '' }}">
@@ -226,16 +251,18 @@
     <li class="side-menu-item" style="--item-index: 8">
         <a href="/prestamos" class="side-menu-link {{ Request::is('prestamos*') && !Request::is('mis-documentos*') ? 'active' : '' }}">
             <i class="fas fa-box side-menu-icon"></i>
-            <span class="side-menu-text">Lista Prestamos</span>
+            <span class="side-menu-text">Lista Préstamos</span>
         </a>
     </li>
     
     <li class="side-menu-item" style="--item-index: 9">
         <a href="/mis-documentos" class="side-menu-link {{ Request::is('mis-documentos*') ? 'active' : '' }}">
             <i class="fas fa-box side-menu-icon"></i>
-            <span class="side-menu-text">Mis prestamos</span>
+            <span class="side-menu-text">Mis prstamos</span>
         </a>
     </li>
+
+  
     
 
 </ul>

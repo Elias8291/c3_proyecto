@@ -338,6 +338,33 @@
             display: flex;
             gap: 20px;
         }
+
+        /* Estilos para input deshabilitado */
+.form-control:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+    border-color: #e2e8f0;
+}
+
+/* Estilos para input habilitado */
+.form-control:enabled {
+    background-color: #ffffff;
+    cursor: pointer;
+    opacity: 1;
+    border-color: #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+/* Efecto visual cuando se habilita un campo */
+@keyframes enableField {
+    0% { background-color: #f5f5f5; }
+    100% { background-color: #ffffff; }
+}
+
+.form-control:enabled {
+    animation: enableField 0.5s ease forwards;
+}
     </style>
 @endsection
 

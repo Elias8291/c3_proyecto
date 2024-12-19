@@ -386,32 +386,25 @@
             }
         }
 
+        // Validar el campo de teléfono
         function validarTelefono(input) {
-        let valor = $(input).val();
-        valor = valor.replace(/[^0-9]/g, ''); // Permitir solo números
-        $(input).val(valor);
-        if (valor.length !== 10) {
-            $(input).addClass('form-error');
-            // Remover mensaje de error anterior si existe
-            $(input).next('.validation-message').remove();
-            // Agregar nuevo mensaje de error
-            $('<p class="validation-message" style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">El número telefónico debe contener exactamente 10 dígitos.</p>').insertAfter(input);
-        } else {
-            $(input).removeClass('form-error');
-            // Remover mensaje de error si existe
-            $(input).next('.validation-message').remove();
+            let valor = $(input).val();
+            valor = valor.replace(/[^0-9]/g, ''); // Permitir solo números
+            $(input).val(valor);
+            if (valor.length !== 10) {
+                $(input).addClass('form-error');
+            } else {
+                $(input).removeClass('form-error');
+            }
         }
-    }
 
         // Validar en tiempo real nombre, apellidos y teléfono
         $('input[name="name"], input[name="apellido_paterno"], input[name="apellido_materno"]').on('input', function () {
             validarTextoSoloLetras(this);
         });
         $('input[name="telefono"]').on('input', function () {
-        validarTelefono(this);
-    }).on('blur', function() {
-        validarTelefono(this);
-    });
+            validarTelefono(this);
+        });
 
         // Validar todos los campos al enviar
         $('form').on('submit', function (e) {
@@ -464,5 +457,29 @@
         alert('Existen errores en el formulario. Por favor, revisa los campos marcados.');
         @endif
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    // Escuchar cambios en el input de imagen
+    const imageInput = document.querySelector('input[name="image"]');
+    const imagePreview = document.querySelector('.fixed-image');
+
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function (event) {
+            const file = event.target.files[0]; // Obtener el archivo seleccionado
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Actualizar el src de la imagen para previsualizar
+                    imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file); // Leer el archivo como una URL de datos
+            } else {
+                // Restaurar la imagen predeterminada si no hay archivo seleccionado
+                imagePreview.src = "{{ $usuario->image ? asset('storage/' . $usuario->image) : 'https://via.placeholder.com/150' }}";
+            }
+        });
+    }
+});
+
 </script>
 @endsection

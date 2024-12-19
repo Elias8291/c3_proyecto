@@ -13,20 +13,9 @@
     --accent-light: rgba(155, 40, 71, 0.05);
 }
 
-body {
-    background-color: var(--background);
-    font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-    background-image: 
-        linear-gradient(45deg, var(--accent-light) 25%, transparent 25%),
-        linear-gradient(-45deg, var(--accent-light) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, var(--accent-light) 75%),
-        linear-gradient(-45deg, transparent 75%, var(--accent-light) 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-}
 
-.main-footer {
+
+  .main-footer {
         background-color: #ffffff !important; /* Fondo blanco */
         color: #000000 !important; /* Texto negro */
         box-shadow: none !important; /* Elimina sombras si existen */

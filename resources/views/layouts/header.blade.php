@@ -125,13 +125,34 @@
 .dropdown-footer a:hover {
     color: var(--text-primary);
 }
+.side-menu-icon-only .side-menu-text {
+    display: none; /* Oculta los textos */
+}
+
+.side-menu-icon-only .side-menu-link {
+    justify-content: center; /* Centra los íconos */
+    padding: 12px; /* Ajusta el espacio */
+}
+
+.side-menu-icon-only .side-menu {
+    max-width: 60px; /* Ajusta el ancho de la barra lateral */
+    overflow: hidden; /* Evita el desbordamiento */
+}
+
+.side-menu-icon-only .side-menu-icon {
+    color: var(--primary-color); /* Asegúrate de que el color sea visible */
+}
+
 </style>
 
 <form class="form-inline mr-auto" action="#">
     <ul class="navbar-nav mr-3">
-        <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-        
-    </ul>
+        <li>
+            <a href="#" id="menu-toggle" data-toggle="sidebar" class="nav-link nav-link-lg toggle-sidebar">
+                <i class="fas fa-bars"></i>
+            </a>
+        </li>
+    </ul>    
 </form>
 
 <!-- Barra de navegación -->
@@ -176,14 +197,9 @@
             <div class="dropdown-title">
                 Bienvenido, {{ \Illuminate\Support\Facades\Auth::user()->name }}
             </div>
-            <a class="dropdown-item has-icon edit-profile" data-toggle="modal" data-target="#EditProfileModal" href="#" data-id="{{ \Auth::id() }}">
-                <i class="fa fa-user"></i> Editar Perfil de Usuario
-            </a>
-            <a class="dropdown-item has-icon" data-toggle="modal" data-target="#changePasswordModal" href="#" data-id="{{ \Auth::id() }}">
-                <i class="fa fa-lock"></i> Cambiar Password
-            </a>
+          
             <a href="{{ url('logout') }}" class="dropdown-item has-icon text-danger" onclick="event.preventDefault(); localStorage.clear(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
             </a>
             <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
                 {{ csrf_field() }}
@@ -193,3 +209,14 @@
   
     
 </ul>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleButton = document.querySelector('#menu-toggle'); // Botón de las tres barras
+        const sideMenu = document.querySelector('.side-menu'); // Contenedor de la barra lateral
+
+        toggleButton.addEventListener('click', function (e) {
+            e.preventDefault(); // Evita el comportamiento predeterminado del enlace
+            sideMenu.classList.toggle('side-menu-icon-only');
+        });
+    });
+</script>

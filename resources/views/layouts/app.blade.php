@@ -99,10 +99,10 @@
             <nav class="navbar navbar-expand-lg main-navbar" >
                 @include('layouts.header')
             </nav>
-            <div class="main-sidebar main-sidebar-postion" style="background-color:  #e2e2e2">
+            <div class="main-sidebar main-sidebar-postion" style="background-color:  #fff4f4">
                 @include('layouts.sidebar')
             </div>
-            <div class="main-content" style="background:#F7FAFC">
+            <div class="main-content" style="background:#ece4e4">
                 @yield('content')
             </div>
 

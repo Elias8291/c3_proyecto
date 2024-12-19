@@ -2,7 +2,7 @@
   <div class="sidebar-brand">
     <a href="{{ url('/') }}">
       <div class="d-flex align-items-center">
-        <img class="navbar-brand-full app-header-logo" src="{{ asset('img/PD1.png') }}" width="100" >
+        <img class="navbar-brand-full app-header-logo" src="{{ asset('img/EVALUS2.png') }}" width="100" >
       </div>
     </a>
     
@@ -10,7 +10,7 @@
   
   <div class="sidebar-brand sidebar-brand-sm">
     <a href="{{ url('/') }}">
-      <img class="navbar-brand-full"src="{{ asset('img/PD1.png') }}" width="60px" alt="Student Icon"/>
+      <img class="navbar-brand-full"src="{{ asset('img/EVALUS2.png') }}" width="60px" alt="Student Icon"/>
     </a>
   </div>
   <ul class="sidebar-menu">
@@ -19,7 +19,7 @@
 </aside>
 <style>
   #sidebar-wrapper {
-    background-color: #e2e2e2 ;
+    background-color: #fff4f4 ;
     transition: all 0.3s;
   }
 
@@ -35,7 +35,7 @@
     font-family: 'Arial', sans-serif;
     font-size: 24px;
     font-weight: bold;
-    color: #fff;
+    color: #ffffff;
     background: linear-gradient(to right, #750606, #ad0606);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
