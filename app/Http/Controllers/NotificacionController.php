@@ -21,11 +21,31 @@ class NotificacionController extends Controller
 
     public function marcarComoLeida($id)
     {
-        $notificacion = Notificacion::findOrFail($id);
-        $notificacion->leida = true;
-        $notificacion->save();
+        try {
+            $notificacion = Notificacion::where('id', $id)
+                ->where('usuario_receptor_id', auth()->id())
+                ->firstOrFail();
 
-        return redirect()->back()->with('success', 'Notificación marcada como leída.');
+            $notificacion->leida = true;
+            $notificacion->save();
+
+            return redirect()->back()->with('success', 'Notificación marcada como leída.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudo marcar la notificación como leída.');
+        }
+    }
+
+    public function marcarTodasComoLeidas()
+    {
+        try {
+            Notificacion::where('usuario_receptor_id', auth()->id())
+                ->where('leida', false)
+                ->update(['leida' => true]);
+
+            return redirect()->back()->with('success', 'Todas las notificaciones han sido marcadas como leídas.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudieron marcar las notificaciones como leídas.');
+        }
     }
 
     public function eliminar($id)

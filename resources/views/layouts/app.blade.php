@@ -102,7 +102,7 @@
             <div class="main-sidebar main-sidebar-postion" style="background-color:  #fff4f4">
                 @include('layouts.sidebar')
             </div>
-            <div class="main-content" style="background:#ece4e4">
+            <div class="main-content" style="background:#fcf3f3">
                 @yield('content')
             </div>
 

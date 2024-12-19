@@ -181,43 +181,77 @@ class PrestamoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
   
-public function devolverPorDocumento($documentoId)
-{
-    try {
-        DB::beginTransaction();
-        
-        $prestamo = Prestamo::where('documento_id', $documentoId)
-                           ->where('estado', 'Aprobado')
-                           ->latest()
-                           ->firstOrFail();
-    
-        $prestamo->update([
-            'estado' => 'Devuelto',
-            'fecha_devolucion' => now(),
-        ]);
-    
-        // Actualizar el estado del documento a Disponible
-        Documento::where('id', $documentoId)->update([
-            'estado' => 'Disponible'
-        ]);
-        
-        DB::commit();
-    
-        return response()->json([
-            'success' => true,
-            'message' => 'Préstamo devuelto correctamente.',
-            'prestamo' => $prestamo
-        ]);
-        
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al devolver el préstamo.',
-            'error' => $e->getMessage()
-        ], 500);
-    }
-}
+     public function devolverPorDocumento($documentoId)
+     {
+         try {
+             DB::beginTransaction();
+             
+             $prestamo = Prestamo::with(['documento.evaluado', 'usuario'])
+                                ->where('documento_id', $documentoId)
+                                ->where('estado', 'Aprobado')
+                                ->latest()
+                                ->firstOrFail();
+         
+             $prestamo->update([
+                 'estado' => 'Devuelto',
+                 'fecha_devolucion' => now(),
+             ]);
+         
+             // Actualizar el estado del documento a Disponible
+             Documento::where('id', $documentoId)->update([
+                 'estado' => 'Disponible'
+             ]);
+     
+             // Notificar al usuario que solicitó el préstamo
+             if ($prestamo->usuario_id !== Auth::id()) {
+                 Notificacion::create([
+                     'usuario_emisor_id' => Auth::id(),
+                     'usuario_receptor_id' => $prestamo->usuario_id,
+                     'area_id' => Auth::user()->id_area,
+                     'mensaje' => sprintf(
+                         'El documento %s ha sido devuelto correctamente',
+                         $prestamo->documento->evaluado->primer_nombre
+                     ),
+                     'leida' => false
+                 ]);
+             }
+     
+             // Notificar a los usuarios del área de archivo
+             $usuariosArchivo = User::where('id_area', 10)->get();
+             foreach ($usuariosArchivo as $usuario) {
+                 if ($usuario->id !== Auth::id()) {
+                     Notificacion::create([
+                         'usuario_emisor_id' => Auth::id(),
+                         'usuario_receptor_id' => $usuario->id,
+                         'area_id' => Auth::user()->id_area,
+                         'mensaje' => sprintf(
+                             'El documento %s ha sido devuelto por %s del área %s',
+                             $prestamo->documento->evaluado->primer_nombre,
+                             Auth::user()->name,
+                             Auth::user()->area->nombre
+                         ),
+                         'leida' => false
+                     ]);
+                 }
+             }
+             
+             DB::commit();
+         
+             return response()->json([
+                 'success' => true,
+                 'message' => 'Préstamo devuelto correctamente.',
+                 'prestamo' => $prestamo
+             ]);
+             
+         } catch (\Exception $e) {
+             DB::rollBack();
+             return response()->json([
+                 'success' => false,
+                 'message' => 'Error al devolver el préstamo.',
+                 'error' => $e->getMessage()
+             ], 500);
+         }
+     }
     
 
 
@@ -234,7 +268,7 @@ public function cancelar(Request $request, $id)
         DB::beginTransaction();
         
         // Buscar el préstamo
-        $prestamo = Prestamo::findOrFail($id);
+        $prestamo = Prestamo::with(['documento', 'usuario'])->findOrFail($id);
 
         // Verificar que el préstamo esté en estado Pendiente
         if ($prestamo->estado !== 'Pendiente') {
@@ -252,6 +286,38 @@ public function cancelar(Request $request, $id)
 
         // Actualizar el estado del documento a Disponible
         $prestamo->documento->update(['estado' => 'Disponible']);
+
+        // Crear notificación para el solicitante del préstamo
+        Notificacion::create([
+            'usuario_emisor_id' => Auth::id(),
+            'usuario_receptor_id' => $prestamo->usuario_id,
+            'area_id' => Auth::user()->id_area,
+            'mensaje' => sprintf(
+                'Tu solicitud de préstamo para el documento %s ha sido cancelada por %s',
+                $prestamo->documento->evaluado->primer_nombre,
+                Auth::user()->name
+            ),
+            'leida' => false
+        ]);
+
+        // Crear notificaciones para los usuarios del área de archivo
+        $usuariosArchivo = User::where('id_area', 10)->get();
+        foreach ($usuariosArchivo as $usuario) {
+            if ($usuario->id !== Auth::id()) { // No enviar notificación al usuario que cancela si es del área de archivo
+                Notificacion::create([
+                    'usuario_emisor_id' => Auth::id(),
+                    'usuario_receptor_id' => $usuario->id,
+                    'area_id' => Auth::user()->id_area,
+                    'mensaje' => sprintf(
+                        'La solicitud de préstamo del documento %s de %s ha sido cancelada por %s',
+                        $prestamo->documento->evaluado->primer_nombre,
+                        $prestamo->usuario->name,
+                        Auth::user()->name
+                    ),
+                    'leida' => false
+                ]);
+            }
+        }
 
         DB::commit();
 
@@ -271,7 +337,6 @@ public function cancelar(Request $request, $id)
     }
 }
 
-
 /**
  * Cancelar un préstamo por ID de documento.
  *
@@ -282,8 +347,11 @@ public function cancelar(Request $request, $id)
 public function cancelarPorDocumento($documentoId)
 {
     try {
+        DB::beginTransaction();
+
         // Buscar el préstamo pendiente más reciente para este documento
-        $prestamo = Prestamo::where('documento_id', $documentoId)
+        $prestamo = Prestamo::with(['documento', 'usuario'])
+                           ->where('documento_id', $documentoId)
                            ->where('estado', 'Pendiente')
                            ->latest()
                            ->first();
@@ -305,7 +373,8 @@ public function cancelarPorDocumento($documentoId)
 
         // Actualizar el estado del préstamo
         $prestamo->update([
-            'estado' => 'Rechazado'
+            'estado' => 'Rechazado',
+            'fecha_cancelacion' => now()
         ]);
 
         // Actualizar el estado del documento
@@ -313,12 +382,31 @@ public function cancelarPorDocumento($documentoId)
             'estado' => 'Disponible'
         ]);
 
+        // Notificar a los usuarios del área de archivo
+        $usuariosArchivo = User::where('id_area', 10)->get();
+        foreach ($usuariosArchivo as $usuario) {
+            Notificacion::create([
+                'usuario_emisor_id' => Auth::id(),
+                'usuario_receptor_id' => $usuario->id,
+                'area_id' => Auth::user()->id_area,
+                'mensaje' => sprintf(
+                    'El usuario %s ha cancelado su solicitud de préstamo para el documento %s',
+                    Auth::user()->name,
+                    $prestamo->documento->evaluado->primer_nombre
+                ),
+                'leida' => false
+            ]);
+        }
+
+        DB::commit();
+
         return response()->json([
             'success' => true,
             'message' => 'Solicitud de préstamo cancelada correctamente.',
         ]);
 
     } catch (\Exception $e) {
+        DB::rollBack();
         return response()->json([
             'success' => false,
             'message' => 'Error al cancelar la solicitud de préstamo.',

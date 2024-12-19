@@ -143,6 +143,22 @@ Route::middleware(['auth'])->group(function () {
 
 Route::put('/perfil/actualizar', [UsuarioController::class, 'updateProfile'])->name('usuarios.profile.update');
 Route::delete('/documentos/{documento}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
+Route::middleware(['auth'])->group(function () {
+    // Ruta para ver todas las notificaciones
+    Route::get('/notificaciones', [NotificacionController::class, 'index'])
+        ->name('notificaciones.index');
 
+    // Ruta para marcar una notificación como leída (cambiada a POST)
+    Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarComoLeida'])
+        ->name('notificaciones.marcarComoLeida');
+
+    // Ruta para marcar todas las notificaciones como leídas
+    Route::post('/notificaciones/marcar-todas-leidas', [NotificacionController::class, 'marcarTodasComoLeidas'])
+        ->name('notificaciones.marcarTodasComoLeidas');
+
+    // Ruta para eliminar una notificación
+    Route::delete('/notificaciones/{id}', [NotificacionController::class, 'eliminar'])
+        ->name('notificaciones.eliminar');
+});
 });
 // En routes/web.php
