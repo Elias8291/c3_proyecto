@@ -130,5 +130,11 @@ Route::group(['middleware' => ['auth']], function () {
              ->name('prestamos.mis_documentos');
     });
     Route::post('/usuarios/check-email', [UsuarioController::class, 'checkEmail'])->name('usuarios.checkEmail');
+    Route::get('/evaluados/search', [EvaluadoController::class, 'searchEvaluados'])->name('evaluados.search');
+Route::get('/evaluados/{evaluado}/datos', [EvaluadoController::class, 'getDatosEvaluado'])->name('evaluados.datos');
+Route::get('/evaluados/search', [EvaluadoController::class, 'search'])->name('evaluados.search');
+Route::get('/search-evaluados', [EvaluadoController::class, 'searchEvaluados'])->name('evaluados.search');
+Route::get('/cajas-disponibles/{evaluadoId}', [CajaController::class, 'getCajasDisponibles'])->name('cajas.disponibles');
+
 });
 // En routes/web.php

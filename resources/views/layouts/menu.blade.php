@@ -226,7 +226,7 @@
     <li class="side-menu-item" style="--item-index: 8">
         <a href="/prestamos" class="side-menu-link {{ Request::is('prestamos*') && !Request::is('mis-documentos*') ? 'active' : '' }}">
             <i class="fas fa-box side-menu-icon"></i>
-            <span class="side-menu-text">Prestamos</span>
+            <span class="side-menu-text">Lista Prestamos</span>
         </a>
     </li>
     

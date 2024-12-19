@@ -235,10 +235,7 @@
     }
 
     /* Paginación mejorada */
-    .pagination {
-        margin-top: 2rem;
-        gap: 5px;
-    }
+  
 
     .page-link {
         border: none;
@@ -378,7 +375,7 @@ body::after {
 }
 
 /* Opcional: Añadir una capa oscura sutil sobre el fondo para resaltar los contenedores */
-.section, .section-header, .section-body, .card, .table-container, .pagination {
+.section, .section-header, .section-body, .card, .table-container, {
     position: relative;
     z-index: 1;
 }
@@ -434,10 +431,12 @@ body::after {
                             </tbody>
                         </table>
                     </div>
+                    
                 </div>
-                <div class="pagination justify-content-end">
-                    {!! $roles->links() !!}
-                </div>
+              
+            </div>
+            <div class="paginations justify-content-end">
+                {!! $roles->links() !!}
             </div>
         </div>
     </section>

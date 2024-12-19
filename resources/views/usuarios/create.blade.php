@@ -532,7 +532,7 @@
         <a href="{{ url()->previous() }}" class="btn-back">
             <i class="fas fa-arrow-left"></i> Regresar
         </a>
-        
+
         <h2>Crear Usuario</h2>
 
         <!-- Mostrar mensajes de éxito o error -->
@@ -558,6 +558,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="name">Nombre <span class="text-danger">*</span></label>
+                    <div class="error-message" id="name-error" style="display: none; color: #ef4444; font-size: 14px; margin-top: 5px;"></div>
                     <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}"
                         required>
                 </div>
@@ -565,6 +566,8 @@
 
                 <div class="form-group">
                     <label for="apellido_paterno">Apellido Paterno <span class="text-danger">*</span></label>
+                    <div class="error-message" id="name-error" style="display: none; color: #ef4444; font-size: 14px; margin-top: 5px;"></div>
+                    <div class="error-message" id="name-error" style="display: none; color: #ef4444; font-size: 14px; margin-top: 5px;"></div>
                     <input type="text" name="apellido_paterno" id="apellido_paterno" class="form-control"
                         value="{{ old('apellido_paterno') }}" required>
                 </div>
@@ -573,15 +576,19 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="apellido_materno">Apellido Materno</label>
+                    <div class="error-message" id="name-error" style="display: none; color: #ef4444; font-size: 14px; margin-top: 5px;"></div>
                     <input type="text" name="apellido_materno" id="apellido_materno" class="form-control"
                         value="{{ old('apellido_materno') }}">
                 </div>
 
                 <div class="form-group">
                     <label for="telefono">Teléfono</label>
+                    <div class="error-message" id="name-error" style="display: none; color: #ef4444; font-size: 14px; margin-top: 5px;"></div>
                     <input type="text" name="telefono" id="telefono" class="form-control" value="{{ old('telefono') }}"
                         maxlength="10">
                     <!-- Contenedor para los requisitos del teléfono, inicialmente oculto -->
+                    <div id="telefono-error" class="text-danger" style="display: none; font-size: 14px; margin-top: 5px;">
+                    </div>
                     <div class="phone-requirements" style="display: none;">
                         <div class="requirement-item" data-requirement="length">
                             <span class="requirement-icon">•</span>
@@ -992,5 +999,114 @@
                 }
             });
         });
+
+        const phoneInput = document.getElementById('telefono');
+        const phoneError = document.getElementById('telefono-error');
+
+        phoneInput.addEventListener('blur', function() {
+            if (this.value.length > 0 && this.value.length < 10) {
+                phoneError.style.display = 'block';
+                phoneError.textContent =
+                    `Faltan ${10 - this.value.length} dígitos. El número debe tener 10 dígitos.`;
+                this.classList.add('form-error');
+            } else if (this.value.length === 0) {
+                phoneError.style.display = 'none';
+                this.classList.remove('form-error');
+            } else {
+                phoneError.style.display = 'none';
+                this.classList.remove('form-error');
+            }
+        });
+
+        // Limpiar el mensaje de error cuando el usuario empiece a escribir de nuevo
+        phoneInput.addEventListener('input', function() {
+            if (this.value.length === 10) {
+                phoneError.style.display = 'none';
+                this.classList.remove('form-error');
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+    // Obtener todos los campos en orden
+    const fields = [
+        {
+            input: document.getElementById('name'),
+            error: document.getElementById('name-error'),
+            message: 'Debe ingresar el nombre'
+        },
+        {
+            input: document.getElementById('apellido_paterno'),
+            error: document.getElementById('apellido_paterno-error'),
+            message: 'Debe ingresar el apellido paterno'
+        },
+        {
+            input: document.getElementById('apellido_materno'),
+            error: document.getElementById('apellido_materno-error'),
+            message: 'Debe ingresar el apellido materno'
+        },
+        {
+            input: document.getElementById('telefono'),
+            error: document.getElementById('telefono-error'),
+            message: 'Debe ingresar el teléfono'
+        },
+        {
+            input: document.getElementById('email'),
+            error: document.getElementById('email-error'),
+            message: 'Debe ingresar el correo electrónico'
+        }
+    ];
+
+    // Función para validar campos anteriores
+    function validatePreviousFields(currentIndex) {
+        let isValid = true;
+        let firstInvalidField = null;
+
+        for (let i = 0; i < currentIndex; i++) {
+            const field = fields[i];
+            if (!field.input.value.trim()) {
+                field.error.style.display = 'block';
+                field.error.textContent = field.message;
+                field.input.classList.add('form-error');
+                isValid = false;
+                if (!firstInvalidField) {
+                    firstInvalidField = field.input;
+                }
+            } else {
+                field.error.style.display = 'none';
+                field.input.classList.remove('form-error');
+            }
+        }
+
+        if (!isValid && firstInvalidField) {
+            firstInvalidField.focus();
+        }
+
+        return isValid;
+    }
+
+    // Agregar eventos a cada campo
+    fields.forEach((field, index) => {
+        field.input.addEventListener('focus', function() {
+            validatePreviousFields(index);
+        });
+
+        field.input.addEventListener('input', function() {
+            // Limpiar error del campo actual cuando el usuario comienza a escribir
+            field.error.style.display = 'none';
+            field.input.classList.remove('form-error');
+
+            // Revalidar campos anteriores
+            validatePreviousFields(index);
+        });
+
+        field.input.addEventListener('blur', function() {
+            // Validar el campo actual cuando pierde el foco
+            if (!this.value.trim() && index > 0) {
+                field.error.style.display = 'block';
+                field.error.textContent = field.message;
+                field.input.classList.add('form-error');
+            }
+        });
+    });
+});
     </script>
 @endsection

@@ -337,12 +337,9 @@
                     <!-- Imagen de Perfil -->
                     <div class="form-group mb-4">
                         <label class="form-label" for="image">Imagen de Perfil</label>
-                        <input name="image" type="file" accept="image/*"  id="imageInput"
+                        <input name="image" type="file" accept="image/*"
                             class="form-control @error('image') form-error @enderror">
                         @error('image')
-
-
-                        
                         <p class="form-error">{{ $message }}</p>
                         @enderror
                     </div>
@@ -389,25 +386,32 @@
             }
         }
 
-        // Validar el campo de teléfono
         function validarTelefono(input) {
-            let valor = $(input).val();
-            valor = valor.replace(/[^0-9]/g, ''); // Permitir solo números
-            $(input).val(valor);
-            if (valor.length !== 10) {
-                $(input).addClass('form-error');
-            } else {
-                $(input).removeClass('form-error');
-            }
+        let valor = $(input).val();
+        valor = valor.replace(/[^0-9]/g, ''); // Permitir solo números
+        $(input).val(valor);
+        if (valor.length !== 10) {
+            $(input).addClass('form-error');
+            // Remover mensaje de error anterior si existe
+            $(input).next('.validation-message').remove();
+            // Agregar nuevo mensaje de error
+            $('<p class="validation-message" style="color: #dc2626; font-size: 0.875rem; margin-top: 0.25rem;">El número telefónico debe contener exactamente 10 dígitos.</p>').insertAfter(input);
+        } else {
+            $(input).removeClass('form-error');
+            // Remover mensaje de error si existe
+            $(input).next('.validation-message').remove();
         }
+    }
 
         // Validar en tiempo real nombre, apellidos y teléfono
         $('input[name="name"], input[name="apellido_paterno"], input[name="apellido_materno"]').on('input', function () {
             validarTextoSoloLetras(this);
         });
         $('input[name="telefono"]').on('input', function () {
-            validarTelefono(this);
-        });
+        validarTelefono(this);
+    }).on('blur', function() {
+        validarTelefono(this);
+    });
 
         // Validar todos los campos al enviar
         $('form').on('submit', function (e) {
@@ -460,60 +464,5 @@
         alert('Existen errores en el formulario. Por favor, revisa los campos marcados.');
         @endif
     });
-
-
-    // Agregar esta función en la sección de scripts
-document.addEventListener('DOMContentLoaded', function() {
-    const imageInput = document.getElementById('imageInput');
-    const previewImage = document.querySelector('.fixed-image');
-
-    imageInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            // Verificar si es una imagen
-            if (!file.type.startsWith('image/')) {
-                alert('Por favor, seleccione un archivo de imagen válido.');
-                this.value = '';
-                return;
-            }
-
-            // Crear URL temporal para la imagen
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                
-                // Aplicar una animación suave
-                previewImage.style.opacity = '0';
-                setTimeout(() => {
-                    previewImage.style.transition = 'opacity 0.3s ease';
-                    previewImage.style.opacity = '1';
-                }, 100);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Agregar validación de tamaño y tipo de imagen
-    imageInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            // Verificar el tamaño (por ejemplo, máximo 2MB)
-            const maxSize = 2 * 1024 * 1024; // 2MB
-            if (file.size > maxSize) {
-                alert('La imagen es demasiado grande. El tamaño máximo es 2MB.');
-                this.value = '';
-                return;
-            }
-
-            // Verificar el tipo de archivo
-            const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!validTypes.includes(file.type)) {
-                alert('Por favor, seleccione un archivo de imagen válido (JPEG, PNG o GIF).');
-                this.value = '';
-                return;
-            }
-        }
-    });
-});
 </script>
 @endsection

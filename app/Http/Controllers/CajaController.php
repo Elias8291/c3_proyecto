@@ -39,17 +39,16 @@ class CajaController extends Controller
     public function getCajasDisponibles($evaluadoId, Request $request)
     {
         $anioApertura = $request->anio;
-        $mesApertura = $request->mes;
-
+        $mesApertura = strtolower($request->mes);
+    
         // Filtrar las cajas que coincidan con el año y mes de apertura
         $cajas = Caja::where('anio', $anioApertura)
-        ->where('mes', $mesApertura)
-        ->select('id', 'numero_caja', 'mes', 'anio', 'ubicacion', 'rango_alfabetico')
-        ->get();
-
+            ->whereRaw('LOWER(mes) = ?', [$mesApertura])
+            ->select('id', 'numero_caja', 'mes', 'anio')
+            ->get();
+    
         return response()->json($cajas);
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -102,4 +101,6 @@ class CajaController extends Controller
 
         return redirect()->route('cajas.index')->with('success', 'Caja eliminada correctamente.');
     } 
+
+    
 }

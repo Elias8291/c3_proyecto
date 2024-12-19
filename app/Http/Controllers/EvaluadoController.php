@@ -210,4 +210,41 @@ class EvaluadoController extends Controller
         // Redirigir a la lista de evaluados con un mensaje de éxito
         return redirect()->route('evaluados.index')->with('success', 'Evaluado eliminado exitosamente.');
     }
+
+    public function searchEvaluados(Request $request)
+{
+    $searchTerms = array_filter(explode(' ', trim($request->input('term'))));
+    
+    $evaluados = Evaluado::query();
+    
+    foreach ($searchTerms as $term) {
+        $evaluados->where(function($query) use ($term) {
+            $query->where('primer_nombre', 'LIKE', "%{$term}%")
+                  ->orWhere('segundo_nombre', 'LIKE', "%{$term}%")
+                  ->orWhere('primer_apellido', 'LIKE', "%{$term}%")
+                  ->orWhere('segundo_apellido', 'LIKE', "%{$term}%");
+        });
+    }
+    
+    $results = $evaluados->with('carpetas')
+                        ->limit(10)
+                        ->get()
+                        ->map(function($evaluado) {
+                            return [
+                                'id' => $evaluado->id,
+                                'primer_nombre' => $evaluado->primer_nombre,
+                                'segundo_nombre' => $evaluado->segundo_nombre,
+                                'primer_apellido' => $evaluado->primer_apellido,
+                                'segundo_apellido' => $evaluado->segundo_apellido,
+                                'nombre_completo' => trim($evaluado->primer_nombre . ' ' . 
+                                                        $evaluado->segundo_nombre . ' ' . 
+                                                        $evaluado->primer_apellido . ' ' . 
+                                                        $evaluado->segundo_apellido),
+                                'tiene_carpeta' => $evaluado->carpetas->isNotEmpty(),
+                                'curp' => $evaluado->CURP
+                            ];
+                        });
+    
+    return response()->json($results);
+}
 }

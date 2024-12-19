@@ -172,7 +172,11 @@ class CarpetaController extends Controller
                 }
             }
         }
-    
+        return response()->json([
+            'message' => 'Carpeta creada exitosamente',
+            'id' => $carpeta->id  // Asegúrate de incluir el ID
+        ]);
+        
         // Redirigir al detalle de la carpeta creada
         return redirect()->route('carpetas.show', $carpeta->id)
                          ->with('success', 'Carpeta y documentos creados correctamente.');
@@ -206,4 +210,6 @@ class CarpetaController extends Controller
 
         return redirect()->route('carpetas.show', $id)->with('success', 'Carpeta actualizada exitosamente.');
     }
+
+    
 }
