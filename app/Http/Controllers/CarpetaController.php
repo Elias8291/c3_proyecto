@@ -143,43 +143,78 @@ class CarpetaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'id_evaluado' => 'required|exists:evaluados,id',
-            'id_caja' => 'required|exists:cajas,id',
-            'documentos' => 'nullable|string'
-        ]);
+        try {
+            // Validación más específica
+            $validated = $request->validate([
+                'id_evaluado' => 'required|integer|exists:evaluados,id',
+                'id_caja' => 'required|integer|exists:cajas,id',
+                'documentos' => 'nullable|string'
+            ]);
     
-        // Crear la carpeta
-        $carpeta = Carpeta::create([
-            'id_evaluado' => $request->id_evaluado,
-            'id_caja' => $request->id_caja,
-        ]);
+            DB::beginTransaction();
     
-        // Si hay documentos, guardarlos en la base de datos
-        if ($request->filled('documentos')) {
-            $documentos = json_decode($request->documentos, true);
+            // Verificar si el evaluado ya tiene una carpeta
+            $existingCarpeta = Carpeta::where('id_evaluado', $validated['id_evaluado'])->first();
+            if ($existingCarpeta) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El evaluado ya tiene una carpeta asignada'
+                ], 422);
+            }
     
-            if (is_array($documentos)) {
-                foreach ($documentos as $documentoData) {
-                    Documento::create([
-                        'id_carpeta' => $carpeta->id,
-                        'numero_hojas' => $documentoData['numeroHojas'],
-                        'id_area' => $documentoData['area'], // Asegúrate de que esto coincide con el modelo
-                        'estado' => $documentoData['estado'],
-                        'fecha_creacion' => $documentoData['fechaCreacion'],
-                        'id_evaluado' => $request->id_evaluado,
-                    ]);
+            // Crear la carpeta
+            $carpeta = Carpeta::create([
+                'id_evaluado' => $validated['id_evaluado'],
+                'id_caja' => $validated['id_caja'],
+                'fecha_creacion' => now() // Asegurarse de registrar la fecha de creación
+            ]);
+    
+            // Procesar documentos si existen
+            if ($request->filled('documentos')) {
+                $documentos = json_decode($request->documentos, true);
+    
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception('Error al decodificar los documentos');
+                }
+    
+                if (is_array($documentos)) {
+                    foreach ($documentos as $documentoData) {
+                        Documento::create([
+                            'id_carpeta' => $carpeta->id,
+                            'numero_hojas' => $documentoData['numeroHojas'] ?? 0,
+                            'id_area' => $documentoData['area'],
+                            'estado' => $documentoData['estado'] ?? 'activo',
+                            'fecha_creacion' => $documentoData['fechaCreacion'] ?? now(),
+                            'id_evaluado' => $validated['id_evaluado'],
+                        ]);
+                    }
                 }
             }
+    
+            DB::commit();
+    
+            // Retornar respuesta exitosa
+            return response()->json([
+                'success' => true,
+                'message' => 'Carpeta creada exitosamente',
+                'id' => $carpeta->id
+            ]);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear carpeta: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la carpeta: ' . $e->getMessage()
+            ], 500);
         }
-        return response()->json([
-            'message' => 'Carpeta creada exitosamente',
-            'id' => $carpeta->id  // Asegúrate de incluir el ID
-        ]);
-        
-        // Redirigir al detalle de la carpeta creada
-        return redirect()->route('carpetas.show', $carpeta->id)
-                         ->with('success', 'Carpeta y documentos creados correctamente.');
     }
     
 

@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class SeederPermisosC3 extends Seeder
 {
@@ -14,6 +16,7 @@ class SeederPermisosC3 extends Seeder
      */
     public function run()
     {
+        // Lista de permisos
         $permisos = [
             'ver-dashboard',
             'ver-inicio',
@@ -38,11 +41,38 @@ class SeederPermisosC3 extends Seeder
             'crear-caja',
             'editar-caja',
             'eliminar-caja',
-             'solicitar-prestamo',
+            'solicitar-prestamo',
+            'ver-notificacion-prestamo',
+            'devolver-prestamo',
+            'cancelar-prestamo',
+            'eliminar-documentos',
+            'lista-prestamos',
+            'ver-notificacion-prestamo',
         ];
 
+        // Crear o actualizar permisos
         foreach ($permisos as $permiso) {
             Permission::firstOrCreate(['name' => $permiso]);
         }
+  // Crear el rol de administrador y asignar todos los permisos
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole->syncPermissions(Permission::all());
+
+        // Crear un usuario administrador con el rol de admin
+        $adminUser = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'], 
+            [
+                'name' => 'Elias',
+                'password' => bcrypt('admin12345'), 
+                'apellido_paterno' => 'Ramos',
+                'apellido_materno' => 'Ramos',
+                'telefono' => '9517898998',
+                'image' => null,
+                'id_area' => 1,
+            ]
+        );
+
+        // Asignar el rol al usuario
+        $adminUser->assignRole($adminRole);
     }
 }

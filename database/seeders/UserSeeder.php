@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -14,25 +15,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // Crear el usuario administrador si no existe
-        $admin = User::firstOrCreate([
-            'email' => 'admin@gmail.com',
-        ], [
-            'name' => 'Carlos Eduardo',
-            'apellido_paterno' => 'Pérez',
-            'apellido_materno' => 'González',
-            'password' => bcrypt('admin12345'),
-            'telefono' => '555-1234',
-            'image' => null, 
-            'id_area' => 1,
-        ]);
-
-        // Asignamos el rol 'Admin' al usuario administrador
-        $adminRole = Role::where('name', 'Admin')->first();
-        if ($adminRole) {
-            $admin->assignRole($adminRole);
-        }
-
         // Crear el primer usuario adicional si no existe
         $user1 = User::firstOrCreate([
             'email' => 'abisai@gmail.com',
@@ -41,13 +23,13 @@ class UserSeeder extends Seeder
             'apellido_paterno' => 'López',
             'apellido_materno' => 'Martínez',
             'password' => bcrypt('abisai1456'),
-            'telefono' => '555-5678',
-            'image' => null, 
-            'id_area' => 2,
+            'telefono' => '9518993892',
+            'image' => null,
+            'id_area' => 10,
         ]);
 
         // Asignamos el rol 'Secretaria' al primer usuario adicional
-        $secretaryRole = Role::where('name', 'Secretaria')->first();
+        $secretaryRole = Role::where('name', 'Archivo')->first();
         if ($secretaryRole) {
             $user1->assignRole($secretaryRole);
         }
@@ -60,13 +42,13 @@ class UserSeeder extends Seeder
             'apellido_paterno' => 'García',
             'apellido_materno' => 'Ramírez',
             'password' => bcrypt('laura12345'),
-            'telefono' => '555-8765',
-            'image' => null, 
-            'id_area' => 3,
+            'telefono' => '9511857878',
+            'image' => null,
+            'id_area' => 10,
         ]);
 
         // Asignamos el rol 'Empleado' al segundo usuario adicional
-        $employeeRole = Role::where('name', 'Empleado')->first();
+        $employeeRole = Role::where('name', 'Solicitante')->first();
         if ($employeeRole) {
             $user2->assignRole($employeeRole);
         }

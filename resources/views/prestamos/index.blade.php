@@ -65,6 +65,30 @@
                             </div>
                         </div>
                         <div class="info-row">
+                            <i class="fas fa-archive"></i>
+                            <div>
+                                <label>Caja</label>
+                                <span>Caja #{{ $prestamo->documento->carpeta->caja->numero_caja }}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <i class="fas fa-archive"></i>
+                            <div>
+                                <label>Ubicación del Documento</label>
+                                <span>Caja #{{ $prestamo->documento->carpeta->caja->numero_caja }} 
+                                      ({{ $prestamo->documento->carpeta->caja->ubicacion }})
+                                      <br>
+                                      <small class="text-muted">
+                                          {{ $prestamo->documento->carpeta->caja->mes }} {{ $prestamo->documento->carpeta->caja->anio }}
+                                          @if($prestamo->documento->carpeta->caja->rango_alfabetico)
+                                              | Rango: {{ $prestamo->documento->carpeta->caja->rango_alfabetico }}
+                                          @endif
+                                      </small>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="info-row">
                             <i class="fas fa-calendar"></i>
                             <div>
                                 <label>Fecha Solicitud</label>
@@ -142,6 +166,12 @@
                                 <label>Número de Hojas:</label>
                                 <span id="documento-hojas"></span>
                             </div>
+
+                            <div class="info-item">
+                                <label>Número de Caja:</label>
+                                <span id="documento-caja"></span>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -325,6 +355,7 @@
                     `${data.prestamo.documento.evaluado.primer_nombre} ${data.prestamo.documento.evaluado.apellido_paterno || ''}`;
                 document.getElementById('documento-area').textContent = data.prestamo.documento.area.nombre_area;
                 document.getElementById('documento-hojas').textContent = data.prestamo.documento.numero_hojas;
+                document.getElementById('documento-caja').textContent = `Caja #${data.prestamo.documento.carpeta.caja.numero_caja}`;
 
                 // Mostrar modal
                 const modal = document.getElementById('detallesModal');

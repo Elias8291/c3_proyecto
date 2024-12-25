@@ -143,6 +143,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::put('/perfil/actualizar', [UsuarioController::class, 'updateProfile'])->name('usuarios.profile.update');
 Route::delete('/documentos/{documento}', [DocumentoController::class, 'destroy'])->name('documentos.destroy');
+Route::get('/usuarios/{id}/editar', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+
 Route::middleware(['auth'])->group(function () {
     // Ruta para ver todas las notificaciones
     Route::get('/notificaciones', [NotificacionController::class, 'index'])
@@ -159,6 +161,8 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para eliminar una notificación
     Route::delete('/notificaciones/{id}', [NotificacionController::class, 'eliminar'])
         ->name('notificaciones.eliminar');
+
+        
 });
 
 // En routes/web.php

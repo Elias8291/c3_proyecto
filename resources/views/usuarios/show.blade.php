@@ -160,7 +160,31 @@
     background-color: #d4edda;
     border-color: #c3e6cb;
 }
+.role-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #800020;
+}
 
+.role-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #800020, #b30000);
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-left: 10px;
+    box-shadow: 0 2px 4px rgba(128, 0, 32, 0.2);
+}
+
+.info-label {
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 1rem;
+}
 </style>
 @endsection
 
@@ -186,7 +210,14 @@
 
                 <!-- Nombre y Rol -->
                 <h1 class="card-title">{{ $usuario->name }} {{ $usuario->apellido_paterno }}</h1>
-                <div class="profile-role">{{ $usuario->roles->first()->name ?? 'Usuario' }}</div>
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="role-info">
+                            <label class="info-label">Rol Actual:</label>
+                            <span class="role-badge">{{ $usuario->roles->first()->name ?? 'Sin rol asignado' }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Formulario de Edición -->
@@ -212,6 +243,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -239,28 +271,34 @@
                     </div>
                 </div>
 
-                <!-- Cambiar Contraseña -->
-                <div class="info-section">
-                    <h2 class="info-title">Cambiar Contraseña</h2>
-                    
-                    <div class="form-group">
-                        <label for="current_password">Contraseña Actual</label>
-                        <input type="password" name="current_password" class="form-control" required>
-                    </div>
+              <!-- Cambiar Contraseña -->
+<div class="info-section">
+    <h2 class="info-title">Cambiar Contraseña</h2>
 
-                    <div class="form-group">
-                        <label for="password">Nueva Contraseña</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
+    <div class="form-group">
+        <label for="current_password">Contraseña Actual (solo si deseas cambiarla)</label>
+        <input type="password" name="current_password" class="form-control @error('current_password') is-invalid @enderror">
+        @error('current_password')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+    
 
-                    <div class="form-group">
-                        <label for="password_confirmation">Confirmar Nueva Contraseña</label>
-                        <input type="password" name="password_confirmation" class="form-control" required>
-                    </div>
-                </div>
+    <div class="form-group">
+        <label for="password">Nueva Contraseña</label>
+        <input type="password" name="password" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="password_confirmation">Confirmar Nueva Contraseña</label>
+        <input type="password" name="password_confirmation" class="form-control">
+    </div>
+</div>
+
 
                 <!-- Botón Guardar Cambios -->
-                <button type="submit" class="btn btn-primary btn-edit">Guardar Cambios</button>
+                <button type="submit" class="
+                btn btn-primary btn-edit">Guardar Cambios</button>
             </form>
 
             @if(session('success'))

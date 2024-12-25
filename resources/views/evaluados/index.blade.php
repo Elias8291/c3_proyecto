@@ -801,6 +801,16 @@
                                                             transform: scale(1.2);
                                                             color: #422201 !important;
                                                         }
+                                                        
+                                                        /* Añadimos una animación suave para el ícono */
+                                                        .fa-folder-open {
+                                                            animation: folderBounce 2s ease-in-out infinite;
+                                                        }
+                                                        
+                                                        @keyframes folderBounce {
+                                                            0%, 100% { transform: translateY(0); }
+                                                            50% { transform: translateY(-2px); }
+                                                        }
                                                     </style>
                                                 @endif
                                             </td>

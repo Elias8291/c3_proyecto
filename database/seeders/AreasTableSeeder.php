@@ -77,12 +77,6 @@ class AreasTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'nombre_area' => 'Secretariado Ejecutivo',
-                'descripcion' => 'Área responsable de la coordinación y ejecución de políticas públicas del C3',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
                 'nombre_area' => 'Sistemas',
                 'descripcion' => 'Área encargada de la administración de la infraestructura tecnológica y soporte técnico',
                 'created_at' => now(),

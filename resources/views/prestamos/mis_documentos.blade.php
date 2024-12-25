@@ -10,7 +10,7 @@
                 <i class="fas fa-arrow-left"></i> Regresar
             </a>
         </div>
-        <h1>Mis Documentos Prestados</h1>
+        <h1>Documentos en mi Posesión</h1>
     </div>
 
     <div class="documentos-grid">

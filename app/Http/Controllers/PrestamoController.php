@@ -437,27 +437,37 @@ public function rechazar(Request $request, $id)
     return redirect()->back()->with('success', 'Préstamo rechazado correctamente.');
 }
 
-
-
 public function detalles($id)
 {
     try {
-        $prestamo = Prestamo::with(['usuario', 'documento.evaluado', 'documento.area'])
-            ->findOrFail($id);
+        $prestamo = Prestamo::with([
+            'usuario',
+            'documento.evaluado',
+            'documento.area',
+            'documento.carpeta.caja' // Incluye las relaciones de la caja
+        ])->findOrFail($id);
 
-        return response()->json([
+        // Formatear los datos incluyendo más detalles de la caja
+        $datosPrestamo = [
             'success' => true,
-            'prestamo' => $prestamo
-        ]);
+            'prestamo' => $prestamo,
+            'caja' => $prestamo->documento->carpeta ? [
+                'numero' => $prestamo->documento->carpeta->caja->numero_caja ?? 'No asignada',
+                'ubicacion' => $prestamo->documento->carpeta->caja->ubicacion ?? 'No especificada',
+                'mes' => $prestamo->documento->carpeta->caja->mes ?? '',
+                'anio' => $prestamo->documento->carpeta->caja->anio ?? '',
+                'rango_alfabetico' => $prestamo->documento->carpeta->caja->rango_alfabetico ?? ''
+            ] : null
+        ];
+
+        return response()->json($datosPrestamo);
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
-            'message' => 'Error al obtener los detalles del préstamo'
+            'message' => 'Error al obtener los detalles del préstamo: ' . $e->getMessage()
         ], 500);
     }
 }
-
-
 public function misDocumentosPrestados()
 {
     try {

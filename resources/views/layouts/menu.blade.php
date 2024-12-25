@@ -204,7 +204,7 @@
     </li>
     @endcan
 
-   
+    @can('lista-prestamos')
   
     <li class="side-menu-item" style="--item-index: 8">
         <a href="/prestamos" class="side-menu-link {{ Request::is('prestamos*') && !Request::is('mis-documentos*') ? 'active' : '' }}">
@@ -212,7 +212,7 @@
             <span class="side-menu-text">Lista Préstamos</span>
         </a>
     </li>
-    
+    @endcan
     <li class="side-menu-item" style="--item-index: 9">
         <a href="/mis-documentos" class="side-menu-link {{ Request::is('mis-documentos*') ? 'active' : '' }}">
             <i class="fas fa-box side-menu-icon"></i>

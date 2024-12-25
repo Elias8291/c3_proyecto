@@ -1111,74 +1111,96 @@
     const form = $('#carpetaForm');
     
     // Manejar el envío del formulario
-    form.on('submit', function(e) {
-        e.preventDefault();
+    // Modificar el manejador del formulario
+$('#carpetaForm').on('submit', function(e) {
+    e.preventDefault();
 
-        // Verificar que se haya seleccionado un evaluado y una caja
-        if (!$('#id_evaluado').val()) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Por favor, seleccione un evaluado',
-                icon: 'error',
-                confirmButtonColor: '#800020'
-            });
-            return false;
-        }
-
-        if (!$('#id_caja').val()) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Por favor, seleccione una caja',
-                icon: 'error',
-                confirmButtonColor: '#800020'
-            });
-            return false;
-        }
-
-        // Mostrar loading mientras se procesa
+    // Verificar campos requeridos
+    if (!$('#id_evaluado').val()) {
         Swal.fire({
-            title: 'Procesando',
-            text: 'Creando la carpeta...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+            title: 'Error',
+            text: 'Por favor, seleccione un evaluado',
+            icon: 'error',
+            confirmButtonColor: '#800020'
         });
+        return false;
+    }
 
-        // Enviar el formulario mediante AJAX
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            success: function(response) {
+    if (!$('#id_caja').val()) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Por favor, seleccione una caja',
+            icon: 'error',
+            confirmButtonColor: '#800020'
+        });
+        return false;
+    }
+
+    // Mostrar loading
+    Swal.fire({
+        title: 'Procesando',
+        text: 'Creando la carpeta...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Preparar los datos
+    const formData = new FormData(this);
+    
+    // Agregar token CSRF
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+    // Enviar petición AJAX
+    $.ajax({
+        url: $(this).attr('action'),
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.success) {
                 Swal.fire({
                     title: '¡Éxito!',
-                    text: 'La carpeta ha sido creada correctamente',
+                    text: response.message,
                     icon: 'success',
-                    confirmButtonColor: '#800020',
-                    willClose: () => {
-                        // Redirigir a la vista de documentos de la carpeta
+                    confirmButtonColor: '#800020'
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         window.location.href = `/carpetas/${response.id}`;
                     }
                 });
-            },
-            error: function(xhr) {
-                let errorMessage = 'Ocurrió un error al crear la carpeta';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-                }
-                
+            } else {
                 Swal.fire({
                     title: 'Error',
-                    text: errorMessage,
+                    text: response.message || 'Ocurrió un error al crear la carpeta',
                     icon: 'error',
                     confirmButtonColor: '#800020'
                 });
             }
-        });
+        },
+        error: function(xhr) {
+            let errorMessage = 'Ocurrió un error al crear la carpeta';
+            
+            if (xhr.responseJSON) {
+                if (xhr.responseJSON.errors) {
+                    errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                } else if (xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+            }
+            
+            Swal.fire({
+                title: 'Error',
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonColor: '#800020'
+            });
+        }
     });
-    
+});
 </script>
 @endsection

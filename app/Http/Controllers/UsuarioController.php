@@ -123,12 +123,13 @@ class UsuarioController extends Controller
     // Mostrar formulario de edición
     public function edit($id)
     {
-        $usuario = User::findOrFail($id);
-        $areas = Area::all();
-        $roles = Role::all(); 
-        return view('usuarios.editar', compact('usuario', 'areas','roles'));
+        $usuario = User::findOrFail($id); // Encuentra el usuario o lanza un error 404 si no existe
+        $areas = Area::all(); // Asegúrate de que este modelo está correctamente configurado
+        $roles = Role::all(); // Obtiene todos los roles disponibles
+    
+        return view('usuarios.editar', compact('usuario', 'areas', 'roles')); // Pasa los datos necesarios a la vista
     }
-
+    
     // Actualizar un usuario existente
     public function update(Request $request, $id)
     {
@@ -204,10 +205,12 @@ public function editProfile()
     return view('usuarios.profile.edit', compact('usuario', 'areas'));
 }
 
+
 public function updateProfile(Request $request)
 {
     $usuario = Auth::user();
 
+    // Validar los datos del formulario
     $request->validate([
         'name' => 'required|string|max:255',
         'apellido_paterno' => 'required|string|max:255',
@@ -215,20 +218,19 @@ public function updateProfile(Request $request)
         'email' => 'required|email|unique:users,email,' . $usuario->id,
         'telefono' => 'nullable|string|max:10',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'current_password' => 'required_with:password|string', // Requiere la contraseña actual si se quiere cambiar la contraseña
-        'password' => 'nullable|string|confirmed|min:8', // Nueva contraseña
+        'current_password' => 'nullable|string', // Hacer opcional la contraseña actual
+        'password' => 'nullable|string|confirmed|min:8', // Hacer opcional la nueva contraseña
     ]);
 
-    // Validar contraseña actual si se intenta cambiar la contraseña
-    if ($request->filled('current_password')) {
+    // Validar y actualizar la contraseña solo si los campos están presentes
+    if ($request->filled('current_password') && $request->filled('password')) {
+        // Verificar si la contraseña actual es incorrecta
         if (!Hash::check($request->current_password, $usuario->password)) {
-            return back()->withErrors(['current_password' => 'La contraseña actual es incorrecta.']);
+            return back()->withErrors(['current_password' => 'La contraseña actual no es correcta.'])->withInput();
         }
 
-        // Si pasa la validación, cambia la contraseña
-        if ($request->filled('password')) {
-            $usuario->password = Hash::make($request->password);
-        }
+        // Actualizar la contraseña si la actual es válida
+        $usuario->password = Hash::make($request->password);
     }
 
     // Manejar la imagen de perfil
@@ -253,5 +255,7 @@ public function updateProfile(Request $request)
 
     return redirect()->route('usuarios.profile');
 }
+
+
 
 }
